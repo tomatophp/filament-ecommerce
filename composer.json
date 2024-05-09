@@ -1,0 +1,45 @@
+{
+    "name": "tomatophp/filament-ecommerce",
+    "type": "library",
+    "description": "Build your own ecommerce store with Filament & Splade",
+    "keywords": [
+        "php",
+        "laravel",
+        "ecommerce",
+        "filament",
+        "splade",
+        "tomatophp",
+        "prdoucts",
+        "orders",
+        "cart"
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "TomatoPHP\\FilamentEcommerce\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TomatoPHP\\FilamentEcommerce\\FilamentEcommerceServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Fady Mondy",
+            "email": "info@3x1.io"
+        }
+    ],
+    "require": {
+        "php": "^8.1|^8.2",
+        "tomatophp/console-helpers": "^1.1",
+        "filament/filament": "^3.0.0"
+    }
+}

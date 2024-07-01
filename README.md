@@ -27,6 +27,48 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 ->plugin(\TomatoPHP\FilamentEcommerce\FilamentEcommercePlugin::make())
 ```
 
+## Features
+
+- [x] Multi Company / Branches Management
+- [x] Product Management
+- [x] Product Table Group By Type
+- [x] Product Multi Variants
+- [x] Product Multi Images
+- [x] Product Multi Languages Content
+- [x] Shipping Vendor Management
+- [x] Order Management
+- [x] Order Shipping Action
+- [x] Order Change Status Action
+- [x] Order Table Group By Status
+- [x] Order Receipt Print
+- [x] Order Table Summary
+- [ ] Order Settings
+- [ ] Order PDF Export
+- [ ] Order Export
+- [ ] Order Import
+- [ ] Product Import
+- [ ] Product Export
+- [ ] Product Variants On Order
+- [ ] Coupon Management
+- [ ] Gift Card Management
+- [ ] Refferal Management
+- [ ] Pay Order With Wallet
+- [ ] Pay Order With Gift Card
+- [ ] Add Discount To Order Using Coupon
+- [ ] Cart Manager
+- [ ] Comparison Between Products
+- [ ] Wishlist Manager
+- [ ] Product Download for Digital Products
+- [ ] Search History Manager
+- [ ] Filament CMS Page Builder Integration
+- [ ] Filament CMS Themes Integration
+- [ ] Reports Widgets
+- [ ] Order Facade Methods
+- [ ] Product Service Class
+- [ ] Coupons Service Class
+- [ ] Ecommerce Service Class
+- [ ] Ecommerce APIs
+
 ## Publish Assets
 
 you can publish config file by use this command
@@ -59,7 +101,7 @@ you can join our discord server to get support [TomatoPHP](https://discord.gg/Xq
 
 ## Docs
 
-you can check docs of this package on [Docs](https://docs.tomatophp.com/plugins/laravel-package-generator)
+you can check docs of this package on [Docs](https://docs.tomatophp.com/filament/filament-ecommerce)
 
 ## Changelog
 
@@ -71,7 +113,7 @@ Please see [SECURITY](SECURITY.md) for more information about security.
 
 ## Credits
 
-- [Tomatophp](mailto:info@3x1.io)
+- [Fady Mondy](https://wa.me/+201207860084)
 
 ## License
 

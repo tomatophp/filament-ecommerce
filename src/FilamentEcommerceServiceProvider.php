@@ -3,6 +3,8 @@
 namespace TomatoPHP\FilamentEcommerce;
 
 use Illuminate\Support\ServiceProvider;
+use TomatoPHP\FilamentCms\Facades\FilamentCMS;
+use TomatoPHP\FilamentCms\Services\Contracts\CmsType;
 
 
 class FilamentEcommerceServiceProvider extends ServiceProvider
@@ -52,6 +54,21 @@ class FilamentEcommerceServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        //you boot methods here
+        FilamentCMS::types()->register([
+            CmsType::make('product')
+                ->label('Product')
+                ->color('primary')
+                ->icon('heroicon-o-shopping-cart')
+                ->sub([
+                    CmsType::make('category')
+                        ->label('Category')
+                        ->color('primary')
+                        ->icon('heroicon-o-rectangle-group'),
+                    CmsType::make('tag')
+                        ->label('Tag')
+                        ->color('primary')
+                        ->icon('heroicon-o-tag')
+                ])
+        ]);
     }
 }

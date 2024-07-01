@@ -40,6 +40,10 @@
     "require": {
         "php": "^8.1|^8.2",
         "tomatophp/console-helpers": "^1.1",
-        "filament/filament": "^3.0.0"
+        "filament/filament": "^3.0.0",
+        "milon/barcode": "^11.0",
+        "tomatophp/filament-cms": "^1.0",
+        "tomatophp/filament-locations": "^1.0",
+        "tomatophp/filament-accounts": "^2.0"
     }
 }

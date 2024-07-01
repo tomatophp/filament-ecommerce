@@ -7,6 +7,7 @@ use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Tables;
+use Illuminate\Database\Eloquent\Model;
 use TomatoPHP\FilamentEcommerce\Models\Delivery;
 use TomatoPHP\FilamentLocations\Models\City;
 use TomatoPHP\FilamentLocations\Models\Country;
@@ -14,6 +15,32 @@ use TomatoPHP\FilamentLocations\Models\Country;
 class ShippingVendorPrices extends RelationManager
 {
     protected static string $relationship = 'shippingPrices';
+
+    /**
+     * @return string|null
+     */
+    public static function getLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.shipping_prices.single');
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getModelLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.shipping_prices.single');
+    }
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return trans('filament-ecommerce::messages.shipping_prices.title');
+    }
+
+    protected static function getPluralModelLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.shipping_prices.title');
+    }
 
     public function form(Form $form): Form
     {

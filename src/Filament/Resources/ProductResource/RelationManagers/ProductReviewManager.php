@@ -7,11 +7,39 @@ use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Tables;
+use Illuminate\Database\Eloquent\Model;
 use TomatoPHP\FilamentAccounts\Models\Account;
 
 class ProductReviewManager extends RelationManager
 {
     protected static string $relationship = 'productReviews';
+
+    /**
+     * @return string|null
+     */
+    public static function getLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.product_reviews.single');
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getModelLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.product_reviews.single');
+    }
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return trans('filament-ecommerce::messages.product_reviews.title');
+    }
+
+    protected static function getPluralModelLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.product_reviews.title');
+    }
+
 
     public function form(Form $form): Form
     {

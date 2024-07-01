@@ -14,7 +14,7 @@
         <div class="flex justify-between xl:gap-60 lg:gap-48 md:gap-16 sm:gap-8 sm:flex-row flex-col gap-4">
             <div class="w-full">
                 <div class=" my-4">
-                    <img src="{{setting('site_logo')}}" alt="{{setting('site_name')}}" class="h-12 ">
+                    <img src="{{$this->getRecord()->company?->getFirstMediaUrl('logo')}}" alt="{{$this->getRecord()->company->name}}" class="h-12 ">
                 </div>
                 <div class="flex flex-col">
                     <div>

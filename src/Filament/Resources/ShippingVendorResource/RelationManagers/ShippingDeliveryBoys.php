@@ -7,10 +7,38 @@ use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Tables;
+use Illuminate\Database\Eloquent\Model;
 
 class ShippingDeliveryBoys extends RelationManager
 {
     protected static string $relationship = 'deliveries';
+
+
+    /**
+     * @return string|null
+     */
+    public static function getLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.deliveries.single');
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getModelLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.deliveries.single');
+    }
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return trans('filament-ecommerce::messages.deliveries.title');
+    }
+
+    protected static function getPluralModelLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.deliveries.title');
+    }
 
     public function form(Form $form): Form
     {

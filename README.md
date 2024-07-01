@@ -8,7 +8,7 @@
 [![Downloads](https://poser.pugx.org/tomatophp/filament-ecommerce/d/total.svg)](https://packagist.org/packages/tomatophp/filament-ecommerce)
 
 
-Build your own ecommerce store with Filament & Splade
+Build your own ecommerce store with FilamentPHP with the Power of Filament CMS
 
 ## Installation
 
@@ -37,6 +37,7 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 - [x] Product Multi Languages Content
 - [x] Shipping Vendor Management
 - [x] Order Management
+- [x] Order Logs
 - [x] Order Shipping Action
 - [x] Order Change Status Action
 - [x] Order Table Group By Status
@@ -68,6 +69,20 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 - [ ] Coupons Service Class
 - [ ] Ecommerce Service Class
 - [ ] Ecommerce APIs
+
+## Screenshots
+
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/branches.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/companies.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/create-order.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/create-product.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/deliveries.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/edit-company.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/edit-shipping-vendors.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/order-items.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/orders.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/products.png)
+![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/shipping-vendors.png)
 
 ## Publish Assets
 

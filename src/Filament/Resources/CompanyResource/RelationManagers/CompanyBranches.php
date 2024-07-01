@@ -7,6 +7,7 @@ use Filament\Forms;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Tables;
+use Illuminate\Database\Eloquent\Model;
 use TomatoPHP\FilamentEcommerce\Models\Company;
 
 class CompanyBranches extends RelationManager
@@ -14,6 +15,32 @@ class CompanyBranches extends RelationManager
     protected static string $relationship = 'branches';
 
     public static $primaryColumn = 'name';
+
+    /**
+     * @return string|null
+     */
+    public static function getLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.branch.single');
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function getModelLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.branch.single');
+    }
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return trans('filament-ecommerce::messages.branch.title');
+    }
+
+    protected static function getPluralModelLabel(): ?string
+    {
+        return trans('filament-ecommerce::messages.branch.title');
+    }
 
     public function form(Form $form): Form
     {

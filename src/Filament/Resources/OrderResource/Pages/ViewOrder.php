@@ -21,6 +21,7 @@ class ViewOrder extends ViewRecord
     {
         return [
             Actions\Action::make('print')
+                ->label(trans('filament-ecommerce::messages.orders.actions.print'))
                 ->openUrlInNewTab()
                 ->url(route('order.print', $this->getRecord()->id)),
             Actions\DeleteAction::make(),

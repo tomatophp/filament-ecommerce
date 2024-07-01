@@ -23,7 +23,7 @@
 <body style="text-align: center" onload="window.print()">
 <div dir="rtl"  style="margin-left: auto; margin-right:auto; display:block">
     <div>
-        <img style="width: 100px" src="{{setting('site_logo')}}"></div><br>
+        <img style="width: 100px" src="{{$model->company?->getFirstMediaUrl('logo')}}"></div><br>
     <br>
     <h3 style="border: 1px solid #000000; text-align: center; padding: 5px;">{{trans('filament-ecommerce::messages.orders.print.order')}} {{$model->uuid}}</h3>
     <br>

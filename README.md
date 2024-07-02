@@ -8,7 +8,7 @@
 [![Downloads](https://poser.pugx.org/tomatophp/filament-ecommerce/d/total.svg)](https://packagist.org/packages/tomatophp/filament-ecommerce)
 
 
-Build your own ecommerce store with FilamentPHP with the Power of Filament CMS
+Build your own ecommerce store with FilamentPHP with the Power of Tomato CMS Builder
 
 ## Installation
 

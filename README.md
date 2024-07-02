@@ -1,4 +1,4 @@
-![Screenshot](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/3x1io-tomato-ecommerce.jpg)
+![Screenshot](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/3x1io-tomato-ecommerce.jpg)
 
 # Filament Ecommerce Builder
 
@@ -72,17 +72,17 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 
 ## Screenshots
 
-![Branches](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/branches.png)
-![Companies](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/companies.png)
-![Edit Company](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/edit-company.png)
-![Products List](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/products.png)
-![Create Product](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/create-products.png)
-![Create Order](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/create-orders.png)
-![Order Items](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/order-items.png)
-![Orders List](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/orders.png)
-![Deliveries](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/deliveries.png)
-![Edit Shipping](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/edit-shipping-vendors.png)
-![Shipping](https://github.com/tomatophp/filament-ecommerce/blob/master/arts/shipping-vendors.png)
+![Branches](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/branches.png)
+![Companies](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/companies.png)
+![Edit Company](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/edit-company.png)
+![Products List](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/products.png)
+![Create Product](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/create-products.png)
+![Create Order](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/create-orders.png)
+![Order Items](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/order-items.png)
+![Orders List](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/orders.png)
+![Deliveries](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/deliveries.png)
+![Edit Shipping](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/edit-shipping-vendors.png)
+![Shipping](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/shipping-vendors.png)
 
 ## Publish Assets
 

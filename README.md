@@ -43,10 +43,12 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 - [x] Order Table Group By Status
 - [x] Order Receipt Print
 - [x] Order Table Summary
-- [ ] Order Settings
+- [x] Order Settings
+- [x] Order Export
+- [x] Order Import
+- [x] Order Charts Widgets
 - [ ] Order PDF Export
-- [ ] Order Export
-- [ ] Order Import
+- [ ] Order Facade Methods
 - [ ] Product Import
 - [ ] Product Export
 - [ ] Product Variants On Order
@@ -63,8 +65,6 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 - [ ] Search History Manager
 - [ ] Filament CMS Page Builder Integration
 - [ ] Filament CMS Themes Integration
-- [ ] Reports Widgets
-- [ ] Order Facade Methods
 - [ ] Product Service Class
 - [ ] Coupons Service Class
 - [ ] Ecommerce Service Class

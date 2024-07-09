@@ -22,9 +22,16 @@
 </head>
 <body style="text-align: center" onload="window.print()">
 <div dir="rtl"  style="margin-left: auto; margin-right:auto; display:block">
+    @if(setting('ordering_show_company_logo'))
     <div>
-        <img style="width: 100px" src="{{$model->company?->getFirstMediaUrl('logo')}}"></div><br>
-    <br>
+        <img style="width: 100px" src="{{$model->company?->getFirstMediaUrl('logo')}}">
+    </div>
+    @endif
+    @if(setting('ordering_show_company_data'))
+        <h3 style="text-align: center; padding: 5px;">{{$model->company?->name}}</h3>
+    @else
+        <br>
+    @endif
     <h3 style="border: 1px solid #000000; text-align: center; padding: 5px;">{{trans('filament-ecommerce::messages.orders.print.order')}} {{$model->uuid}}</h3>
     <br>
     <p style="margin-top: -15px;">{{trans('filament-ecommerce::messages.orders.print.printed_at')}}: {{\Carbon\Carbon::now()->format('d/m/Y g:i A')}}</p>
@@ -130,9 +137,17 @@
     </table>
     <br>
 
-    <div>{{$model->branch?->name}}</div>
-    <div>{{$model->branch?->address}}</div>
-    <div><b>{{$model->branch?->phone}}</b></div>
+    @if(setting('ordering_show_branch_data'))
+        <div>{{$model->branch?->name}}</div>
+        <div>{{$model->branch?->address}}</div>
+        <div><b>{{$model->branch?->phone}}</b></div>
+    @endif
+    @if(setting('ordering_show_tax_number'))
+        <div>REG: {{ $model->company?->tax_number }}</div>
+    @endif
+    @if(setting('ordering_show_registration_number'))
+        <div>TAX: {{ $model->company?->registration_number }}</div>
+    @endif
     <hr style="width: 100%">
     <img src="data:image/png;base64,{{\DNS1D::getBarcodePNG((string)$model->uuid, 'C128',1,44,array(1,1,1), true)}}" alt="barcode"  />
 

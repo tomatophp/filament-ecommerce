@@ -54,7 +54,8 @@ class ProductResource extends Resource
             ->schema([
                 Forms\Components\Tabs::make('Tabs')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make('Details')
+                        Forms\Components\Tabs\Tab::make(trans('filament-ecommerce::messages.product.tabs.details'))
+                            ->icon('heroicon-o-information-circle')
                             ->schema([
                                 Forms\Components\Select::make('type')
                                     ->columnSpanFull()
@@ -114,7 +115,8 @@ class ProductResource extends Resource
                                     ->columnSpanFull()
                                     ->label(trans('filament-ecommerce::messages.product.columns.is_trend')),
                             ])->columns(2),
-                        Forms\Components\Tabs\Tab::make('Prices')
+                        Forms\Components\Tabs\Tab::make(trans('filament-ecommerce::messages.product.tabs.prices'))
+                            ->icon('heroicon-o-currency-dollar')
                             ->schema([
                                 Forms\Components\Toggle::make('is_shipped')
                                     ->label(trans('filament-ecommerce::messages.product.columns.is_shipped')),
@@ -169,7 +171,8 @@ class ProductResource extends Resource
                                             ->label(trans('filament-ecommerce::messages.product.columns.discount_to')),
                                     ])->columns(3)
                             ]),
-                        Forms\Components\Tabs\Tab::make('Stock')
+                        Forms\Components\Tabs\Tab::make(trans('filament-ecommerce::messages.product.tabs.stock'))
+                            ->icon('heroicon-o-home-modern')
                             ->schema([
                                 Forms\Components\Toggle::make('is_in_stock')
                                     ->label(trans('filament-ecommerce::messages.product.columns.is_in_stock')),
@@ -200,7 +203,8 @@ class ProductResource extends Resource
                                     ->label(trans('filament-ecommerce::messages.product.columns.max_stock_alert'))
                                     ->numeric(),
                             ])->columns(2),
-                        Forms\Components\Tabs\Tab::make('SEO')
+                        Forms\Components\Tabs\Tab::make(trans('filament-ecommerce::messages.product.tabs.seo'))
+                            ->icon('heroicon-o-magnifying-glass')
                             ->schema([
                                 Forms\Components\SpatieMediaLibraryFileUpload::make('feature_image')
                                     ->columnSpanFull()
@@ -255,7 +259,8 @@ class ProductResource extends Resource
                                     ->label(trans('filament-ecommerce::messages.product.columns.keywords')),
 
                             ])->columns(2),
-                        Forms\Components\Tabs\Tab::make('Variation')
+                        Forms\Components\Tabs\Tab::make(trans('filament-ecommerce::messages.product.tabs.variation'))
+                            ->icon('heroicon-o-cursor-arrow-ripple')
                             ->schema([
                                 Forms\Components\Toggle::make('has_options')
                                     ->live()
@@ -382,7 +387,7 @@ class ProductResource extends Resource
                     ->state(fn(Product $product) => ($product->price+$product->vat) - $product->discount)
                     ->description(fn(Product $product) => '(Price:'.number_format($product->price, 2) . '+VAT:' . number_format($product->vat) . ')-Discount:' . number_format($product->discount))
                     ->label(trans('filament-ecommerce::messages.product.columns.price'))
-                    ->money()
+                    ->money(locale: 'en', currency: setting('site_currency'))
                     ->sortable(),
                 Tables\Columns\ToggleColumn::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.product.columns.is_activated')),

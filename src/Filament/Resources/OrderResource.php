@@ -4,11 +4,15 @@ namespace TomatoPHP\FilamentEcommerce\Filament\Resources;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ImportAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use TomatoPHP\FilamentAccounts\Components\AccountColumn;
 use TomatoPHP\FilamentAccounts\Models\Account;
+use TomatoPHP\FilamentEcommerce\Filament\Export\ExportOrders;
+use TomatoPHP\FilamentEcommerce\Filament\Import\ImportOrders;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource\Pages;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource\RelationManagers;
 use TomatoPHP\FilamentEcommerce\Models\Branch;
@@ -28,9 +32,12 @@ use TomatoPHP\FilamentEcommerce\Models\ShippingPrice;
 use TomatoPHP\FilamentEcommerce\Models\ShippingVendor;
 use TomatoPHP\FilamentLocations\Models\City;
 use TomatoPHP\FilamentLocations\Models\Country;
+use TomatoPHP\FilamentTypes\Components\TypeColumn;
+use TomatoPHP\FilamentTypes\Models\Type;
 
 class OrderResource extends Resource
 {
+
     protected static ?string $model = Order::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-cursor-arrow-rays';
@@ -59,12 +66,15 @@ class OrderResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $types = Type::query()
+            ->where('for', 'orders')
+            ->where('type', 'status');
         return $form
             ->schema([
                 Forms\Components\TextInput::make('uuid')
                     ->disabled(fn(Order $order)=> $order->exists)
                     ->label(trans('filament-ecommerce::messages.orders.columns.uuid'))
-                    ->default(fn () => (string) \Illuminate\Support\Str::uuid())
+                    ->default(fn () => setting('ordering_stating_code') .'-'. \Illuminate\Support\Str::random(8))
                     ->required()
                     ->columnSpanFull()
                     ->maxLength(255),
@@ -76,12 +86,14 @@ class OrderResource extends Resource
                     Forms\Components\Section::make('Company')->schema([
                         Forms\Components\Select::make('company_id')
                             ->searchable()
+                            ->default(setting('ordering_company_id'))
                             ->options(Company::query()->pluck('name', 'id')->toArray())
                             ->preload()
                             ->live()
                             ->required()
                             ->label(trans('filament-ecommerce::messages.orders.columns.company_id')),
                         Forms\Components\Select::make('branch_id')
+                            ->default(setting('ordering_direct_branch'))
                             ->searchable()
                             ->required()
                             ->options(fn(Forms\Get $get) => Branch::query()->where('company_id', $get('company_id'))->pluck('name', 'id')->toArray())
@@ -90,26 +102,13 @@ class OrderResource extends Resource
                             ->label(trans('filament-ecommerce::messages.orders.columns.status'))
                             ->searchable()
                             ->preload()
-                            ->options([
-                                'pending' => trans('filament-ecommerce::messages.orders.status.pending'),
-                                'prepear' => trans('filament-ecommerce::messages.orders.status.prepear'),
-                                'withdrew' => trans('filament-ecommerce::messages.orders.status.withdrew'),
-                                'shipped' => trans('filament-ecommerce::messages.orders.status.shipped'),
-                                'delivered' => trans('filament-ecommerce::messages.orders.status.delivered'),
-                                'part-delivered' => trans('filament-ecommerce::messages.orders.status.part-delivered'),
-                                'returned' => trans('filament-ecommerce::messages.orders.status.returned'),
-                                'canceled' => trans('filament-ecommerce::messages.orders.status.canceled'),
-                            ])
+                            ->options((clone $types)->pluck('name', 'key')->toArray())
                             ->required()
                             ->default('pending'),
                         Forms\Components\Select::make('payment_method')
                             ->searchable()
                             ->preload()
-                            ->options([
-                                'cash' => 'Cash',
-                                'credit' => 'Credit',
-                                'wallet' => 'Wallet',
-                            ])
+                            ->options(Type::query()->where('for', 'orders')->where('type', 'payment_methods')->pluck('name', 'key')->toArray())
                             ->default('cash')
                             ->label(trans('filament-ecommerce::messages.orders.columns.payment_method')),
                     ])->columns(2),
@@ -132,18 +131,10 @@ class OrderResource extends Resource
                             ->maxLength(255),
                         Forms\Components\TextInput::make('phone')
                             ->label(trans('filament-ecommerce::messages.orders.columns.phone'))
-                            ->tel()
                             ->maxLength(255),
                         Forms\Components\Select::make('source')
                             ->searchable()
-                            ->options([
-                                'system' => 'System',
-                                'web' => 'Website',
-                                'app' => 'Mobile App',
-                                'phone' => 'Callcenter',
-                                'pos' => 'POS',
-                                'other' => 'Other',
-                            ])
+                            ->options(Type::query()->where('for', 'orders')->where('type', 'source')->pluck('name', 'key')->toArray())
                             ->label(trans('filament-ecommerce::messages.orders.columns.source'))
                             ->required()
                             ->default('system'),
@@ -338,97 +329,131 @@ class OrderResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $types = Type::query()
+            ->where('for', 'orders')
+            ->where('type', 'status');
+
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->hiddenLabel()
+                    ->tooltip(trans('filament-ecommerce::messages.orders.actions.export'))
+                    ->color('success')
+                    ->icon('heroicon-s-document-arrow-down')
+                    ->exporter(ExportOrders::class),
+                Tables\Actions\Action::make('import')
+                    ->hiddenLabel()
+                    ->tooltip(trans('filament-ecommerce::messages.orders.actions.import'))
+                    ->color('warning')
+                    ->form([
+                        Forms\Components\Textarea::make('data')
+                            ->default("name: \nphone: \naddress: \nsource: \nitems: SKU*QTY,SKU*QTY")
+                            ->hint(trans('filament-ecommerce::messages.orders.import.hint'))
+                            ->label(trans('filament-ecommerce::messages.orders.import.order_text'))
+                            ->autosize()
+                            ->required()
+                    ])
+                    ->action(function (array $data){
+                        $getMultiOrders = explode( "====", $data['data']);
+                        if(count($getMultiOrders)){
+                            foreach ($getMultiOrders as $orderItem){
+                                (new self)->convertTextToOrder($orderItem);
+                            }
+                        }
+                        else {
+                            (new self)->convertTextToOrder($data['data']);
+                        }
+                    })
+                    ->icon('heroicon-s-document-text')
+            ])
             ->columns([
                 AccountColumn::make('account.id')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.account_id'))
                     ->sortable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.created_at'))
                     ->description(fn($record) => $record->created_at->diffForHumans())
                     ->dateTime()
                     ->sortable()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('uuid')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.uuid'))
                     ->description(fn($record) => $record->type . ' by ' . $record->user?->name)
                     ->label('UUID')
                     ->sortable()
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('status')
+                TypeColumn::make('status')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.status'))
                     ->sortable()
-                    ->badge()
-                    ->state(fn($record) => trans('filament-ecommerce::messages.orders.status.'.$record->status))
-                    ->color(fn($record) => match ($record->status) {
-                        'pending' => 'warning',
-                        'prepear' => 'info',
-                        'withdrew' => 'danger',
-                        'shipped' => 'primary',
-                        'delivered' => 'success',
-                        'part-delivered' => 'warning',
-                        'returned' => 'danger',
-                        'canceled' => 'danger',
-                        default => 'secondary',
-                    })
-                    ->icon(fn($record) => match ($record->status) {
-                        'pending' => 'heroicon-o-clock',
-                        'prepear' => 'heroicon-o-arrows-pointing-in',
-                        'withdrew' => 'heroicon-o-arrows-right-left',
-                        'shipped' => 'heroicon-o-truck',
-                        'delivered' => 'heroicon-o-check-circle',
-                        'part-delivered' => 'heroicon-o-chevron-up-down',
-                        'returned' => 'heroicon-o-archive-box-x-mark',
-                        'canceled' => 'heroicon-o-x-circle',
-                        default => 'heroicon-o-clock',
-                    })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.name'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->description(fn($record) => $record->phone)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.phone'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('address')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.address'))
                     ->description(fn($record) => $record->country->name . ', '. $record->city->name . ', '. $record->area->name . ', '. $record->flat)
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('shipper.name')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.shipper_id'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('branch.name')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.branch_id'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('shipping')
-                    ->summarize(Tables\Columns\Summarizers\Sum::make()->money())
-                    ->money()
-                    ->color('warning')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('vat')
-                    ->summarize(Tables\Columns\Summarizers\Sum::make()->money())
-                    ->money()
-                    ->color('warning')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('discount')
-                    ->summarize(Tables\Columns\Summarizers\Sum::make()->money())
-                    ->money()
-                    ->color('danger')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('total')
-                    ->summarize(Tables\Columns\Summarizers\Sum::make()->money())
-                    ->money()
-                    ->color('success')
-                    ->sortable(),
-                Tables\Columns\ToggleColumn::make('is_approved')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\ToggleColumn::make('is_closed')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('payment_method')
+                TypeColumn::make('payment_method')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.payment_method'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
+                TypeColumn::make('source')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.source'))
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('shipping')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.shipping'))
+                    ->summarize(Tables\Columns\Summarizers\Sum::make()->money(locale: 'en', currency: setting('site_currency')))
+                    ->money(locale: 'en', currency: setting('site_currency'))
+                    ->color('warning')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('vat')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.vat'))
+                    ->summarize(Tables\Columns\Summarizers\Sum::make()->money(locale: 'en', currency: setting('site_currency')))
+                    ->money(locale: 'en', currency: setting('site_currency'))
+                    ->color('warning')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('discount')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.discount'))
+                    ->summarize(Tables\Columns\Summarizers\Sum::make()->money(locale: 'en', currency: setting('site_currency')))
+                    ->money(locale: 'en', currency: setting('site_currency'))
+                    ->color('danger')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('total')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.total'))
+                    ->summarize(Tables\Columns\Summarizers\Sum::make()->money(locale: 'en', currency: setting('site_currency')))
+                    ->money(locale: 'en', currency: setting('site_currency'))
+                    ->color('success')
+                    ->sortable(),
+                Tables\Columns\ToggleColumn::make('is_approved')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.is_approved'))
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\ToggleColumn::make('is_closed')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.is_closed'))
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label(trans('filament-ecommerce::messages.orders.columns.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -441,16 +466,7 @@ class OrderResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label(trans('filament-ecommerce::messages.orders.filters.status'))
                     ->searchable()
-                    ->options([
-                        'pending' => trans('filament-ecommerce::messages.orders.status.pending'),
-                        'prepear' => trans('filament-ecommerce::messages.orders.status.prepear'),
-                        'withdrew' => trans('filament-ecommerce::messages.orders.status.withdrew'),
-                        'shipped' => trans('filament-ecommerce::messages.orders.status.shipped'),
-                        'delivered' => trans('filament-ecommerce::messages.orders.status.delivered'),
-                        'part-delivered' => trans('filament-ecommerce::messages.orders.status.part-delivered'),
-                        'returned' => trans('filament-ecommerce::messages.orders.status.returned'),
-                        'canceled' => trans('filament-ecommerce::messages.orders.status.canceled'),
-                    ]),
+                    ->options((clone $types)->pluck('name', 'key')->toArray()),
                 Tables\Filters\Filter::make('company')
                     ->label(trans('filament-ecommerce::messages.orders.filters.company'))
                     ->form([
@@ -514,8 +530,33 @@ class OrderResource extends Resource
                     ->label(trans('filament-ecommerce::messages.orders.filters.is_closed')),
             ])
             ->actions([
+                Tables\Actions\Action::make('approved')
+                    ->hidden(fn($record) => $record->status !== 'pending')
+                    ->requiresConfirmation()
+                    ->action(function($record, array $data){
+                        $record->update(['is_approved' => 1, 'status' => 'prepared']);
+
+                        $orderLog = new OrderLog();
+                        $orderLog->user_id = auth()->user()->id;
+                        $orderLog->order_id = $record->id;
+                        $orderLog->status = $record->status;
+                        $orderLog->is_closed = 1;
+                        $orderLog->note = 'Order has been Approved by: '.auth()->user()->name. ' and Total: '.number_format($record->total, 2);
+                        $orderLog->save();
+
+                        Notification::make()
+                            ->title('Order Approved Changed')
+                            ->body('Order has been Approved')
+                            ->success()
+                            ->send();
+                    })
+                    ->label(trans('filament-ecommerce::messages.orders.actions.approved'))
+                    ->tooltip(trans('filament-ecommerce::messages.orders.actions.approved'))
+                    ->icon('heroicon-s-check-circle')
+                    ->color('success')
+                    ->iconButton(),
                 Tables\Actions\Action::make('shipping')
-                    ->hidden(fn($record) => $record->status === 'prepear' && $record->status === 'pending')
+                    ->hidden(fn($record) => $record->status === 'prepared' || $record->status === 'pending')
                     ->requiresConfirmation()
                     ->form([
                         Forms\Components\Select::make('shipping_vendor_id')
@@ -576,7 +617,7 @@ class OrderResource extends Resource
                     })
                     ->label(trans('filament-ecommerce::messages.orders.actions.shipping'))
                     ->tooltip(trans('filament-ecommerce::messages.orders.actions.shipping'))
-                    ->icon('heroicon-o-truck')
+                    ->icon('heroicon-s-truck')
                     ->color('danger')
                     ->iconButton(),
                 Tables\Actions\Action::make('status')
@@ -584,16 +625,7 @@ class OrderResource extends Resource
                         Forms\Components\Select::make('status')
                             ->label(trans('filament-ecommerce::messages.orders.columns.status'))
                             ->searchable()
-                            ->options([
-                                'pending' => trans('filament-ecommerce::messages.orders.status.pending'),
-                                'prepear' => trans('filament-ecommerce::messages.orders.status.prepear'),
-                                'withdrew' => trans('filament-ecommerce::messages.orders.status.withdrew'),
-                                'shipped' => trans('filament-ecommerce::messages.orders.status.shipped'),
-                                'delivered' => trans('filament-ecommerce::messages.orders.status.delivered'),
-                                'part-delivered' => trans('filament-ecommerce::messages.orders.status.part-delivered'),
-                                'returned' => trans('filament-ecommerce::messages.orders.status.returned'),
-                                'canceled' => trans('filament-ecommerce::messages.orders.status.canceled'),
-                            ])
+                            ->options((clone $types)->pluck('name', 'key')->toArray())
                             ->required()
                             ->default('pending'),
                     ])
@@ -619,12 +651,12 @@ class OrderResource extends Resource
                     })
                     ->tooltip(trans('filament-ecommerce::messages.orders.actions.status'))
                     ->label(trans('filament-ecommerce::messages.orders.actions.status'))
-                    ->icon('heroicon-o-check-circle')
+                    ->icon('heroicon-s-adjustments-horizontal')
                     ->color('warning')
                     ->iconButton(),
                 Tables\Actions\Action::make('print')
                     ->tooltip(trans('filament-ecommerce::messages.orders.actions.print'))
-                    ->icon('heroicon-o-printer')
+                    ->icon('heroicon-s-printer')
                     ->openUrlInNewTab()
                     ->url(fn($record) => route('order.print', $record->id))
                     ->iconButton(),
@@ -641,6 +673,116 @@ class OrderResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    protected function convertTextToOrder(string $text)
+    {
+        $getTextArray = explode( "\n", $text);
+
+        $name = null;
+        $phone = null;
+        $address = null;
+        $source = null;
+        $items = null;
+        foreach ($getTextArray as $textItem){
+            if(str($textItem)->contains('name:')){
+                $name = str($textItem)->replace('name:', '')->replaceFirst(' ', '')->toString();
+            }
+            if(str($textItem)->contains('phone:')){
+                $phone = str($textItem)->replace('phone:', '')->replaceFirst(' ', '')->toString();
+            }
+            if(str($textItem)->contains('address:')){
+                $address = str($textItem)->replace('address:', '')->replaceFirst(' ', '')->toString();
+            }
+            if(str($textItem)->contains('source:')){
+                $source = str($textItem)->replace('source:', '')->replaceFirst(' ', '')->toString();
+            }
+            if(str($textItem)->contains('items:')){
+                $items = str($textItem)->replace('items:', '')->replaceFirst(' ', '')->toString();
+            }
+        }
+        $account = config('filament-accounts.model')::query()->where('phone', $phone)->where('username', $phone)->first();
+        if(!$account){
+            $account = config('filament-accounts.model')::query()->create([
+                "name" => $name,
+                "phone" => $phone,
+                "loginBy" => 'phone',
+                "username" => $phone,
+                "address" => $address,
+            ]);
+        }
+        else {
+            $account->update([
+                "name" => $name,
+                "phone" => $phone,
+                "address" => $address,
+            ]);
+        }
+
+        $order = Order::query()->create([
+            'uuid' => setting('ordering_stating_code') .'-'. \Illuminate\Support\Str::random(8),
+            'company_id' => setting('ordering_company_id'),
+            'branch_id' => setting('ordering_direct_branch'),
+            'user_id' => auth()->user()->id,
+            'account_id' => $account->id,
+            'name' => $name,
+            'phone' => $phone,
+            'address' => $address,
+            'source' => $source,
+            'status' => 'pending',
+            'payment_method' => 'cash',
+            'total' => 0,
+            'vat'=> 0,
+            'discount' => 0,
+            'shipping' => 0
+        ]);
+
+        $total = 0;
+        $vat= 0;
+        $discount = 0;
+        $shipping = setting('ordering_active_shipping_fees') ? (int)setting('ordering_shipping_fees') : 0;
+
+        if($order){
+            $itemsArray = explode(',', $items);
+            foreach ($itemsArray as $itemText){
+                $exploadItemText = explode('*', $itemText);
+                $product = Product::query()->where('sku', 'LIKE','%'.str($exploadItemText[0])->remove(' ')->toString().'%')->first();
+                $qty = $exploadItemText[1];
+                $discount = 0;
+
+                if($product){
+                    if($product->discount_to && Carbon::parse($product->discount_to)->isFuture()){
+                        $discount = $product->discount;
+                    }
+                    $order->ordersItems()->create([
+                        'product_id' => $product->id,
+                        'qty' => $qty,
+                        'price' => $product->price,
+                        'discount' => $discount,
+                        'vat' => $product->vat,
+                        'total' => (($product->price+$product->vat) - $discount)*$qty,
+                    ]);
+
+                    $discount += $discount;
+                    $vat += $product->vat;
+                    $total+= (($product->price+$product->vat) - $discount)*$qty;
+                }
+            }
+
+            $order->discount = $discount;
+            $order->vat = $vat;
+            $order->total = $total+$shipping;
+            $order->shipping = $shipping;
+            $order->save();
+
+            $orderLog = new OrderLog();
+            $orderLog->user_id = auth()->user()->id;
+            $orderLog->order_id = $order->id;
+            $orderLog->status = $order->status;
+            $orderLog->is_closed = 1;
+            $orderLog->note = 'Order created by '.auth()->user()->name. ' and Total: '.number_format($order->total, 2) . ' and imported text '.$text;
+            $orderLog->save();
+        }
     }
 
     public static function getRelations(): array

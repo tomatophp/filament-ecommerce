@@ -5,6 +5,11 @@ namespace TomatoPHP\FilamentEcommerce;
 use Illuminate\Support\ServiceProvider;
 use TomatoPHP\FilamentCms\Facades\FilamentCMS;
 use TomatoPHP\FilamentCms\Services\Contracts\CmsType;
+use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderReceiptSettingsPage;
+use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderSettingsPage;
+use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderStatusSettingsPage;
+use TomatoPHP\FilamentSettingsHub\Facades\FilamentSettingsHub;
+use TomatoPHP\FilamentSettingsHub\Services\Contracts\SettingHold;
 
 
 class FilamentEcommerceServiceProvider extends ServiceProvider
@@ -50,6 +55,10 @@ class FilamentEcommerceServiceProvider extends ServiceProvider
         //Register Routes
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
+        $this->app->bind('filament-ecommerce', function () {
+            return new \TomatoPHP\FilamentEcommerce\Services\FilamentEcommerceServices();
+        });
+
     }
 
     public function boot(): void
@@ -69,6 +78,27 @@ class FilamentEcommerceServiceProvider extends ServiceProvider
                         ->color('primary')
                         ->icon('heroicon-o-tag')
                 ])
+        ]);
+
+        FilamentSettingsHub::register([
+            SettingHold::make()
+                ->label('filament-ecommerce::messages.settings.orders.title')
+                ->icon('heroicon-o-building-storefront')
+                ->route(OrderSettingsPage::getRouteName())
+                ->description('filament-ecommerce::messages.settings.orders.description')
+                ->group('filament-ecommerce::messages.settings.group'),
+            SettingHold::make()
+                ->label('filament-ecommerce::messages.settings.status.title')
+                ->icon('heroicon-o-check-circle')
+                ->route(OrderStatusSettingsPage::getRouteName())
+                ->description('filament-ecommerce::messages.settings.status.description')
+                ->group('filament-ecommerce::messages.settings.group'),
+            SettingHold::make()
+                ->label('filament-ecommerce::messages.settings.receipt.title')
+                ->icon('heroicon-o-printer')
+                ->route(OrderReceiptSettingsPage::getRouteName())
+                ->description('filament-ecommerce::messages.settings.receipt.description')
+                ->group('filament-ecommerce::messages.settings.group'),
         ]);
     }
 }

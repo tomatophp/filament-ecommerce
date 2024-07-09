@@ -35,6 +35,13 @@ return [
     'product' => [
         'title' => 'المنتجات',
         'single' => 'منتج',
+        'tabs' => [
+            'details' => 'التفاصيل',
+            'prices' => 'الأسعار',
+            'stock' => 'المخزون',
+            'seo' => 'تحسين محركات البحث',
+            'variation' => 'الخيارات',
+        ],
         'filters' => [
             'category_id' => 'التصنيف',
             'type' => 'النوع',
@@ -103,12 +110,20 @@ return [
     'orders' => [
         'title' => 'الطلبات',
         'single' => 'الطلب',
+        'import' => [
+            "hint" => 'حتي تستطيع إستيراد الطلبات الجديدة برجاء إملي النص التالي بالبيانات ويمكنك استخدم [SKU*QTY,] بهذا الشكل للمنتجات',
+            'order_text' => 'Order Text',
+        ],
         'actions' => [
+            'approved' => 'الموافقة',
             'shipping' => 'الشحن',
             'status' => 'تغيير الحالة',
             'edit' => 'تعديل الطلب',
             'show' => 'عرض الطلب',
             'print' => 'طباعة',
+            'settings' => "إعدادات الطلب",
+            'import' => 'استيراد الطلبات',
+            'export' => 'تصدير الطلبات',
         ],
         'filters' => [
             'company' => 'الشركة',
@@ -139,7 +154,6 @@ return [
         'columns' => [
             'shipping_vendor_id' => 'شركة الشحن',
             'shipper_id' => 'عامل التوصيل',
-            'uuid' => 'كود الطلب',
             'company_id' => 'الشركة',
             'branch_id' => 'الفرع',
             'status' => 'الحالة',
@@ -165,7 +179,12 @@ return [
             'shipping' => 'الشحن',
             'has_returns' => 'لديه مرتجعات',
             'return_total' => 'إجمالي المرتجعات',
-            'reason' => 'السبب'
+            'reason' => 'السبب',
+            'is_approved' => 'تم التاكيد',
+            'is_closed' => 'مكتمل',
+            'created_at' => 'تاريخ الإنشاء',
+            'updated_at' => 'تاريخ التحديث',
+            'uuid' => 'كود الطلب',
         ],
         'print' => [
             'from' => "من:",
@@ -259,4 +278,50 @@ return [
             'updated_at' => 'تاريخ التحديث',
         ]
     ],
+    'settings' => [
+        'group' => "إعدادات الطلبات",
+        'receipt' => [
+            'title' => "إعدادات الفاتورة",
+            'description' => "تعديل إعدادات الفاتورة وتغيير الشعار والبيانات الخاصة بالشركة",
+            "columns" => [
+                "ordering_show_company_data" => "عرض بيانات الشركة",
+                "ordering_show_company_logo" => "عرض شعار الشركة",
+                "ordering_show_branch_data" => "عرض بيانات الفرع",
+                "ordering_show_tax_number" => "عرض الرقم الضريبي",
+                "ordering_show_registration_number" => "عرض رقم السجل التجاري",
+            ]
+        ],
+        'orders' => [
+            'title' => "إعدادات الطلبات",
+            'description' => "تغيير رمز الطلب وتعديل الفروع و تفعيل رسوم الشحن",
+            'sections' => [
+                'ordering' => 'إعدادات الطلبات',
+                'shipping' => 'إعدادات الشحن',
+            ],
+            "columns" => [
+                "ordering_stating_code" => "رمز البداية للطلبات",
+                "ordering_company_id" => "الشركة",
+                "ordering_web_branch" => "الفرع الرئيسي لطلبات الموقع",
+                "ordering_mobile_branch" => "الفرع الرئيسي لطلبات التطبيق",
+                "ordering_direct_branch" => "الفرع الرئيسي لطلبات المباشرة",
+                "ordering_active_shipping_fees" => "تفعيل رسوم الشحن",
+                "ordering_shipping_fees" => "رسوم الشحن",
+            ]
+        ],
+        'status' => [
+            'title' => "إعدادات الحالات",
+            'description' => "تعديل حالات الطلبات وتغيير الأيقونات والألوان",
+            "action" => [
+                "edit" => "تعديل الحالة",
+                "notification" => "تم تعديل الحالة بنجاح",
+            ],
+            "columns" => [
+                "status" => "الحالة",
+                "icon" => "أيقونة",
+                "color" => "لون",
+                "language" => "اللغة",
+                "value" => "القيمة",
+            ]
+        ],
+    ]
 ];

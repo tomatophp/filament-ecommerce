@@ -45,6 +45,7 @@ class CreateOrder extends CreateRecord
         $record->user_id =  auth()->user()->id;
         $record->vat = $vat;
         $record->discount = $discount;
+        $record->shipping = setting('ordering_active_shipping_fees') ? (int)setting('ordering_shipping_fees') : 0;
         $record->total = $total+$record->shipping;
         $record->save();
 

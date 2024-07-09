@@ -187,7 +187,7 @@ class Order extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function delivery()
+    public function shipper()
     {
         return $this->belongsTo('TomatoPHP\FilamentEcommerce\Models\Delivery', 'shipper_id');
     }

@@ -7,6 +7,7 @@ use Spatie\LaravelSettings\Settings;
 
 class OrderingSettings extends Settings
 {
+    public int $ordering_company_id;
     public int $ordering_web_branch;
     public int $ordering_mobile_branch;
     public int $ordering_direct_branch;
@@ -14,20 +15,20 @@ class OrderingSettings extends Settings
     public int $ordering_active_inventory_direct_branch;
 
     public string $ordering_stating_code;
-    public string $ordering_pending_status;
-    public string $ordering_prepared_status;
-    public string $ordering_withdrew_status;
-    public string $ordering_shipped_status;
+    public array $ordering_pending_status;
+    public array $ordering_prepared_status;
+    public array $ordering_withdrew_status;
+    public array $ordering_shipped_status;
 
-    public string $ordering_delivered_status;
+    public array $ordering_delivered_status;
 
-    public string $ordering_cancelled_status;
+    public array $ordering_cancelled_status;
 
-    public string $ordering_refunded_status;
+    public array $ordering_refunded_status;
 
-    public string $ordering_done_status;
+    public array $ordering_done_status;
 
-    public string $ordering_paid_status;
+    public array $ordering_paid_status;
 
     public bool $ordering_active_inventory;
 

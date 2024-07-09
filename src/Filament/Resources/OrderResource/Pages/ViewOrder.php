@@ -21,11 +21,12 @@ class ViewOrder extends ViewRecord
     {
         return [
             Actions\Action::make('print')
+                ->icon('heroicon-o-printer')
                 ->label(trans('filament-ecommerce::messages.orders.actions.print'))
                 ->openUrlInNewTab()
                 ->url(route('order.print', $this->getRecord()->id)),
-            Actions\DeleteAction::make(),
-            Actions\EditAction::make(),
+            Actions\DeleteAction::make()->icon('heroicon-o-trash'),
+            Actions\EditAction::make()->icon('heroicon-o-pencil-square')->color('warning'),
         ];
     }
 

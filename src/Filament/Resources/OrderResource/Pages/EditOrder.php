@@ -17,7 +17,12 @@ class EditOrder extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\Action::make('print')
+                ->icon('heroicon-o-printer')
+                ->label(trans('filament-ecommerce::messages.orders.actions.print'))
+                ->openUrlInNewTab()
+                ->url(route('order.print', $this->getRecord()->id)),
+            Actions\DeleteAction::make()->icon('heroicon-o-trash'),
         ];
     }
 

@@ -35,6 +35,13 @@ return [
     'product' => [
         'title' => 'Products',
         'single' => 'Product',
+        'tabs' => [
+            'details' => 'Details',
+            'prices' => 'Prices',
+            'stock' => 'Stock',
+            'seo' => 'SEO',
+            'variation' => 'Variation',
+        ],
         'filters' => [
             'category_id' => 'Category',
             'type' => 'Type',
@@ -103,12 +110,20 @@ return [
     'orders' => [
         'title' => 'Orders',
         'single' => 'Order',
+        'import' => [
+            "hint" => 'please fill this order text with your data without delete of any line, items must be like [SKU*QTY,] ',
+            'order_text' => 'Order Text',
+        ],
         'actions' => [
+            'approved' => 'Approve',
             'shipping' => 'Shipping',
             'status' => 'Change Status',
             'edit' => 'Edit Order',
             'show' => 'Show Order',
             'print' => 'Print',
+            'settings' => "Order Settings",
+            'import' => 'Import Orders',
+            'export' => 'Export Orders',
         ],
         'filters' => [
             'company' => 'Company',
@@ -161,6 +176,11 @@ return [
             'qty' => 'Qty',
             'discount' => 'Discount',
             'vat' => 'VAT',
+            'total' => 'Total',
+            'is_approved' => 'Is Approved',
+            'is_closed' => 'Is Closed',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
             'total' => 'Total',
             'shipping' => 'Shipping',
             'has_returns' => 'Has Returns',
@@ -260,4 +280,50 @@ return [
             'updated_at' => 'Updated At',
         ]
     ],
+    'settings' => [
+        'group' => 'Orders Settings',
+        'receipt' => [
+            'title' => "Order Receipt Settings",
+            'description' => "Order Receipt Print Settings",
+            "columns" => [
+                "ordering_show_company_data" => "Show Company Data",
+                "ordering_show_company_logo" => "Show Company Logo",
+                "ordering_show_branch_data" => "Show Branch Data",
+                "ordering_show_tax_number" => "Show Tax Number",
+                "ordering_show_registration_number" => "Show Registration Number",
+            ]
+        ],
+        'orders' => [
+            'title' => "Order Settings",
+            'description' => "Order UUID Setting, branches, shipping settings",
+            'sections' => [
+                'ordering' => 'Ordering Settings',
+                'shipping' => 'Ordering Shipping Setting',
+            ],
+            "columns" => [
+                "ordering_stating_code" => "Order UUID Start With",
+                "ordering_company_id" => "Main Company For Orders",
+                "ordering_web_branch" => "Main Branch For Website Orders",
+                "ordering_mobile_branch" => "Main Branch For Mobile App Orders",
+                "ordering_direct_branch" => "Main Branch For Dashboard Orders",
+                "ordering_active_shipping_fees" => "Active Shipping Fees",
+                "ordering_shipping_fees" => "Shipping Fees",
+            ]
+        ],
+        'status' => [
+            'title' => "Order Status Settings",
+            'description' => "Change your order status colors and text",
+            "action" => [
+                "edit" => "Edit Status",
+                "notification" => "Status Updated Successfully",
+            ],
+            "columns" => [
+                "status" => "Status",
+                "icon" => "Icon",
+                "color" => "Color",
+                "language" => "Language",
+                "value" => "Value",
+            ]
+        ],
+    ]
 ];

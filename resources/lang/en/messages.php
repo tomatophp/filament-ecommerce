@@ -43,7 +43,8 @@ return [
             'variation' => 'Variation',
         ],
         'filters' => [
-            'category_id' => 'Category',
+            'category_id' => 'Main Category',
+            'categories' => 'Categories',
             'type' => 'Type',
             'has_options' => 'Has Variants',
             'is_activated' => 'Is Activated',
@@ -115,6 +116,11 @@ return [
             'order_text' => 'Order Text',
         ],
         'actions' => [
+            'coupon' => [
+                'success' => 'Coupon Applied Successfully',
+                'not_valid' => 'Coupon Not Valid',
+                'not_found' => 'Coupon Not Found',
+            ],
             'approved' => 'Approve',
             'shipping' => 'Shipping',
             'status' => 'Change Status',
@@ -126,6 +132,7 @@ return [
             'export' => 'Export Orders',
         ],
         'filters' => [
+            'apply' => 'Apply',
             'company' => 'Company',
             'branch_id' => 'Branch',
             'account_id' => 'Account',
@@ -160,6 +167,7 @@ return [
             'status' => 'Status',
             'payment_method' => 'Payment Method',
             'notes' => 'Notes',
+            'coupon' => 'Discount Coupon',
             'user_id' => 'User',
             'account_id' => 'Account',
             'name' => 'Name',
@@ -197,6 +205,7 @@ return [
             'total' => "Total",
             'qty' => "Qty",
             'price' => "Price",
+            'coupon' => "Discount Coupon",
             'discount' => "Discount",
             'vat' => "VAT",
             'shipping' => "Shipping",
@@ -208,7 +217,14 @@ return [
             'status' => "status",
             'payment_method' => "Payment Method",
             'source' => "Source",
-        ]
+        ],
+        'sections' => [
+            'company' => 'Company Info',
+            'account' => 'Account Info',
+            'location' => 'Account Location',
+            'items' => 'Order Items',
+            'totals' => 'Totals',
+        ],
     ],
     'shipping' => [
         'title' => 'Shipping Vendors',
@@ -325,5 +341,83 @@ return [
                 "value" => "Value",
             ]
         ],
+    ],
+    "widget" => [
+        "state" => "Orders This Week Per Status",
+        "orders" => "Orders",
+        "source" => 'Compare Order Sources',
+        'payment' => 'Compare Order Payment Methods'
+    ],
+    "coupons" => [
+        "title" => "Coupons",
+        "single" => "Coupon",
+        "columns" => [
+            "code" => "Code",
+            "copy" => "Copy Code",
+            "type" => "Type",
+            "discount_coupon" => "Discount",
+            "percentage_coupon" => "Percentage",
+            "amount" => "Amount",
+            "end_at" => "End At",
+            "is_activated" => "Is Activated",
+            "is_limited" => "Is Limited",
+            "apply_to" => "Apply To",
+            "product" => "Product",
+            "category" => "Category",
+            "except" => "Except",
+            "use_limit" => "Use Limit",
+            "use_limit_by_user" => "Use Limit By User",
+            "order_total_limit" => "Order Total Limit",
+            "is_marketing" => "Is Marketing",
+            "marketer_name" => "Marketer Name",
+            "marketer_type" => "Marketer Type",
+            "marketer_amount" => "Marketer Amount",
+            "marketer_amount_max" => "Marketer Amount Max",
+            "marketer_show_amount_max" => "Show Marketer Amount Max",
+            "marketer_hide_total_sales" => "Hide Marketer Total Sales",
+        ],
+        "filters" => [
+            "type" => "Type",
+            "is_activated" => "Is Activated",
+            "is_limited" => "Is Limited",
+            "is_marketing" => "Is Marketing",
+        ]
+    ],
+    "gift_card" => [
+        "title" => "Gift Cards",
+        "single" => "Card",
+        "columns" => [
+            "default" => "Gift Card",
+            "account_id" => "Account",
+            "account_id_hint" => "Set Card for selected account",
+            "name" => "Name",
+            "code" => "Code",
+            "balance" => "Balance",
+            "is_activated" => "Is Activated",
+            "is_expired" => "Is Expired",
+        ],
+        "filters" => [
+            "account_id" => "Account",
+            "is_activated" => "Is Activated",
+            "is_expired" => "Is Expired",
+        ]
+    ],
+    "referral_code" => [
+        "title" => "Referral Codes",
+        "single" => "Code",
+        "columns" => [
+            "default" => "Referral Code",
+            "account_id" => "Account",
+            "name" => "Name",
+            "code" => "Code",
+            "is_activated" => "Is Activated",
+            "is_public" => "Is Public",
+            "counter" => "Counter",
+        ],
+        "filters" => [
+            "account_id" => "Account",
+            "is_activated" => "Is Activated",
+            "is_public" => "Is Public",
+        ]
     ]
 ];

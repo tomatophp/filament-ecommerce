@@ -43,7 +43,8 @@ return [
             'variation' => 'الخيارات',
         ],
         'filters' => [
-            'category_id' => 'التصنيف',
+            'categories' => 'التصنيفات',
+            'category_id' => 'التصنيف الرئيسي',
             'type' => 'النوع',
             'has_options' => 'يحتوي على خيارات',
             'is_activated' => 'مفعل',
@@ -112,9 +113,15 @@ return [
         'single' => 'الطلب',
         'import' => [
             "hint" => 'حتي تستطيع إستيراد الطلبات الجديدة برجاء إملي النص التالي بالبيانات ويمكنك استخدم [SKU*QTY,] بهذا الشكل للمنتجات',
-            'order_text' => 'Order Text',
+            'order_text' => 'نص الطلب',
         ],
         'actions' => [
+            'coupon' => [
+                'success' => 'تم تطبيق الكوبون بنجاح',
+                'not_valid' => 'الكوبون غير صالح',
+                'not_found' => 'الكوبون غير موجود',
+            ],
+            'apply' => 'تطبيق',
             'approved' => 'الموافقة',
             'shipping' => 'الشحن',
             'status' => 'تغيير الحالة',
@@ -124,6 +131,13 @@ return [
             'settings' => "إعدادات الطلب",
             'import' => 'استيراد الطلبات',
             'export' => 'تصدير الطلبات',
+        ],
+        'sections' => [
+            'company' => 'بيانات الشركة',
+            'account' => 'بيانات الحساب',
+            'location' => 'بيانات الموقع',
+            'items' => 'المنتجات',
+            'totals' => 'الإجماليات',
         ],
         'filters' => [
             'company' => 'الشركة',
@@ -152,6 +166,7 @@ return [
             'returned' => 'تم الإرجاع',
         ],
         'columns' => [
+            'coupon' => "كوبون الخصم",
             'shipping_vendor_id' => 'شركة الشحن',
             'shipper_id' => 'عامل التوصيل',
             'company_id' => 'الشركة',
@@ -187,6 +202,7 @@ return [
             'uuid' => 'كود الطلب',
         ],
         'print' => [
+            'coupon' => "كوبون الخصم",
             'from' => "من:",
             'to' => "إلى:",
             'order' => "الطلب: ",
@@ -323,5 +339,82 @@ return [
                 "value" => "القيمة",
             ]
         ],
+    ],
+    "widget" => [
+        "state" => "الطلبات هذا الاسبوع حسب الحالة",
+        "orders" => "طلب",
+        "source" => 'مقارنة مصادر الطلبات',
+        'payment' => 'مقارنة طرق الدفع',
+    ],
+    "coupons" => [
+        "title" => "كوبونات الخصم",
+        "single" => "كوبون",
+        "columns" => [
+            "code" => "الكود",
+            "copy" => "نسخ",
+            "type" => "النوع",
+            "discount_coupon" => "خصم",
+            "percentage_coupon" => "نسبة",
+            "amount" => "القيمة",
+            "end_at" => "تاريخ الانتهاء",
+            "is_activated" => "مفعل",
+            "is_limited" => "محدود",
+            "apply_to" => "تطبيق علي",
+            "product" => "المنتج",
+            "category" => "التصنيف",
+            "except" => "ما عدا",
+            "use_limit" => "حد الاستخدام",
+            "use_limit_by_user" => "حد الاستخدام للمستخدم",
+            "order_total_limit" => "حد الطلب الإجمالي",
+            "is_marketing" => "تسويقي",
+            "marketer_name" => "اسم المسوق",
+            "marketer_type" => "نوع المسوق",
+            "marketer_amount" => "قيمة المسوق",
+            "marketer_amount_max" => "أقصي قيمة للمسوق",
+            "marketer_show_amount_max" => "عرض أقصي قيمة للمسوق",
+            "marketer_hide_total_sales" => "إخفاء إجمالي المبيعات",
+        ],
+        "filters" => [
+            "type" => "النوع",
+            "is_activated" => "مفعل",
+            "is_limited" => "محدود",
+            "is_marketing" => "تسويقي",
+        ]
+    ],
+    "gift_card" => [
+        "title" => "بطاقات الهدايا",
+        "single" => "بطاقة هدية",
+        "columns" => [
+            "default" => "بطاقة هدية",
+            "account_id" => "الحساب",
+            "name" => "الاسم",
+            "code" => "الكود",
+            "balance" => "الرصيد",
+            "is_activated" => "مفعل",
+            "is_expired" => "منتهي",
+        ],
+        "filters" => [
+            "account_id" => "الحساب",
+            "is_activated" => "مفعل",
+            "is_expired" => "منتهي",
+        ]
+    ],
+    "referral_code" => [
+        "title" => "رموز الإحالة",
+        "single" => "رمز إحالة",
+        "columns" => [
+            "default" => "رمز إحالة",
+            "account_id" => "الحساب",
+            "name" => "الاسم",
+            "code" => "الكود",
+            "is_activated" => "مفعل",
+            "is_public" => "عام",
+            "counter" => "العداد",
+        ],
+        "filters" => [
+            "account_id" => "الحساب",
+            "is_activated" => "مفعل",
+            "is_public" => "عام",
+        ]
     ]
 ];

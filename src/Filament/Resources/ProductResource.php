@@ -423,6 +423,17 @@ class ProductResource extends Resource
                         ->pluck('name', 'id')
                         ->toArray()
                     ),
+                Tables\Filters\SelectFilter::make('categories')
+                    ->label(trans('filament-ecommerce::messages.product.filters.categories'))
+                    ->searchable()
+                    ->multiple()
+                    ->relationship('categories', 'name')
+                    ->options(Category::query()
+                        ->where('for', 'product')
+                        ->where('type', 'category')
+                        ->pluck('name', 'id')
+                        ->toArray()
+                    ),
                 Tables\Filters\SelectFilter::make('type')
                     ->label(trans('filament-ecommerce::messages.product.filters.type'))
                     ->searchable()

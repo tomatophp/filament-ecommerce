@@ -109,11 +109,23 @@
                 <td>{!! dollar($model->vat) !!}</td>
             </tr>
         @endif
+        @if($model->coupon)
+            <tr>
+                <th>{{trans('filament-ecommerce::messages.orders.print.coupon')}} [{{ $model->coupon->code }}]</th>
+                <td>
+                    {!! dollar($model->coupon->discount($model->total)) !!}
+                </td>
+            </tr>
+        @endif
         @if($model->discount)
             <tr>
                 <th>{{trans('filament-ecommerce::messages.orders.print.discount')}}</th>
                 <td>
-                    {!! dollar($model->discount) !!}
+                    @if($model->coupon)
+                        {!! dollar($model->discount - $model->coupon->discount($model->total)) !!}
+                    @else
+                        {!! dollar($model->discount) !!}
+                    @endif
                 </td>
             </tr>
         @endif

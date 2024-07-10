@@ -11,12 +11,14 @@ use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use TomatoPHP\FilamentAccounts\Components\AccountColumn;
 use TomatoPHP\FilamentAccounts\Models\Account;
+use TomatoPHP\FilamentEcommerce\Facades\FilamentEcommerce;
 use TomatoPHP\FilamentEcommerce\Filament\Export\ExportOrders;
 use TomatoPHP\FilamentEcommerce\Filament\Import\ImportOrders;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource\Pages;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource\RelationManagers;
 use TomatoPHP\FilamentEcommerce\Models\Branch;
 use TomatoPHP\FilamentEcommerce\Models\Company;
+use TomatoPHP\FilamentEcommerce\Models\Coupon;
 use TomatoPHP\FilamentEcommerce\Models\Delivery;
 use TomatoPHP\FilamentEcommerce\Models\Order;
 use Filament\Forms;
@@ -30,6 +32,7 @@ use TomatoPHP\FilamentEcommerce\Models\OrderLog;
 use TomatoPHP\FilamentEcommerce\Models\Product;
 use TomatoPHP\FilamentEcommerce\Models\ShippingPrice;
 use TomatoPHP\FilamentEcommerce\Models\ShippingVendor;
+use TomatoPHP\FilamentEcommerce\Services\Coupons;
 use TomatoPHP\FilamentLocations\Models\City;
 use TomatoPHP\FilamentLocations\Models\Country;
 use TomatoPHP\FilamentTypes\Components\TypeColumn;
@@ -83,7 +86,8 @@ class OrderResource extends Resource
                     'sm' => 1,
                     'lg' => 12,
                 ])->schema([
-                    Forms\Components\Section::make('Company')->schema([
+                    Forms\Components\Section::make(trans('filament-ecommerce::messages.orders.sections.company'))
+                        ->schema([
                         Forms\Components\Select::make('company_id')
                             ->searchable()
                             ->default(setting('ordering_company_id'))
@@ -111,8 +115,9 @@ class OrderResource extends Resource
                             ->options(Type::query()->where('for', 'orders')->where('type', 'payment_methods')->pluck('name', 'key')->toArray())
                             ->default('cash')
                             ->label(trans('filament-ecommerce::messages.orders.columns.payment_method')),
-                    ])->columns(2),
-                    Forms\Components\Section::make('Account')->schema([
+                    ])->columns(2)->collapsible()->collapsed(fn($record) => $record),
+                    Forms\Components\Section::make(trans('filament-ecommerce::messages.orders.sections.account'))
+                        ->schema([
                         Forms\Components\Select::make('account_id')
                             ->searchable()
                             ->options( \App\Models\Account::query()->where('is_active', 1)->pluck('name', 'id')->toArray())
@@ -138,8 +143,9 @@ class OrderResource extends Resource
                             ->label(trans('filament-ecommerce::messages.orders.columns.source'))
                             ->required()
                             ->default('system'),
-                    ])->columnSpan(6),
-                    Forms\Components\Section::make('Location')->schema([
+                    ])->columnSpan(6)->collapsible()->collapsed(fn($record) => $record),
+                    Forms\Components\Section::make(trans('filament-ecommerce::messages.orders.sections.location'))
+                        ->schema([
                         Forms\Components\Select::make('country_id')
                             ->preload()
                             ->searchable()
@@ -163,9 +169,9 @@ class OrderResource extends Resource
                         Forms\Components\Textarea::make('address')
                             ->label(trans('filament-ecommerce::messages.orders.columns.address'))
                             ->columnSpanFull(),
-                    ])->columns(2)->columnSpan(6),
+                    ])->columns(2)->columnSpan(6)->collapsible()->collapsed(fn($record) => $record),
                 ]),
-                Forms\Components\Section::make('Items')
+                Forms\Components\Section::make(trans('filament-ecommerce::messages.orders.sections.items'))
                     ->schema([
                     Forms\Components\Repeater::make('items')
                         ->hiddenLabel()
@@ -261,10 +267,72 @@ class OrderResource extends Resource
                             $set('vat', $vat);
                         })
                         ->columns(12)
-                ]),
-                Forms\Components\Section::make('Totals')->schema([
-//                    Forms\Components\TextInput::make('coupon_id')
-//                        ->numeric(),
+                ])->collapsible()->collapsed(fn($record) => $record),
+                Forms\Components\Section::make(trans('filament-ecommerce::messages.orders.sections.totals'))
+                    ->schema([
+                    Forms\Components\Hidden::make('coupon_id'),
+                    Forms\Components\TextInput::make('coupon')
+                        ->label(trans('filament-ecommerce::messages.orders.columns.coupon'))
+                        ->hidden(fn($record) => $record)
+                        ->suffixAction(
+                            Forms\Components\Actions\Action::make('apply')
+                                ->tooltip(trans('filament-ecommerce::messages.orders.actions.apply'))
+                                ->icon('heroicon-s-check')
+                                ->action(function (Forms\Get $get,Forms\Set $set){
+                                    $coupon = Coupon::query()->where('code', $get('coupon'))->first();
+                                    if($coupon){
+                                        $items = $get('items');
+                                        $total = 0;
+                                        $vat = 0;
+                                        $productIds = [];
+                                        $discount = 0;
+                                        foreach ($items as $orderItem){
+                                            $productIds[] = $orderItem['product_id'];
+                                            $product = Product::find($orderItem['product_id']);
+                                            if($product){
+                                                $getDiscount= 0;
+                                                if($product->discount_to && Carbon::parse($product->discount_to)->isFuture()){
+                                                    $getDiscount = $product->discount;
+                                                }
+
+                                                $discount+=$getDiscount;
+                                                $vat+=$product->vat;
+                                                $total += ((($product->price+$product->vat)-$getDiscount)*$orderItem['qty']);
+                                            }
+                                        }
+
+                                        $getCouponDiscount = FilamentEcommerce::coupon()
+                                            ->products($productIds)
+                                            ->discount(code: $get('coupon'), total: $total);
+
+                                        if($getCouponDiscount){
+                                            $discount+=$getCouponDiscount;
+
+                                            $set('discount', $discount);
+                                            $set('total', ($total+$vat)-$discount);
+                                            $set('coupon_id', $coupon->id);
+
+                                            Notification::make()
+                                                ->title(trans('filament-ecommerce::messages.orders.actions.coupon.success'))
+                                                ->success()
+                                                ->send();
+                                        }
+                                        else {
+                                            Notification::make()
+                                                ->title(trans('filament-ecommerce::messages.orders.actions.coupon.not_valid'))
+                                                ->danger()
+                                                ->send();
+                                        }
+                                    }
+                                    else {
+                                        Notification::make()
+                                            ->title(trans('filament-ecommerce::messages.orders.actions.coupon.not_found'))
+                                            ->danger()
+                                            ->send();
+                                    }
+
+                                })
+                        ),
                     Forms\Components\TextInput::make('shipping')
                         ->lazy()
                         ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set) {
@@ -280,8 +348,6 @@ class OrderResource extends Resource
 
                                     $total += ((($product->price+$product->vat)-$getDiscount)*$orderItem['qty']);
                                 }
-
-
                             }
 
                             $set('total', $total+(int)$get('shipping'));
@@ -322,8 +388,7 @@ class OrderResource extends Resource
                     Forms\Components\Textarea::make('notes')
                         ->label(trans('filament-ecommerce::messages.orders.columns.notes'))
                         ->columnSpanFull(),
-                ]),
-
+                ])->collapsible()->collapsed(fn($record) => $record),
             ]);
     }
 

@@ -31,7 +31,7 @@ class OrdersStateWidget extends BaseWidget
                     now()
                 )
                 ->count();
-            $states[] = EcommerceState::make($item->name .' Orders', (clone $orderQuery)->where('status', $item->key)->count())
+            $states[] = EcommerceState::make(trans('filament-ecommerce::messages.widget.orders') . ' ' . $item->name , (clone $orderQuery)->where('status', $item->key)->count())
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->value((clone $orderQuery)->where('status', $item->key)->count())
                 ->chart($trend->pluck('aggregate')->toArray())

@@ -32,7 +32,7 @@ trait ValidateOrder
             'total' => 'nullable',
             'discount' => 'nullable',
             'shipping' => 'nullable',
-            'vat' => 'nullable',
+            'tax' => 'nullable',
             'status' => 'nullable|max:255|string',
             'is_approved' => 'nullable',
             'is_closed' => 'nullable',

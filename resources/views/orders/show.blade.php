@@ -184,13 +184,27 @@
                     </div>
                 </div>
                 @endif
+                @if($this->getRecord()->coupon)
+                    <div class="flex justify-between gap-4 py-4 border-b dark:border-gray-700 text-danger-500">
+                        <div class="font-bold">
+                            {{trans('filament-ecommerce::messages.orders.print.coupon')}} [{{ $this->getRecord()->coupon->code }}]
+                        </div>
+                        <div>
+                            {!! dollar($this->getRecord()->coupon->discount($this->getRecord()->total) ) !!}
+                        </div>
+                    </div>
+                @endif
                 @if($this->getRecord()->discount)
                 <div class="flex justify-between gap-4 py-4 border-b dark:border-gray-700 text-danger-500">
                     <div class="font-bold">
                         {{trans('filament-ecommerce::messages.orders.print.discount')}}
                     </div>
                     <div>
-                        {!! dollar($this->getRecord()->discount ) !!}
+                        @if($this->getRecord()->coupon)
+                            {!! dollar($this->getRecord()->discount - $this->getRecord()->coupon->discount($this->getRecord()->total)) !!}
+                        @else
+                            {!! dollar($this->getRecord()->discount ) !!}
+                        @endif
                     </div>
                 </div>
                 @endif

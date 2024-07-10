@@ -74,7 +74,15 @@ class Product extends Model implements HasMedia
      */
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'product_has_categories',  'category_id', 'product_id');
+        return $this->belongsToMany(Category::class, 'product_has_categories',   'product_id', 'category_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Category::class, 'product_has_tags', 'product_id', 'tag_id');
     }
 
     /**
@@ -85,13 +93,7 @@ class Product extends Model implements HasMedia
         return $this->belongsToMany('TomatoPHP\FilamentEcommerce\Models\Product', 'product_has_collection', 'collection_id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function tags()
-    {
-        return $this->belongsToMany(Category::class, 'product_has_tags', null, 'tag_id');
-    }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

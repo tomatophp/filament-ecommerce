@@ -45,6 +45,16 @@ class Coupon extends Model
         "marketer_hide_total_sales" => "boolean",
         "is_limited" => "boolean",
     ];
+
+    public function discount(?float $total=null)
+    {
+        if($this->type === 'percentage_coupon'){
+            return $total * $this->amount / 100;
+        }
+        else {
+            return $this->amount;
+        }
+    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

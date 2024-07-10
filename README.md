@@ -47,17 +47,18 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 - [x] Order Export
 - [x] Order Import
 - [x] Order Charts Widgets
+- [x] Coupon Management
+- [x] Gift Card Management
+- [x] Refferal Management
+- [x] Coupons Service Class
+- [x] Add Discount To Order Using Coupon
 - [ ] Order PDF Export
 - [ ] Order Facade Methods
 - [ ] Product Import
 - [ ] Product Export
 - [ ] Product Variants On Order
-- [ ] Coupon Management
-- [ ] Gift Card Management
-- [ ] Refferal Management
 - [ ] Pay Order With Wallet
 - [ ] Pay Order With Gift Card
-- [ ] Add Discount To Order Using Coupon
 - [ ] Cart Manager
 - [ ] Comparison Between Products
 - [ ] Wishlist Manager
@@ -66,7 +67,6 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 - [ ] Filament CMS Page Builder Integration
 - [ ] Filament CMS Themes Integration
 - [ ] Product Service Class
-- [ ] Coupons Service Class
 - [ ] Ecommerce Service Class
 - [ ] Ecommerce APIs
 
@@ -83,6 +83,36 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 ![Deliveries](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/deliveries.png)
 ![Edit Shipping](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/edit-shipping-vendors.png)
 ![Shipping](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/shipping-vendors.png)
+
+## Use Coupon Service
+
+you can use coupon service to check if coupon is valid or not
+
+you can use this method to check for selected Order
+
+```php
+use \TomatoPHP\FilamentEcommerce\Facades\FilamentEcommerce;
+
+FilamentEcommerce::coupon()->check('coupon_code', \TomatoPHP\FilamentEcommerce\Models\Order::find(1));
+```
+
+or you can check the code for selected products
+
+```php
+use \TomatoPHP\FilamentEcommerce\Facades\FilamentEcommerce;
+
+FilamentEcommerce::coupon()->products([1,2,4])->check('coupon_code');
+```
+
+or you can get the direct discount amount of the code 
+
+```php
+use \TomatoPHP\FilamentEcommerce\Facades\FilamentEcommerce;
+
+FilamentEcommerce::coupon()->products([1,2,4])->discount('coupon_code');
+```
+
+and it's the same as check you can apply to selected order or selected products.
 
 ## Publish Assets
 

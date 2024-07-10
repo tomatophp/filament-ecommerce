@@ -32,6 +32,6 @@ class ReferralCode extends Model
      */
     public function account()
     {
-        return $this->belongsTo(config('tomato-crm.model'));
+        return $this->belongsTo(config('filament-accounts.model'));
     }
 }

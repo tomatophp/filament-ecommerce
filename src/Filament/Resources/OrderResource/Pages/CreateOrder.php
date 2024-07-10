@@ -3,9 +3,11 @@
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource\Pages;
 
 use Carbon\Carbon;
+use TomatoPHP\FilamentEcommerce\Facades\FilamentEcommerce;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use TomatoPHP\FilamentEcommerce\Models\Coupon;
 use TomatoPHP\FilamentEcommerce\Models\OrderLog;
 use TomatoPHP\FilamentEcommerce\Models\Product;
 
@@ -44,6 +46,13 @@ class CreateOrder extends CreateRecord
 
         $record->user_id =  auth()->user()->id;
         $record->vat = $vat;
+        if(isset($data['coupon_id']) && $data['coupon_id']){
+            $coupon = Coupon::query()->find($data['coupon_id']);
+            if($coupon){
+                $record->coupon_id = $coupon->id;
+                $discount += FilamentEcommerce::coupon()->discount($coupon->code, $record);
+            }
+        }
         $record->discount = $discount;
         $record->shipping = setting('ordering_active_shipping_fees') ? (int)setting('ordering_shipping_fees') : 0;
         $record->total = $total+$record->shipping;

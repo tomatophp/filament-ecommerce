@@ -9,6 +9,7 @@ use TomatoPHP\FilamentEcommerce\Filament\Resources\BranchResource;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CompanyResource;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\DeliveryResource;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\ReferralCodeResource;
@@ -49,11 +50,10 @@ class FilamentEcommercePlugin implements Plugin
                 CompanyResource::class,
                 ProductResource::class,
                 OrderResource::class,
-    //            CouponResource::class,
-    //            DeliveryResource::class,
-    //            GiftCard::class,
-    //            ReferralCodeResource::class,
-                ShippingVendorResource::class
+                ShippingVendorResource::class,
+                CouponResource::class,
+                GiftCardResource::class,
+                ReferralCodeResource::class,
             ])
             ->widgets($this->useWidgets ? [
                 OrdersStateWidget::class,

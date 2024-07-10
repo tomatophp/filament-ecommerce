@@ -52,13 +52,19 @@ finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 - [x] Refferal Management
 - [x] Coupons Service Class
 - [x] Add Discount To Order Using Coupon
-- [ ] Order PDF Export
-- [ ] Order Facade Methods
-- [ ] Product Import
-- [ ] Product Export
 - [ ] Product Variants On Order
+- [ ] Gitf Card Services
+- [ ] Gift Card Apply To Account Wallet
 - [ ] Pay Order With Wallet
 - [ ] Pay Order With Gift Card
+- [ ] Refferal Code Services
+- [ ] Refferal Code Middleware Counter
+- [ ] Order PDF Export
+- [ ] Order Facade Methods
+- [ ] Order Tracking Page
+- [ ] Product Import
+- [ ] Product Export
+- [ ] Product Clone
 - [ ] Cart Manager
 - [ ] Comparison Between Products
 - [ ] Wishlist Manager

@@ -18,6 +18,7 @@ composer require tomatophp/filament-ecommerce
 after install your package please run this command
 
 ```bash
+php artisan vendor:publish --provider="Spatie\LaravelSettings\LaravelSettingsServiceProvider" --tag="migrations"
 php artisan filament-ecommerce:install
 ```
 

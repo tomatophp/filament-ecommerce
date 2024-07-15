@@ -2,6 +2,8 @@
 
 namespace TomatoPHP\FilamentEcommerce;
 
+use Filament\SpatieLaravelTranslatablePlugin;
+use TomatoPHP\FilamentAccounts\FilamentAccountsPlugin;
 use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderReceiptSettingsPage;
 use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderSettingsPage;
 use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderStatusSettingsPage;
@@ -22,9 +24,11 @@ use TomatoPHP\FilamentEcommerce\Filament\Widgets\OrdersStateWidget;
 use TomatoPHP\FilamentEcommerce\Filament\Widgets\OrderStateChart;
 use TomatoPHP\FilamentEcommerce\Models\GiftCard;
 use TomatoPHP\FilamentEcommerce\Models\ShippingVendor;
+use TomatoPHP\FilamentLocations\FilamentLocationsPlugin;
 use TomatoPHP\FilamentSettingsHub\Facades\FilamentSettingsHub;
 use TomatoPHP\FilamentSettingsHub\FilamentSettingsHubPlugin;
 use TomatoPHP\FilamentSettingsHub\Services\Contracts\SettingHold;
+use TomatoPHP\FilamentTypes\FilamentTypesPlugin;
 
 
 class FilamentEcommercePlugin implements Plugin
@@ -35,6 +39,7 @@ class FilamentEcommercePlugin implements Plugin
     }
 
     public ?bool $useWidgets = false;
+    public ?array $locals = ['en', 'ar'];
 
     public function useWidgets(bool $condation = true): static
     {
@@ -42,10 +47,22 @@ class FilamentEcommercePlugin implements Plugin
         return $this;
     }
 
+    public function defaultLocales(array $locales): static
+    {
+        $this->locals = $locales;
+        return $this;
+    }
+
     public function register(Panel $panel): void
     {
         $panel
             ->plugin(FilamentSettingsHubPlugin::make())
+            ->plugin(
+                FilamentAccountsPlugin::make()
+                    ->canLogin()
+                    ->canBlocked()
+            )
+            ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales($this->locals))
             ->resources([
                 CompanyResource::class,
                 ProductResource::class,

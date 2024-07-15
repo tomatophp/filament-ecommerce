@@ -19,6 +19,7 @@ after install your package please run this command
 
 ```bash
 php artisan vendor:publish --provider="Spatie\LaravelSettings\LaravelSettingsServiceProvider" --tag="migrations"
+php artisan vendor:publish --tag="filament-accounts-model"
 php artisan filament-ecommerce:install
 ```
 

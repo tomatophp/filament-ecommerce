@@ -15,11 +15,29 @@ Build your own ecommerce store with FilamentPHP with the Power of Tomato CMS Bui
 ```bash
 composer require tomatophp/filament-ecommerce
 ```
-after install your package please run this command
+
+we need the Media Library plugin to be installed and migrated you can use this command to publish the migration
+
+```bash
+php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"
+```
+
+now you need to install the settings hub use these commands
 
 ```bash
 php artisan vendor:publish --provider="Spatie\LaravelSettings\LaravelSettingsServiceProvider" --tag="migrations"
+php artisan filament-settings-hub:install
+```
+
+then you need to publish the account model
+
+```bash
 php artisan vendor:publish --tag="filament-accounts-model"
+```
+
+after installing your package please run this command
+
+```bash
 php artisan filament-ecommerce:install
 ```
 

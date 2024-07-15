@@ -15,20 +15,6 @@ class OrderingSettings extends Settings
     public int $ordering_active_inventory_direct_branch;
 
     public string $ordering_stating_code;
-    public array $ordering_pending_status;
-    public array $ordering_prepared_status;
-    public array $ordering_withdrew_status;
-    public array $ordering_shipped_status;
-
-    public array $ordering_delivered_status;
-
-    public array $ordering_cancelled_status;
-
-    public array $ordering_refunded_status;
-
-    public array $ordering_done_status;
-
-    public array $ordering_paid_status;
 
     public bool $ordering_active_inventory;
 

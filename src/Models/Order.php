@@ -72,7 +72,47 @@ class Order extends Model
     /**
      * @var array
      */
-    protected $fillable = ['company_id','user_id', 'country_id', 'area_id', 'city_id', 'address_id', 'account_id', 'cashier_id', 'coupon_id', 'shipper_id', 'shipping_vendor_id', 'branch_id', 'uuid', 'type', 'name', 'phone', 'flat', 'address', 'source', 'shipper_vendor', 'total', 'discount', 'shipping', 'vat', 'status', 'is_approved', 'is_closed', 'is_on_table', 'table', 'notes', 'has_returns', 'return_total', 'reason', 'is_payed', 'payment_method', 'payment_vendor', 'payment_vendor_id', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'company_id',
+        'user_id', 
+        'country_id', 
+        'area_id', 
+        'city_id', 
+        'address_id', 
+        'account_id', 
+        'cashier_id', 
+        'coupon_id', 
+        'shipper_id', 
+        'shipping_vendor_id', 
+        'branch_id', 
+        'uuid', 
+        'type', 
+        'name', 
+        'phone', 
+        'flat', 
+        'address', 
+        'source', 
+        'shipper_vendor', 
+        'total', 
+        'discount', 
+        'shipping', 
+        'vat', 
+        'status', 
+        'is_approved', 
+        'is_closed', 
+        'is_on_table', 
+        'table', 
+        'notes', 
+        'has_returns', 
+        'return_total', 
+        'reason', 
+        'is_payed', 
+        'payment_method', 
+        'payment_vendor', 
+        'payment_vendor_id', 
+        'created_at', 
+        'updated_at'
+    ];
 
     protected $casts = [
         'is_approved' => 'bool',

@@ -3,7 +3,6 @@
 namespace TomatoPHP\FilamentEcommerce\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use TomatoPHP\TomatoProducts\Models\Product;
 
 /**
  * @property integer $id
@@ -40,7 +39,7 @@ class Cart extends Model
      */
     public function account()
     {
-        return $this->belongsTo(config('tomato-crm.model'));
+        return $this->belongsTo(config('filament-accounts.model'));
     }
 
     /**

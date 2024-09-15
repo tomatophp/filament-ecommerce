@@ -43,10 +43,10 @@
         "filament/filament": "^3.0.0",
         "milon/barcode": "^11.0",
         "flowframe/laravel-trend": "^0.2.0",
-        "tomatophp/filament-cms": "^1.0",
-        "tomatophp/filament-locations": "^1.0",
-        "tomatophp/filament-accounts": "^2.0",
-        "tomatophp/filament-types": "^1.0",
-        "tomatophp/filament-settings-hub": "^1.0"
+        "tomatophp/filament-cms": "^v1.0",
+        "tomatophp/filament-locations": "^v1.0",
+        "tomatophp/filament-accounts": "^v2.0",
+        "tomatophp/filament-types": "^v1.0",
+        "tomatophp/filament-settings-hub": "^v1.0"
     }
 }

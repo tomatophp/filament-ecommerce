@@ -1,0 +1,29 @@
+{
+    "name": "FilamentEcommerce",
+    "alias": "filament-ecommerce",
+    "description": {
+        "ar": "قم ببناء متجر الكتروني متكامل ومتفاعل بكل سهولة",
+        "en": "Build your own ecommerce store with FilamentPHP with the Power of Tomato CMS Builder",
+        "gr": "Build your own ecommerce store with FilamentPHP with the Power of Tomato CMS Builder",
+        "sp": "Build your own ecommerce store with FilamentPHP with the Power of Tomato CMS Builder"
+    },
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "TomatoPHP\\FilamentEcommerce\\FilamentEcommerceServiceProvider"
+    ],
+    "files": [],
+    "title": {
+        "ar": "المتجر الالكتروني",
+        "en": "Ecommerce Builder",
+        "gr": "Ecommerce Builder",
+        "sp": "Ecommerce Builder"
+    },
+    "color": "#cc1448",
+    "icon": "heroicon-c-shopping-bag",
+    "placeholder": "https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/3x1io-tomato-ecommerce.jpg",
+    "type": "plugin",
+    "version": "v1.0.6",
+    "github" : "https://github.com/tomatophp/filament-ecommerce",
+    "docs" : "https://github.com/tomatophp/filament-ecommerce"
+}

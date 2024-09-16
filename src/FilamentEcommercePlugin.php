@@ -3,6 +3,7 @@
 namespace TomatoPHP\FilamentEcommerce;
 
 use Filament\SpatieLaravelTranslatablePlugin;
+use Nwidart\Modules\Module;
 use TomatoPHP\FilamentAccounts\FilamentAccountsPlugin;
 use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderReceiptSettingsPage;
 use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderSettingsPage;
@@ -33,6 +34,8 @@ use TomatoPHP\FilamentTypes\FilamentTypesPlugin;
 
 class FilamentEcommercePlugin implements Plugin
 {
+    private bool $isActive = false;
+
     public function getId(): string
     {
         return 'filament-ecommerce';
@@ -55,34 +58,45 @@ class FilamentEcommercePlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $panel
-            ->plugin(FilamentSettingsHubPlugin::make())
-            ->plugin(
-                FilamentAccountsPlugin::make()
-                    ->canLogin()
-                    ->canBlocked()
-            )
-            ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales($this->locals))
-            ->resources([
-                CompanyResource::class,
-                ProductResource::class,
-                OrderResource::class,
-                ShippingVendorResource::class,
-                CouponResource::class,
-                GiftCardResource::class,
-                ReferralCodeResource::class,
-            ])
-            ->widgets($this->useWidgets ? [
-                OrdersStateWidget::class,
-                OrderPaymentMethodChart::class,
-                OrderSourceChart::class,
-                OrderStateChart::class
-            ] : [])
-            ->pages([
-                OrderSettingsPage::class,
-                OrderStatusSettingsPage::class,
-                OrderReceiptSettingsPage::class
-            ]);
+        if(class_exists(Module::class)){
+            if(\Nwidart\Modules\Facades\Module::find('FilamentEcommerce')->isEnabled()){
+                $this->isActive = true;
+            }
+        }
+        else {
+            $this->isActive = true;
+        }
+
+        if($this->isActive) {
+            $panel
+                ->plugin(FilamentSettingsHubPlugin::make())
+                ->plugin(
+                    FilamentAccountsPlugin::make()
+                        ->canLogin()
+                        ->canBlocked()
+                )
+                ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales($this->locals))
+                ->resources([
+                    CompanyResource::class,
+                    ProductResource::class,
+                    OrderResource::class,
+                    ShippingVendorResource::class,
+                    CouponResource::class,
+                    GiftCardResource::class,
+                    ReferralCodeResource::class,
+                ])
+                ->widgets($this->useWidgets ? [
+                    OrdersStateWidget::class,
+                    OrderPaymentMethodChart::class,
+                    OrderSourceChart::class,
+                    OrderStateChart::class
+                ] : [])
+                ->pages([
+                    OrderSettingsPage::class,
+                    OrderStatusSettingsPage::class,
+                    OrderReceiptSettingsPage::class
+                ]);
+        }
     }
 
     public function boot(Panel $panel): void

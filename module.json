@@ -23,7 +23,7 @@
     "icon": "heroicon-c-shopping-bag",
     "placeholder": "https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/3x1io-tomato-ecommerce.jpg",
     "type": "plugin",
-    "version": "v1.0.6",
+    "version": "v1.0.7",
     "github" : "https://github.com/tomatophp/filament-ecommerce",
     "docs" : "https://github.com/tomatophp/filament-ecommerce"
 }

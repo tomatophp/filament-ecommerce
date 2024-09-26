@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -25,12 +26,19 @@ class ShippingVendor extends Model implements HasMedia
     /**
      * @var array
      */
-    protected $fillable = ['price','name', 'delivery_estimation','contact_person', 'phone', 'address', 'is_activated', 'integration', 'created_at', 'updated_at'];
+    protected $fillable = ['team_id', 'price','name', 'delivery_estimation','contact_person', 'phone', 'address', 'is_activated', 'integration', 'created_at', 'updated_at'];
 
     protected $casts = [
         'is_activated' => 'boolean'
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
 
     public function deliveries(){
         return $this->hasMany('TomatoPHP\FilamentEcommerce\Models\Delivery');

@@ -41,8 +41,106 @@ class FilamentEcommercePlugin implements Plugin
         return 'filament-ecommerce';
     }
 
+    public bool $useAccounts = false;
+    public bool $useSettings = false;
+    public bool $useCompany = false;
+    public bool $useProduct = false;
+    public bool $useOrder = false;
+    public bool $useOrderSettings = false;
+    public bool $allowOrderCreate = false;
+    public bool $allowOrderExport = false;
+    public bool $allowOrderImport = false;
+    public bool $showOrderAccount = false;
+    public bool $useShippingVendor = false;
+    public bool $useCoupon = false;
+    public bool $useGiftCard = false;
+    public bool $useReferralCode = false;
     public ?bool $useWidgets = false;
     public ?array $locals = ['en', 'ar'];
+
+    public function useAccounts(bool $condition = true): static
+    {
+        $this->useAccounts = $condition;
+        return $this;
+    }
+
+    public function useSettings(bool $condition = true): static
+    {
+        $this->useSettings = $condition;
+        return $this;
+    }
+
+    public function useCompany(bool $condition = true): static
+    {
+        $this->useCompany = $condition;
+        return $this;
+    }
+
+    public function useProduct(bool $condition = true): static
+    {
+        $this->useProduct = $condition;
+        return $this;
+    }
+
+    public function useOrder(bool $condition = true): static
+    {
+        $this->useOrder = $condition;
+        return $this;
+    }
+
+    public function useOrderSettings(bool $condition = true): static
+    {
+        $this->useOrderSettings = $condition;
+        return $this;
+    }
+
+    public function allowOrderCreate(bool $condition = true): static
+    {
+        $this->allowOrderCreate = $condition;
+        return $this;
+    }
+
+    public function allowOrderExport(bool $condition = true): static
+    {
+        $this->allowOrderExport = $condition;
+        return $this;
+    }
+
+    public function allowOrderImport(bool $condition = true): static
+    {
+        $this->allowOrderImport = $condition;
+        return $this;
+    }
+
+    public function showOrderAccount(bool $condition = true): static
+    {
+        $this->showOrderAccount = $condition;
+        return $this;
+    }
+
+    public function useShippingVendor(bool $condition = true): static
+    {
+        $this->useShippingVendor = $condition;
+        return $this;
+    }
+
+    public function useCoupon(bool $condition = true): static
+    {
+        $this->useCoupon = $condition;
+        return $this;
+    }
+
+    public function useGiftCard(bool $condition = true): static
+    {
+        $this->useGiftCard = $condition;
+        return $this;
+    }
+
+    public function useReferralCode(bool $condition = true): static
+    {
+        $this->useReferralCode = $condition;
+        return $this;
+    }
 
     public function useWidgets(bool $condation = true): static
     {
@@ -58,49 +156,47 @@ class FilamentEcommercePlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        if(class_exists(Module::class) && \Nwidart\Modules\Facades\Module::find('FilamentEcommerce')?->isEnabled()){
+        if (class_exists(Module::class) && \Nwidart\Modules\Facades\Module::find('FilamentEcommerce')?->isEnabled()) {
             $this->isActive = true;
-        }
-        else {
+        } else {
             $this->isActive = true;
         }
 
-        if($this->isActive) {
+        if ($this->isActive) {
             $panel
-                ->plugin(FilamentSettingsHubPlugin::make())
-                ->plugin(
+                ->plugins($this->useSettings ? [
+                    FilamentSettingsHubPlugin::make()
+                ] : [])
+                ->plugins($this->useAccounts ? [
                     FilamentAccountsPlugin::make()
                         ->canLogin()
                         ->canBlocked()
-                )
+                ] : [])
                 ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales($this->locals))
-                ->resources([
-                    CompanyResource::class,
-                    ProductResource::class,
-                    OrderResource::class,
-                    ShippingVendorResource::class,
-                    CouponResource::class,
-                    GiftCardResource::class,
-                    ReferralCodeResource::class,
-                ])
+                ->resources(array_filter([
+                    $this->useCompany ? CompanyResource::class : null,
+                    $this->useProduct ? ProductResource::class : null,
+                    $this->useOrder ? OrderResource::class : null,
+                    $this->useShippingVendor ? ShippingVendorResource::class : null,
+                    $this->useCoupon ? CouponResource::class : null,
+                    $this->useGiftCard ? GiftCardResource::class : null,
+                    $this->useReferralCode ? ReferralCodeResource::class : null,
+                ]))
                 ->widgets($this->useWidgets ? [
                     OrdersStateWidget::class,
                     OrderPaymentMethodChart::class,
                     OrderSourceChart::class,
                     OrderStateChart::class
                 ] : [])
-                ->pages([
+                ->pages($this->useOrder ? [
                     OrderSettingsPage::class,
                     OrderStatusSettingsPage::class,
                     OrderReceiptSettingsPage::class
-                ]);
+                ] : []);
         }
     }
 
-    public function boot(Panel $panel): void
-    {
-
-    }
+    public function boot(Panel $panel): void {}
 
     public static function make(): static
     {

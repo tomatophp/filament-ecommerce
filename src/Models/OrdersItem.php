@@ -34,7 +34,7 @@ class OrdersItem extends Model
     /**
      * @var array
      */
-    protected $fillable = ['order_id', 'account_id', 'product_id', 'refund_id', 'warehouse_move_id', 'item', 'price', 'discount', 'vat', 'total', 'returned', 'qty', 'returned_qty', 'is_free', 'is_returned', 'options', 'created_at', 'updated_at'];
+    protected $fillable = ['order_id', 'account_id', 'product_id', 'refund_id', 'warehouse_move_id', 'item', 'price', 'discount', 'vat', 'total', 'returned', 'qty', 'code', 'returned_qty', 'is_free', 'is_returned', 'options', 'created_at', 'updated_at'];
 
     protected $casts = [
         "options" => "json"

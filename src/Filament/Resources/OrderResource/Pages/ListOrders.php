@@ -238,12 +238,14 @@ class ListOrders extends ListRecords
     {
         return [
             Actions\Action::make('setting')
+                ->hidden(!filament('filament-ecommerce')->useOrderSettings)
                 ->hiddenLabel()
                 ->tooltip(trans('filament-ecommerce::messages.orders.actions.settings'))
                 ->color('warning')
                 ->url(OrderSettingsPage::getUrl())
                 ->icon('heroicon-o-cog'),
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+            ->hidden(!filament('filament-ecommerce')->allowOrderCreate),
         ];
     }
 }

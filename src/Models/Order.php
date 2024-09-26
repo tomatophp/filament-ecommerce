@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use TomatoPHP\FilamentEcommerce\Models\Branch;
@@ -73,6 +74,7 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
+        'team_id',
         'company_id',
         'user_id', 
         'country_id', 
@@ -122,6 +124,13 @@ class Order extends Model
         'is_payed' => 'bool',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

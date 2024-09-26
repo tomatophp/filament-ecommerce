@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -34,7 +35,7 @@ class Coupon extends Model
     /**
      * @var array
      */
-    protected $fillable = ['code', 'type', 'amount', 'is_limited', 'end_at', 'use_limit', 'use_limit_by_user', 'order_total_limit', 'is_activated', 'is_marketing', 'marketer_name', 'marketer_type', 'marketer_amount', 'marketer_amount_max', 'marketer_show_amount_max', 'marketer_hide_total_sales', 'is_used', 'apply_to', 'except', 'created_at', 'updated_at'];
+    protected $fillable = ['team_id', 'code', 'type', 'amount', 'is_limited', 'end_at', 'use_limit', 'use_limit_by_user', 'order_total_limit', 'is_activated', 'is_marketing', 'marketer_name', 'marketer_type', 'marketer_amount', 'marketer_amount_max', 'marketer_show_amount_max', 'marketer_hide_total_sales', 'is_used', 'apply_to', 'except', 'created_at', 'updated_at'];
 
     protected $casts = [
         "apply_to" => "json",
@@ -45,6 +46,14 @@ class Coupon extends Model
         "marketer_hide_total_sales" => "boolean",
         "is_limited" => "boolean",
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
 
     public function discount(?float $total=null)
     {

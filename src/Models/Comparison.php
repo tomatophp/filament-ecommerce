@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Model;
 use TomatoPHP\TomatoProducts\Models\Product;
 
@@ -20,7 +21,16 @@ class Comparison extends Model
     /**
      * @var array
      */
-    protected $fillable = ['account_id', 'product_id', 'compare_with', 'created_at', 'updated_at'];
+    protected $fillable = ['team_id', 'account_id', 'product_id', 'compare_with', 'created_at', 'updated_at'];
+
+    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

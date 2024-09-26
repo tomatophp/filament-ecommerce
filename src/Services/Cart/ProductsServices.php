@@ -4,7 +4,7 @@ namespace TomatoPHP\FilamentEcommerce\Services\Cart;
 
 use Illuminate\Support\Str;
 use TomatoPHP\FilamentEcommerce\Services\Cart\Contracts\ProductPriceModel;
-use TomatoPHP\TomatoProducts\Models\Product;
+use TomatoPHP\FilamentEcommerce\Models\Product;
 
 class ProductsServices
 {

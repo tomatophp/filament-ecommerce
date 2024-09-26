@@ -61,9 +61,9 @@ class ProductResource extends Resource
                                     ->columnSpanFull()
                                     ->searchable()
                                     ->options([
-                                        "product" => "Product",
-                                        "digital" => "Digital",
-                                        "service" => "Service",
+                                        "product" => trans('filament-ecommerce::messages.product.columns.product'),
+                                        "digital" => trans('filament-ecommerce::messages.product.columns.digital'),
+                                        "service" => trans('filament-ecommerce::messages.product.columns.service'),
                                     ])
                                     ->label(trans('filament-ecommerce::messages.product.columns.type'))
                                     ->default('product'),
@@ -135,10 +135,10 @@ class ProductResource extends Resource
                                             ->searchable()
                                             ->live()
                                             ->options([
-                                                "retail" => "Retail",
-                                                "wholesale" => "Wholesale",
-                                                "special" => "Special",
-                                                "items" => "Items",
+                                                "retail" => trans('filament-ecommerce::messages.product.columns.retail'),
+                                                "wholesale" => trans('filament-ecommerce::messages.product.columns.wholesale'),
+                                                "special" => trans('filament-ecommerce::messages.product.columns.special'),
+                                                "items" => trans('filament-ecommerce::messages.product.columns.items'),
                                             ])
                                             ->default('retail')
                                             ->label(trans('filament-ecommerce::messages.product.columns.for'))
@@ -295,10 +295,10 @@ class ProductResource extends Resource
                                                     ->searchable()
                                                     ->live()
                                                     ->options([
-                                                        "retail" => "Retail",
-                                                        "wholesale" => "Wholesale",
-                                                        "special" => "Special",
-                                                        "items" => "Items",
+                                                        "retail" => trans('filament-ecommerce::messages.product.columns.retail'),
+                                                        "wholesale" => trans('filament-ecommerce::messages.product.columns.wholesale'),
+                                                        "special" => trans('filament-ecommerce::messages.product.columns.special'),
+                                                        "items" => trans('filament-ecommerce::messages.product.columns.items'),
                                                     ])
                                                     ->default('retail')
                                                     ->required(),
@@ -363,9 +363,9 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('type')
                     ->badge()
                     ->state(fn(Product $product) => match ($product->type) {
-                        'product' => 'Product',
-                        'digital' => 'Digital',
-                        'service' => 'Service',
+                        'product' => trans('filament-ecommerce::messages.product.columns.product'),
+                        'digital' => trans('filament-ecommerce::messages.product.columns.digital'),
+                        'service' => trans('filament-ecommerce::messages.product.columns.service'),
                     })
                     ->color(fn(Product $product) => match ($product->type) {
                         'product' => 'primary',
@@ -438,9 +438,9 @@ class ProductResource extends Resource
                     ->label(trans('filament-ecommerce::messages.product.filters.type'))
                     ->searchable()
                     ->options([
-                        "product" => "Product",
-                        "digital" => "Digital",
-                        "service" => "Service",
+                        'product' => trans('filament-ecommerce::messages.product.columns.product'),
+                        'digital' => trans('filament-ecommerce::messages.product.columns.digital'),
+                        'service' => trans('filament-ecommerce::messages.product.columns.service'),
                     ]),
                 Tables\Filters\TernaryFilter::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.product.filters.is_activated')),
@@ -471,7 +471,8 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\ProductReviewManager::make()
+            RelationManagers\ProductReviewManager::make(),
+            RelationManagers\CodesManager::make()
         ];
     }
 

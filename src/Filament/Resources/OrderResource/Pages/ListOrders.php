@@ -237,15 +237,16 @@ class ListOrders extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\CreateAction::make()
+                ->hidden(!filament('filament-ecommerce')::$allowOrderCreate),
             Actions\Action::make('setting')
-                ->hidden(!filament('filament-ecommerce')->useOrderSettings)
+                ->hidden(!filament('filament-ecommerce')::$useOrderSettings)
                 ->hiddenLabel()
                 ->tooltip(trans('filament-ecommerce::messages.orders.actions.settings'))
                 ->color('warning')
                 ->url(OrderSettingsPage::getUrl())
                 ->icon('heroicon-o-cog'),
-            Actions\CreateAction::make()
-            ->hidden(!filament('filament-ecommerce')->allowOrderCreate),
+
         ];
     }
 }

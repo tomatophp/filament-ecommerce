@@ -41,116 +41,116 @@ class FilamentEcommercePlugin implements Plugin
         return 'filament-ecommerce';
     }
 
-    public bool $useAccounts = false;
-    public bool $useSettings = false;
-    public bool $useCompany = false;
-    public bool $useProduct = false;
-    public bool $useOrder = false;
-    public bool $useOrderSettings = false;
-    public bool $allowOrderCreate = false;
-    public bool $allowOrderExport = false;
-    public bool $allowOrderImport = false;
-    public bool $showOrderAccount = false;
-    public bool $useShippingVendor = false;
-    public bool $useCoupon = false;
-    public bool $useGiftCard = false;
-    public bool $useReferralCode = false;
-    public ?bool $useWidgets = false;
-    public ?array $locals = ['en', 'ar'];
+    public static bool $useAccounts = true;
+    public static bool $useSettings = true;
+    public static bool $useCompany = true;
+    public static bool $useProduct = true;
+    public static bool $useOrder = true;
+    public static bool $useOrderSettings = true;
+    public static bool $allowOrderCreate = true;
+    public static bool $allowOrderExport = false;
+    public static bool $allowOrderImport = false;
+    public static bool $showOrderAccount = true;
+    public static bool $useShippingVendor = true;
+    public static bool $useCoupon = false;
+    public static bool $useGiftCard = false;
+    public static bool $useReferralCode = false;
+    public static ?bool $useWidgets = false;
+    public static ?array $locals = ['en', 'ar'];
 
     public function useAccounts(bool $condition = true): static
     {
-        $this->useAccounts = $condition;
+        self::$useAccounts = $condition;
         return $this;
     }
 
     public function useSettings(bool $condition = true): static
     {
-        $this->useSettings = $condition;
+        self::$useSettings = $condition;
         return $this;
     }
 
     public function useCompany(bool $condition = true): static
     {
-        $this->useCompany = $condition;
+        self::$useCompany = $condition;
         return $this;
     }
 
     public function useProduct(bool $condition = true): static
     {
-        $this->useProduct = $condition;
+        self::$useProduct = $condition;
         return $this;
     }
 
     public function useOrder(bool $condition = true): static
     {
-        $this->useOrder = $condition;
+        self::$useOrder = $condition;
         return $this;
     }
 
     public function useOrderSettings(bool $condition = true): static
     {
-        $this->useOrderSettings = $condition;
+        self::$useOrderSettings = $condition;
         return $this;
     }
 
     public function allowOrderCreate(bool $condition = true): static
     {
-        $this->allowOrderCreate = $condition;
+        self::$allowOrderCreate = $condition;
         return $this;
     }
 
     public function allowOrderExport(bool $condition = true): static
     {
-        $this->allowOrderExport = $condition;
+        self::$allowOrderExport = $condition;
         return $this;
     }
 
     public function allowOrderImport(bool $condition = true): static
     {
-        $this->allowOrderImport = $condition;
+        self::$allowOrderImport = $condition;
         return $this;
     }
 
     public function showOrderAccount(bool $condition = true): static
     {
-        $this->showOrderAccount = $condition;
+        self::$showOrderAccount = $condition;
         return $this;
     }
 
     public function useShippingVendor(bool $condition = true): static
     {
-        $this->useShippingVendor = $condition;
+        self::$useShippingVendor = $condition;
         return $this;
     }
 
     public function useCoupon(bool $condition = true): static
     {
-        $this->useCoupon = $condition;
+        self::$useCoupon = $condition;
         return $this;
     }
 
     public function useGiftCard(bool $condition = true): static
     {
-        $this->useGiftCard = $condition;
+        self::$useGiftCard = $condition;
         return $this;
     }
 
     public function useReferralCode(bool $condition = true): static
     {
-        $this->useReferralCode = $condition;
+        self::$useReferralCode = $condition;
         return $this;
     }
 
     public function useWidgets(bool $condation = true): static
     {
-        $this->useWidgets = $condation;
+        self::$useWidgets = $condation;
         return $this;
     }
 
     public function defaultLocales(array $locales): static
     {
-        $this->locals = $locales;
+        self::$locals = $locales;
         return $this;
     }
 
@@ -164,31 +164,31 @@ class FilamentEcommercePlugin implements Plugin
 
         if ($this->isActive) {
             $panel
-                ->plugins($this->useSettings ? [
+                ->plugins(self::$useSettings? [
                     FilamentSettingsHubPlugin::make()
                 ] : [])
-                ->plugins($this->useAccounts ? [
+                ->plugins(self::$useAccounts ? [
                     FilamentAccountsPlugin::make()
                         ->canLogin()
                         ->canBlocked()
                 ] : [])
-                ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales($this->locals))
+                ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(self::$locals))
                 ->resources(array_filter([
-                    $this->useCompany ? CompanyResource::class : null,
-                    $this->useProduct ? ProductResource::class : null,
-                    $this->useOrder ? OrderResource::class : null,
-                    $this->useShippingVendor ? ShippingVendorResource::class : null,
-                    $this->useCoupon ? CouponResource::class : null,
-                    $this->useGiftCard ? GiftCardResource::class : null,
-                    $this->useReferralCode ? ReferralCodeResource::class : null,
+                    self::$useCompany ? CompanyResource::class : null,
+                    self::$useProduct ? ProductResource::class : null,
+                    self::$useOrder ? OrderResource::class : null,
+                    self::$useShippingVendor ? ShippingVendorResource::class : null,
+                    self::$useCoupon ? CouponResource::class : null,
+                    self::$useGiftCard ? GiftCardResource::class : null,
+                    self::$useReferralCode ? ReferralCodeResource::class : null,
                 ]))
-                ->widgets($this->useWidgets ? [
+                ->widgets(self::$useWidgets ? [
                     OrdersStateWidget::class,
                     OrderPaymentMethodChart::class,
                     OrderSourceChart::class,
                     OrderStateChart::class
                 ] : [])
-                ->pages($this->useOrder ? [
+                ->pages(self::$useOrder ? [
                     OrderSettingsPage::class,
                     OrderStatusSettingsPage::class,
                     OrderReceiptSettingsPage::class

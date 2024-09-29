@@ -43,7 +43,28 @@ php artisan filament-ecommerce:install
 finally register the plugin on `/app/Providers/Filament/AdminPanelProvider.php`
 
 ```php
-->plugin(\TomatoPHP\FilamentEcommerce\FilamentEcommercePlugin::make())
+->plugin(
+    \TomatoPHP\FilamentEcommerce\FilamentEcommercePlugin::make()
+        ->useCoupon()
+        ->useGiftCard()
+        ->useReferralCode()
+        ->allowOrderExport()
+        ->allowOrderImport()
+        ->useWidgets()
+)
+```
+
+there is some feature you can disable it
+
+```php
+->plugin(
+    \TomatoPHP\FilamentEcommerce\FilamentEcommercePlugin::make()
+        ->useAccounts(false)
+        ->useOrderSettings(false)
+        ->useSettings(false)
+        ->showOrderAccount(false)
+        ->allowOrderCreate(false)
+)
 ```
 
 ## Features

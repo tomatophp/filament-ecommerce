@@ -273,7 +273,7 @@ class OrderResource extends Resource
                     Forms\Components\Hidden::make('coupon_id'),
                     Forms\Components\TextInput::make('coupon')
                         ->label(trans('filament-ecommerce::messages.orders.columns.coupon'))
-                        ->hidden(fn($record) => $record)
+                        ->hidden(fn($record) => ($record || !filament('filament-ecommerce')::$useCoupon))
                         ->suffixAction(
                             Forms\Components\Actions\Action::make('apply')
                                 ->tooltip(trans('filament-ecommerce::messages.orders.actions.apply'))

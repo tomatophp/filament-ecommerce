@@ -11,21 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $tables = [
-            'products',
-            'coupons',
-            'companies',
-            'gift_cards',
-            'referral_codes',
-            'shipping_vendors',
-            'orders'
-        ];
+        if (Schema::hasTable('teams')) {
+            $tables = [
+                'products',
+                'coupons',
+                'companies',
+                'gift_cards',
+                'referral_codes',
+                'shipping_vendors',
+                'orders'
+            ];
 
-        foreach ($tables as $table) {
-            Schema::table($table, function (Blueprint $table) {
-                $table->unsignedBigInteger('team_id')->nullable()->after('id');
-                $table->foreign('team_id')->references('id')->on('teams')->nullOnDelete();
-            });
+            foreach ($tables as $table) {
+                Schema::table($table, function (Blueprint $table) {
+                    $table->unsignedBigInteger('team_id')->nullable()->after('id');
+                    $table->foreign('team_id')->references('id')->on('teams')->nullOnDelete();
+                });
+            }
         }
     }
 

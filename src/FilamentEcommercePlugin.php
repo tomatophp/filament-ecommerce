@@ -196,7 +196,32 @@ class FilamentEcommercePlugin implements Plugin
         }
     }
 
-    public function boot(Panel $panel): void {}
+    public function boot(Panel $panel): void {
+
+        if(self::$useSettings){
+            FilamentSettingsHub::register([
+                SettingHold::make()
+                    ->label('filament-ecommerce::messages.settings.orders.title')
+                    ->icon('heroicon-o-building-storefront')
+                    ->route(OrderSettingsPage::getRouteName())
+                    ->description('filament-ecommerce::messages.settings.orders.description')
+                    ->group('filament-ecommerce::messages.settings.group'),
+                SettingHold::make()
+                    ->label('filament-ecommerce::messages.settings.status.title')
+                    ->icon('heroicon-o-check-circle')
+                    ->route(OrderStatusSettingsPage::getRouteName())
+                    ->description('filament-ecommerce::messages.settings.status.description')
+                    ->group('filament-ecommerce::messages.settings.group'),
+                SettingHold::make()
+                    ->label('filament-ecommerce::messages.settings.receipt.title')
+                    ->icon('heroicon-o-printer')
+                    ->route(OrderReceiptSettingsPage::getRouteName())
+                    ->description('filament-ecommerce::messages.settings.receipt.description')
+                    ->group('filament-ecommerce::messages.settings.group'),
+            ]);
+        }
+
+    }
 
     public static function make(): static
     {

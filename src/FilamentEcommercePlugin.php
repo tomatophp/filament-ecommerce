@@ -57,6 +57,18 @@ class FilamentEcommercePlugin implements Plugin
     public static bool $useReferralCode = false;
     public static ?bool $useWidgets = false;
     public static ?array $locals = ['en', 'ar'];
+    public static bool $allowShield = false;
+
+    public function allowShield(bool $allow = true): static
+    {
+        static::$allowShield = $allow;
+        return $this;
+    }
+
+    public function isShieldAllowed(): bool
+    {
+        return static::$allowShield;
+    }
 
     public function useAccounts(bool $condition = true): static
     {

@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Http\Request;
+use TomatoPHP\FilamentEcommerce\Database\Factories\AccountFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\BranchFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CompanyFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CouponFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\ProductFactory;
 use TomatoPHP\FilamentEcommerce\Facades\FilamentEcommerce;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\AccountFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\BranchFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\CompanyFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\CouponFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\ProductFactory;
 use TomatoPHP\FilamentEcommerce\Tests\Models\User;
 
 use function Pest\Laravel\actingAs;

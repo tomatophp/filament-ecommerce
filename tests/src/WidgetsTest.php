@@ -1,10 +1,10 @@
 <?php
 
+use TomatoPHP\FilamentEcommerce\Database\Factories\OrderFactory;
 use TomatoPHP\FilamentEcommerce\Filament\Widgets\OrderPaymentMethodChart;
 use TomatoPHP\FilamentEcommerce\Filament\Widgets\OrderSourceChart;
 use TomatoPHP\FilamentEcommerce\Filament\Widgets\OrdersStateWidget;
 use TomatoPHP\FilamentEcommerce\Filament\Widgets\OrderStateChart;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\OrderFactory;
 use TomatoPHP\FilamentEcommerce\Tests\Models\User;
 
 use function Pest\Laravel\actingAs;

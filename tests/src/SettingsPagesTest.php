@@ -1,12 +1,12 @@
 <?php
 
+use TomatoPHP\FilamentEcommerce\Database\Factories\BranchFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CompanyFactory;
 use TomatoPHP\FilamentEcommerce\Filament\Pages\InventorySettingsPage;
 use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderReceiptSettingsPage;
 use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderSettingsPage;
 use TomatoPHP\FilamentEcommerce\Filament\Pages\OrderStatusSettingsPage;
 use TomatoPHP\FilamentEcommerce\Settings\OrderingSettings;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\BranchFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\CompanyFactory;
 use TomatoPHP\FilamentEcommerce\Tests\Models\User;
 use TomatoPHP\FilamentTypes\Models\Type;
 

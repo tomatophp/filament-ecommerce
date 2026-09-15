@@ -15,7 +15,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "TomatoPHP\\FilamentEcommerce\\": "src/"
+            "TomatoPHP\\FilamentEcommerce\\": "src/",
+            "TomatoPHP\\FilamentEcommerce\\Database\\Factories\\": "database/factories/"
         },
         "files": [
             "src/helpers.php"

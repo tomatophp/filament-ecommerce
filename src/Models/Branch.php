@@ -2,8 +2,10 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use TomatoPHP\FilamentEcommerce\Database\Factories\BranchFactory;
 
 /**
  * @property int $id
@@ -19,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Branch extends Model
 {
+    use HasFactory;
+
     /**
      * @var array
      */
@@ -35,5 +39,10 @@ class Branch extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    protected static function newFactory(): BranchFactory
+    {
+        return BranchFactory::new();
     }
 }

@@ -2,11 +2,13 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CompanyFactory;
 use TomatoPHP\FilamentLocations\Models\Country;
 
 /**
@@ -30,6 +32,7 @@ use TomatoPHP\FilamentLocations\Models\Country;
  */
 class Company extends Model implements HasMedia
 {
+    use HasFactory;
     use InteractsWithMedia;
 
     /**
@@ -51,5 +54,10 @@ class Company extends Model implements HasMedia
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    protected static function newFactory(): CompanyFactory
+    {
+        return CompanyFactory::new();
     }
 }

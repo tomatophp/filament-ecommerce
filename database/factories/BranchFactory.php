@@ -1,6 +1,6 @@
 <?php
 
-namespace TomatoPHP\FilamentEcommerce\Tests\Database\Factories;
+namespace TomatoPHP\FilamentEcommerce\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use TomatoPHP\FilamentEcommerce\Models\Branch;

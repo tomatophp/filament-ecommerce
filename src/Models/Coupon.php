@@ -2,9 +2,11 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CouponFactory;
 
 /**
  * @property int $id
@@ -33,6 +35,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Coupon extends Model
 {
+    use HasFactory;
+
     /**
      * @var array
      */
@@ -71,5 +75,10 @@ class Coupon extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    protected static function newFactory(): CouponFactory
+    {
+        return CouponFactory::new();
     }
 }

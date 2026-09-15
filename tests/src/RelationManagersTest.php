@@ -1,5 +1,12 @@
 <?php
 
+use TomatoPHP\FilamentEcommerce\Database\Factories\AccountFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\BranchFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CompanyFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\DeliveryFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\OrderFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\ProductFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\ShippingVendorFactory;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CompanyResource\Pages\EditCompany;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CompanyResource\RelationManagers\CompanyBranches;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource\Pages\ViewOrder;
@@ -12,13 +19,6 @@ use TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource\Relati
 use TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource\RelationManagers\ShippingVendorPrices;
 use TomatoPHP\FilamentEcommerce\Models\ProductReview;
 use TomatoPHP\FilamentEcommerce\Models\ShippingPrice;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\AccountFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\BranchFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\CompanyFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\DeliveryFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\OrderFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\ProductFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\ShippingVendorFactory;
 use TomatoPHP\FilamentEcommerce\Tests\Models\User;
 
 use function Pest\Laravel\actingAs;

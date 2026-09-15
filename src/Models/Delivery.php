@@ -2,8 +2,10 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use TomatoPHP\FilamentEcommerce\Database\Factories\DeliveryFactory;
 
 /**
  * @property int $id
@@ -18,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Delivery extends Model
 {
+    use HasFactory;
+
     /**
      * @var array
      */
@@ -46,5 +50,10 @@ class Delivery extends Model
     public function shippingPrices()
     {
         return $this->hasMany('TomatoPHP\FilamentEcommerce\Models\ShippingPrice');
+    }
+
+    protected static function newFactory(): DeliveryFactory
+    {
+        return DeliveryFactory::new();
     }
 }

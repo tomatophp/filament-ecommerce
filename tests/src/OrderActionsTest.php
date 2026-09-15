@@ -1,11 +1,11 @@
 <?php
 
+use TomatoPHP\FilamentEcommerce\Database\Factories\BranchFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CompanyFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\OrderFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\ProductFactory;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource\Pages\ListOrders;
 use TomatoPHP\FilamentEcommerce\Models\Order;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\BranchFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\CompanyFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\OrderFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\ProductFactory;
 use TomatoPHP\FilamentEcommerce\Tests\Models\User;
 
 use function Pest\Laravel\actingAs;

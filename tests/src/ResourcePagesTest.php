@@ -1,5 +1,12 @@
 <?php
 
+use TomatoPHP\FilamentEcommerce\Database\Factories\AccountFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\BranchFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CompanyFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CouponFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\OrderFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\ProductFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\ShippingVendorFactory;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CompanyResource;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource;
@@ -9,13 +16,6 @@ use TomatoPHP\FilamentEcommerce\Filament\Resources\ReferralCodeResource;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource;
 use TomatoPHP\FilamentEcommerce\Models\GiftCard;
 use TomatoPHP\FilamentEcommerce\Models\ReferralCode;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\AccountFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\BranchFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\CompanyFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\CouponFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\OrderFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\ProductFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\ShippingVendorFactory;
 use TomatoPHP\FilamentEcommerce\Tests\Models\User;
 
 use function Pest\Laravel\actingAs;

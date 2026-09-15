@@ -1,5 +1,9 @@
 <?php
 
+use TomatoPHP\FilamentEcommerce\Database\Factories\BranchFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CompanyFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\CouponFactory;
+use TomatoPHP\FilamentEcommerce\Database\Factories\OrderFactory;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CompanyResource\Pages\CreateCompany;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CompanyResource\Pages\EditCompany;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource\Pages\CreateCoupon;
@@ -10,10 +14,6 @@ use TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource\Pages\EditPro
 use TomatoPHP\FilamentEcommerce\Models\Company;
 use TomatoPHP\FilamentEcommerce\Models\Coupon;
 use TomatoPHP\FilamentEcommerce\Models\Product;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\BranchFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\CompanyFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\CouponFactory;
-use TomatoPHP\FilamentEcommerce\Tests\Database\Factories\OrderFactory;
 use TomatoPHP\FilamentEcommerce\Tests\Models\User;
 
 use function Pest\Laravel\actingAs;

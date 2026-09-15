@@ -2,11 +2,13 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use TomatoPHP\FilamentEcommerce\Database\Factories\ShippingVendorFactory;
 
 /**
  * @property int $id
@@ -23,6 +25,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class ShippingVendor extends Model implements HasMedia
 {
+    use HasFactory;
     use InteractsWithMedia;
 
     /**
@@ -61,5 +64,10 @@ class ShippingVendor extends Model implements HasMedia
     public function shippingPrices()
     {
         return $this->hasMany('TomatoPHP\FilamentEcommerce\Models\ShippingPrice');
+    }
+
+    protected static function newFactory(): ShippingVendorFactory
+    {
+        return ShippingVendorFactory::new();
     }
 }

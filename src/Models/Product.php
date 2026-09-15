@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,6 +12,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 use TomatoPHP\FilamentCms\Models\Category;
+use TomatoPHP\FilamentEcommerce\Database\Factories\ProductFactory;
 
 /**
  * @property int $id
@@ -52,6 +54,7 @@ use TomatoPHP\FilamentCms\Models\Category;
  */
 class Product extends Model implements HasMedia
 {
+    use HasFactory;
     use HasTranslations;
     use InteractsWithMedia;
 
@@ -219,5 +222,10 @@ class Product extends Model implements HasMedia
     private function generateNumeric(int $length): string
     {
         return (string) mt_rand(pow(10, $length - 1), pow(10, $length) - 1);
+    }
+
+    protected static function newFactory(): ProductFactory
+    {
+        return ProductFactory::new();
     }
 }

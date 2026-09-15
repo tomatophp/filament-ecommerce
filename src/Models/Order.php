@@ -2,9 +2,11 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use TomatoPHP\FilamentEcommerce\Database\Factories\OrderFactory;
 use TomatoPHP\FilamentLocations\Models\Area;
 use TomatoPHP\FilamentLocations\Models\City;
 use TomatoPHP\FilamentLocations\Models\Country;
@@ -68,6 +70,8 @@ use TomatoPHP\FilamentLocations\Models\Location;
  */
 class Order extends Model
 {
+    use HasFactory;
+
     /**
      * @var array
      */
@@ -259,5 +263,10 @@ class Order extends Model
     public function ordersItems()
     {
         return $this->hasMany('TomatoPHP\FilamentEcommerce\Models\OrdersItem');
+    }
+
+    protected static function newFactory(): OrderFactory
+    {
+        return OrderFactory::new();
     }
 }

@@ -191,16 +191,24 @@ class FilamentEcommercePlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $panel
-            ->plugins(self::$useSettings ? [
-                FilamentSettingsHubPlugin::make(),
-            ] : [])
-            ->plugins(self::$useAccounts ? [
+        // Plugins the panel already registered keep the host app's configuration.
+        if (self::$useSettings && ! $panel->hasPlugin('filament-settings-hub')) {
+            $panel->plugin(FilamentSettingsHubPlugin::make());
+        }
+
+        if (self::$useAccounts && ! $panel->hasPlugin('filament-accounts')) {
+            $panel->plugin(
                 FilamentAccountsPlugin::make()
                     ->canLogin()
-                    ->canBlocked(),
-            ] : [])
-            ->plugin(SpatieTranslatablePlugin::make()->defaultLocales(self::$locals))
+                    ->canBlocked()
+            );
+        }
+
+        if (! $panel->hasPlugin('spatie-translatable')) {
+            $panel->plugin(SpatieTranslatablePlugin::make()->defaultLocales(self::$locals));
+        }
+
+        $panel
             ->resources(array_filter([
                 self::$useCompany ? CompanyResource::class : null,
                 self::$useProduct ? ProductResource::class : null,

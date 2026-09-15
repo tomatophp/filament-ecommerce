@@ -125,17 +125,20 @@ there is some feature you can disable it
 
 ## Screenshots
 
-![Branches](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/branches.png)
-![Companies](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/companies.png)
-![Edit Company](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/edit-company.png)
-![Products List](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/products.png)
-![Create Product](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/create-products.png)
-![Create Order](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/create-orders.png)
-![Order Items](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/order-items.png)
-![Orders List](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/orders.png)
-![Deliveries](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/deliveries.png)
-![Edit Shipping](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/edit-shipping-vendors.png)
-![Shipping](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/shipping-vendors.png)
+![Orders](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/orders-light.png)
+![Orders Dark](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/orders-dark.png)
+![View Order](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/view-order-light.png)
+![View Order Dark](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/view-order-dark.png)
+![Products](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/products-light.png)
+![Products Dark](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/products-dark.png)
+![Companies](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/companies-light.png)
+![Companies Dark](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/companies-dark.png)
+![Coupons](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/coupons-light.png)
+![Coupons Dark](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/coupons-dark.png)
+![Order Widgets](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/dashboard-light.png)
+![Order Widgets Dark](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/dashboard-dark.png)
+![Order Settings](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/order-settings-light.png)
+![Order Settings Dark](https://raw.githubusercontent.com/tomatophp/filament-ecommerce/master/arts/order-settings-dark.png)
 
 ## Use Coupon Service
 

@@ -2,6 +2,8 @@
 
 namespace TomatoPHP\FilamentEcommerce;
 
+use Filament\Support\Assets\Css;
+use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\ServiceProvider;
 use TomatoPHP\FilamentCms\Facades\FilamentCMS;
 use TomatoPHP\FilamentCms\Services\Contracts\CmsType;
@@ -59,6 +61,10 @@ class FilamentEcommerceServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        FilamentAsset::register([
+            Css::make('filament-ecommerce', __DIR__ . '/../resources/dist/filament-ecommerce.css'),
+        ], 'tomatophp/filament-ecommerce');
+
         FilamentCMS::types()->register([
             CmsType::make('product')
                 ->label('Product')

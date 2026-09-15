@@ -1,0 +1,75 @@
+/*
+ * tomatophp/filament-ecommerce
+ *
+ * Filament v5 panels only ship the utilities Filament itself uses, so the order summary, the order
+ * status settings and the order state widget bring the few utilities they need.
+ *
+ * The rules are deliberately not wrapped in a cascade layer: this file loads before Filament's app.css,
+ * so a layer declared here would rank below Filament's own layers and its reset would win.
+ * Responsive variants come last, in ascending breakpoint order, so they override the base rules.
+ */
+.flex { display: flex; }
+.grid { display: grid; }
+.flex-col { flex-direction: column; }
+.grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+.col-span-2 { grid-column: span 2 / span 2; }
+.col-span-4 { grid-column: span 4 / span 4; }
+.items-center { align-items: center; }
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-4 { gap: 1rem; }
+.gap-x-1 { column-gap: 0.25rem; }
+.gap-x-2 { column-gap: 0.5rem; }
+.gap-y-2 { row-gap: 0.5rem; }
+
+.w-5 { width: 1.25rem; }
+.w-full { width: 100%; }
+.h-5 { height: 1.25rem; }
+.h-6 { height: 1.5rem; }
+.h-12 { height: 3rem; }
+
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1rem; }
+.my-4 { margin-block: 1rem; }
+.py-4 { padding-block: 1rem; }
+
+.border-b { border-bottom-style: solid; border-bottom-width: 1px; border-color: var(--gray-200); }
+
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.tracking-tight { letter-spacing: -0.025em; }
+
+.text-gray-400 { color: var(--gray-400); }
+.text-gray-500 { color: var(--gray-500); }
+.text-gray-800 { color: var(--gray-800); }
+.text-gray-950 { color: var(--gray-950); }
+.text-primary-500 { color: var(--primary-500); }
+.text-success-500 { color: var(--success-500); }
+.text-danger-500 { color: var(--danger-500); }
+
+:where(.dark, .dark *) .dark\:text-white { color: #fff; }
+:where(.dark, .dark *) .dark\:text-gray-400 { color: var(--gray-400); }
+:where(.dark, .dark *) .dark\:text-gray-500 { color: var(--gray-500); }
+:where(.dark, .dark *) .dark\:border-gray-700 { border-color: var(--gray-700); }
+
+@media (width >= 40rem) {
+    .sm\:flex-row { flex-direction: row; }
+    .sm\:gap-8 { gap: 2rem; }
+}
+
+@media (width >= 48rem) {
+    .md\:gap-16 { gap: 4rem; }
+}
+
+@media (width >= 64rem) {
+    .lg\:gap-48 { gap: 12rem; }
+}
+
+@media (width >= 80rem) {
+    .xl\:gap-60 { gap: 15rem; }
+}

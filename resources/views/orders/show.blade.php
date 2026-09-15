@@ -128,13 +128,13 @@
 {{--                            </div>--}}
                         </div>
                         <div>
-                            {!! dollar($item->price) !!}
+                            {!! dollar($item->price ?? 0) !!}
                         </div>
                         <div>
-                            {!! dollar($item->discount) !!}
+                            {!! dollar($item->discount ?? 0) !!}
                         </div>
                         <div class="col-span-2">
-                            {!! dollar($item->tax) !!}
+                            {!! dollar($item->vat ?? 0) !!}
                         </div>
                         <div>
                             {{$item->qty}}

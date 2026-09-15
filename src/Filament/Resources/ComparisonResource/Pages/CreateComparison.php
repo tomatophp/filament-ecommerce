@@ -2,9 +2,8 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ComparisonResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ComparisonResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\ComparisonResource;
 
 class CreateComparison extends CreateRecord
 {

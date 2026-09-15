@@ -8,22 +8,21 @@ class FilamentEcommerceServices
 {
     public function order(): Ordering
     {
-        return new Ordering();
+        return new Ordering;
     }
 
     public function cart(): Ecommerce
     {
-        return new Ecommerce();
+        return new Ecommerce;
     }
 
     public function product(): ProductsServices
     {
-        return new ProductsServices();
+        return new ProductsServices;
     }
 
     public function coupon(): Coupons
     {
-        return new Coupons();
+        return new Coupons;
     }
-
 }

@@ -2,9 +2,8 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\SearchResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\SearchResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\SearchResource;
 
 class CreateSearch extends CreateRecord
 {

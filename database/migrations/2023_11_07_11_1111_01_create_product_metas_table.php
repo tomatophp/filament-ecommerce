@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('product_metas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("product_id")->references('id')->on('products')->onDelete('cascade');
-            $table->string("key");
-            $table->json("value")->nullable();
-            $table->bigInteger("model_id")->nullable();
-            $table->string("model_type")->nullable();
+            $table->foreignId('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->string('key');
+            $table->json('value')->nullable();
+            $table->bigInteger('model_id')->nullable();
+            $table->string('model_type')->nullable();
             $table->timestamps();
         });
     }

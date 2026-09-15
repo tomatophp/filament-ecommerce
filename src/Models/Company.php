@@ -3,13 +3,15 @@
 namespace TomatoPHP\FilamentEcommerce\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use TomatoPHP\FilamentLocations\Models\Country;
 
 /**
- * @property integer $id
- * @property integer $country_id
+ * @property int $id
+ * @property int $country_id
  * @property string $name
  * @property string $ceo
  * @property string $address
@@ -36,7 +38,7 @@ class Company extends Model implements HasMedia
     protected $fillable = ['country_id', 'name', 'ceo', 'address', 'city', 'zip', 'registration_number', 'tax_number', 'email', 'phone', 'website', 'notes', 'created_at', 'updated_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function branches()
     {
@@ -44,7 +46,7 @@ class Company extends Model implements HasMedia
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function country()
     {

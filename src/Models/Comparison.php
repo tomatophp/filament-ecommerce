@@ -2,14 +2,13 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
-use App\Models\Team;
 use Illuminate\Database\Eloquent\Model;
-use TomatoPHP\TomatoProducts\Models\Product;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $id
- * @property integer $account_id
- * @property integer $product_id
+ * @property int $id
+ * @property int $account_id
+ * @property int $product_id
  * @property mixed $compare_with
  * @property string $created_at
  * @property string $updated_at
@@ -23,17 +22,16 @@ class Comparison extends Model
      */
     protected $fillable = ['team_id', 'account_id', 'product_id', 'compare_with', 'created_at', 'updated_at'];
 
-    
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function team()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo('App\Models\Team');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function account()
     {
@@ -41,7 +39,7 @@ class Comparison extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function product()
     {

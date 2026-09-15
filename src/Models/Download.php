@@ -3,12 +3,12 @@
 namespace TomatoPHP\FilamentEcommerce\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use TomatoPHP\TomatoProducts\Models\Product;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $id
- * @property integer $account_id
- * @property integer $product_id
+ * @property int $id
+ * @property int $account_id
+ * @property int $product_id
  * @property string $created_at
  * @property string $updated_at
  * @property Account $account
@@ -22,7 +22,7 @@ class Download extends Model
     protected $fillable = ['account_id', 'product_id', 'created_at', 'updated_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function account()
     {
@@ -30,7 +30,7 @@ class Download extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function product()
     {

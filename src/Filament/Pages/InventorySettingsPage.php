@@ -2,17 +2,20 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Pages;
 
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Pages\Actions\Action;
+use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Facades\Filament;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
+use TomatoPHP\FilamentEcommerce\Models\Branch;
 use TomatoPHP\FilamentEcommerce\Settings\OrderingSettings;
-use TomatoPHP\FilamentSettingsHub\Settings\SitesSettings;
 
 class InventorySettingsPage extends SettingsPage
 {
-    protected static ?string $navigationIcon = 'heroicon-o-cog';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cog';
 
     protected static string $settings = OrderingSettings::class;
 
@@ -21,35 +24,34 @@ class InventorySettingsPage extends SettingsPage
         return false;
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
-        $tenant = \Filament\Facades\Filament::getTenant();
-        if($tenant){
-            return [
-                Action::make('back')->action(fn()=> redirect()->route('filament.'.filament()->getCurrentPanel()->getId().'.pages.settings-hub', $tenant))->color('danger')->label(trans('filament-settings-hub::messages.back')),
-            ];
-        }
-
         return [
-            Action::make('back')->action(fn()=> redirect()->route('filament.'.filament()->getCurrentPanel()->getId().'.pages.settings-hub'))->color('danger')->label(trans('filament-settings-hub::messages.back')),
+            Action::make('back')
+                ->action(fn () => redirect()->route('filament.' . filament()->getCurrentOrDefaultPanel()->getId() . '.pages.settings-hub', Filament::getTenant()))
+                ->color('danger')
+                ->label(trans('filament-settings-hub::messages.back')),
         ];
-
     }
 
     public function getTitle(): string
     {
-        return "Inventory Settings";
+        return 'Inventory Settings';
     }
 
-    protected function getFormSchema(): array
+    public function form(Schema $schema): Schema
     {
-        return [
-            Grid::make(['default' => 1])->schema([
-                TextInput::make('ordering_active_inventory'),
-                TextInput::make('ordering_active_inventory_web_branc'),
-                TextInput::make('ordering_active_inventory_direct_branch'),
-            ])
-
-        ];
+        return $schema
+            ->components([
+                Grid::make(['default' => 1])->schema([
+                    Toggle::make('ordering_active_inventory'),
+                    Select::make('ordering_active_inventory_web_branch')
+                        ->options(fn () => Branch::query()->pluck('name', 'id')->toArray())
+                        ->searchable(),
+                    Select::make('ordering_active_inventory_direct_branch')
+                        ->options(fn () => Branch::query()->pluck('name', 'id')->toArray())
+                        ->searchable(),
+                ]),
+            ]);
     }
 }

@@ -2,57 +2,62 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource\Pages;
-use TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource\RelationManagers;
-use TomatoPHP\FilamentEcommerce\Models\Cart;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource\Pages\CreateCart;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource\Pages\EditCart;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource\Pages\ListCarts;
+use TomatoPHP\FilamentEcommerce\Models\Cart;
 
 class CartResource extends Resource
 {
     protected static ?string $model = Cart::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('account_id')
+        return $schema
+            ->components([
+                TextInput::make('account_id')
                     ->numeric(),
-                Forms\Components\TextInput::make('product_id')
+                TextInput::make('product_id')
                     ->numeric(),
-                Forms\Components\TextInput::make('session_id')
+                TextInput::make('session_id')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('item')
+                TextInput::make('item')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('price')
+                TextInput::make('price')
                     ->required()
                     ->numeric()
                     ->default(0)
                     ->prefix('$'),
-                Forms\Components\TextInput::make('discount')
+                TextInput::make('discount')
                     ->numeric()
                     ->default(0),
-                Forms\Components\TextInput::make('vat')
+                TextInput::make('vat')
                     ->numeric()
                     ->default(0),
-                Forms\Components\TextInput::make('qty')
+                TextInput::make('qty')
                     ->numeric()
                     ->default(0),
-                Forms\Components\TextInput::make('total')
+                TextInput::make('total')
                     ->numeric()
                     ->default(0),
-                Forms\Components\Textarea::make('note')
+                Textarea::make('note')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('options'),
-                Forms\Components\Toggle::make('is_active'),
+                TextInput::make('options'),
+                Toggle::make('is_active'),
             ]);
     }
 
@@ -60,38 +65,38 @@ class CartResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('account_id')
+                TextColumn::make('account_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('product_id')
+                TextColumn::make('product_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('session_id')
+                TextColumn::make('session_id')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('item')
+                TextColumn::make('item')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('price')
+                TextColumn::make('price')
                     ->money()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('discount')
+                TextColumn::make('discount')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('vat')
+                TextColumn::make('vat')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('qty')
+                TextColumn::make('qty')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total')
+                TextColumn::make('total')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_active')
+                IconColumn::make('is_active')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -99,12 +104,12 @@ class CartResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -119,9 +124,9 @@ class CartResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCarts::route('/'),
-            'create' => Pages\CreateCart::route('/create'),
-            'edit' => Pages\EditCart::route('/{record}/edit'),
+            'index' => ListCarts::route('/'),
+            'create' => CreateCart::route('/create'),
+            'edit' => EditCart::route('/{record}/edit'),
         ];
     }
 }

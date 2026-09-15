@@ -3,13 +3,14 @@
 namespace TomatoPHP\FilamentEcommerce\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property integer $id
+ * @property int $id
  * @property string $name
  * @property string $phone
  * @property string $address
- * @property boolean $is_activated
+ * @property bool $is_activated
  * @property string $created_at
  * @property string $updated_at
  * @property Order[] $orders
@@ -20,17 +21,19 @@ class Delivery extends Model
     /**
      * @var array
      */
-    protected $fillable = ['shipping_vendor_id','name', 'phone', 'address', 'is_activated', 'created_at', 'updated_at'];
+    protected $fillable = ['shipping_vendor_id', 'name', 'phone', 'address', 'is_activated', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'is_activated' => 'boolean'
+        'is_activated' => 'boolean',
     ];
 
-    public function vendor(){
+    public function vendor()
+    {
         return $this->belongsTo('TomatoPHP\FilamentEcommerce\Models\ShippingVendor', 'shipping_vendor_id');
     }
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function orders()
     {
@@ -38,7 +41,7 @@ class Delivery extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function shippingPrices()
     {

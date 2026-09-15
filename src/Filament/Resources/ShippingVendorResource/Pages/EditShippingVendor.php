@@ -2,9 +2,9 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource;
 
 class EditShippingVendor extends EditRecord
 {
@@ -13,7 +13,7 @@ class EditShippingVendor extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

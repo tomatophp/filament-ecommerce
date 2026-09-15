@@ -3,17 +3,18 @@
 namespace TomatoPHP\FilamentEcommerce\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use TomatoPHP\TomatoLocations\Models\Area;
-use TomatoPHP\TomatoLocations\Models\City;
-use TomatoPHP\TomatoLocations\Models\Country;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use TomatoPHP\FilamentLocations\Models\Area;
+use TomatoPHP\FilamentLocations\Models\City;
+use TomatoPHP\FilamentLocations\Models\Country;
 
 /**
- * @property integer $id
- * @property integer $shipping_vendor_id
- * @property integer $delivery_id
- * @property integer $country_id
- * @property integer $city_id
- * @property integer $area_id
+ * @property int $id
+ * @property int $shipping_vendor_id
+ * @property int $delivery_id
+ * @property int $country_id
+ * @property int $city_id
+ * @property int $area_id
  * @property string $type
  * @property float $price
  * @property string $created_at
@@ -32,31 +33,31 @@ class ShippingPrice extends Model
     protected $fillable = ['shipping_vendor_id', 'delivery_id', 'country_id', 'city_id', 'area_id', 'type', 'price', 'created_at', 'updated_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function area()
     {
-        return $this->belongsTo(\TomatoPHP\FilamentLocations\Models\Area::class);
+        return $this->belongsTo(Area::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function city()
     {
-        return $this->belongsTo(\TomatoPHP\FilamentLocations\Models\City::class);
+        return $this->belongsTo(City::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function country()
     {
-        return $this->belongsTo(\TomatoPHP\FilamentLocations\Models\Country::class);
+        return $this->belongsTo(Country::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function delivery()
     {
@@ -64,7 +65,7 @@ class ShippingPrice extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function shippingVendor()
     {

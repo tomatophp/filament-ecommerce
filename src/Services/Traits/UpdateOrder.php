@@ -15,7 +15,7 @@ trait UpdateOrder
         $this->syncItems($request, true);
         $this->syncMeta($request);
 
-        $this->log(__("Order Has Been Updated"));
+        $this->log(__('Order Has Been Updated'));
 
         return $this->order;
     }

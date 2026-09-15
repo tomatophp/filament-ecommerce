@@ -16,7 +16,6 @@ return new class extends Migration
 
             $table->foreignId('account_id')->nullable()->constrained('accounts')->onDelete('cascade');
 
-
             $table->foreignId('product_id')->nullable()->constrained('products');
 
             $table->string('session_id')->nullable();

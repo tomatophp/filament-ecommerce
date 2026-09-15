@@ -2,24 +2,30 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources;
 
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use TomatoPHP\FilamentAccounts\Models\Account;
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ReferralCodeResource\Pages;
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ReferralCodeResource\RelationManagers;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\ReferralCodeResource\Pages\ListReferralCodes;
 use TomatoPHP\FilamentEcommerce\Models\ReferralCode;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ReferralCodeResource extends Resource
 {
     protected static ?string $model = ReferralCode::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-top-right-on-square';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-arrow-top-right-on-square';
 
     protected static ?int $navigationSort = 7;
 
@@ -43,29 +49,29 @@ class ReferralCodeResource extends Resource
         return trans('filament-ecommerce::messages.referral_code.single');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('account_id')
+        return $schema
+            ->components([
+                Select::make('account_id')
                     ->columnSpanFull()
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.account_id'))
                     ->searchable()
                     ->options(Account::query()->pluck('name', 'id')->toArray()),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->default(trans('filament-ecommerce::messages.referral_code.columns.default'))
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.name'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('code')
+                TextInput::make('code')
                     ->unique(ignoreRecord: true)
                     ->default(Str::random(6))
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.code'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Toggle::make('is_activated')
+                Toggle::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.is_activated')),
-                Forms\Components\Toggle::make('is_public')
+                Toggle::make('is_public')
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.is_public')),
             ]);
     }
@@ -74,56 +80,56 @@ class ReferralCodeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('account.name')
+                TextColumn::make('account.name')
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.account_id'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.name'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('code')
+                TextColumn::make('code')
                     ->copyable()
                     ->icon('heroicon-o-clipboard')
                     ->badge()
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.code'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('counter')
+                TextColumn::make('counter')
                     ->badge()
                     ->color('info')
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.counter'))
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_activated')
+                IconColumn::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.is_activated'))
                     ->boolean(),
-                Tables\Columns\IconColumn::make('is_public')
+                IconColumn::make('is_public')
                     ->label(trans('filament-ecommerce::messages.referral_code.columns.is_public'))
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('account_id')
+                SelectFilter::make('account_id')
                     ->label(trans('filament-ecommerce::messages.referral_code.filters.account_id'))
                     ->searchable()
                     ->options(Account::query()->pluck('name', 'id')->toArray()),
-                Tables\Filters\TernaryFilter::make('is_activated')
+                TernaryFilter::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.referral_code.filters.is_activated')),
-                Tables\Filters\TernaryFilter::make('is_public')
+                TernaryFilter::make('is_public')
                     ->label(trans('filament-ecommerce::messages.referral_code.filters.is_public')),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -138,7 +144,7 @@ class ReferralCodeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListReferralCodes::route('/'),
+            'index' => ListReferralCodes::route('/'),
         ];
     }
 }

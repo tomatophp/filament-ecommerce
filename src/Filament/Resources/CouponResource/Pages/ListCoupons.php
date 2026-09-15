@@ -2,10 +2,9 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource\Pages;
 
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRecords;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource;
-use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
 
 class ListCoupons extends ManageRecords
 {
@@ -14,7 +13,7 @@ class ListCoupons extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

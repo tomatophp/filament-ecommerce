@@ -2,9 +2,9 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\CompanyResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\CompanyResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\CompanyResource;
 
 class EditCompany extends EditRecord
 {
@@ -13,7 +13,7 @@ class EditCompany extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

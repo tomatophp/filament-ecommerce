@@ -2,24 +2,25 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use LaraZeus\SpatieTranslatable\Actions\LocaleSwitcher;
+use LaraZeus\SpatieTranslatable\Resources\Pages\ListRecords\Concerns\Translatable;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource;
 
 class ListProducts extends ListRecords
 {
-    use ListRecords\Concerns\Translatable;
+    use Translatable;
+
+    public ?string $activeLocale = null;
 
     protected static string $resource = ProductResource::class;
-
-    #[Reactive]
-    public ?string $activeLocale = null;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
-            Actions\LocaleSwitcher::make()
+            CreateAction::make(),
+            LocaleSwitcher::make(),
         ];
     }
 }

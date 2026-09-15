@@ -2,17 +2,19 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
-use App\Models\Team;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 use TomatoPHP\FilamentCms\Models\Category;
-use Illuminate\Support\Str;
 
 /**
- * @property integer $id
- * @property integer $category_id
+ * @property int $id
+ * @property int $category_id
  * @property string $name
  * @property string $keywords
  * @property string $slug
@@ -26,19 +28,19 @@ use Illuminate\Support\Str;
  * @property float $discount
  * @property string $discount_to
  * @property float $vat
- * @property boolean $is_in_stock
- * @property boolean $is_activated
- * @property boolean $is_shipped
- * @property boolean $is_trend
- * @property boolean $has_options
- * @property boolean $has_multi_price
- * @property boolean $has_unlimited_stock
- * @property boolean $has_max_cart
- * @property integer $min_cart
- * @property integer $max_cart
- * @property boolean $has_stock_alert
- * @property integer $min_stock_alert
- * @property integer $max_stock_alert
+ * @property bool $is_in_stock
+ * @property bool $is_activated
+ * @property bool $is_shipped
+ * @property bool $is_trend
+ * @property bool $has_options
+ * @property bool $has_multi_price
+ * @property bool $has_unlimited_stock
+ * @property bool $has_max_cart
+ * @property int $min_cart
+ * @property int $max_cart
+ * @property bool $has_stock_alert
+ * @property int $min_stock_alert
+ * @property int $max_stock_alert
  * @property string $created_at
  * @property string $updated_at
  * @property Category[] $categories
@@ -50,8 +52,8 @@ use Illuminate\Support\Str;
  */
 class Product extends Model implements HasMedia
 {
-    use InteractsWithMedia;
     use HasTranslations;
+    use InteractsWithMedia;
 
     public $translatable = ['name', 'about', 'description', 'details', 'keywords'];
 
@@ -71,16 +73,17 @@ class Product extends Model implements HasMedia
         'has_max_cart' => 'boolean',
         'has_stock_alert' => 'boolean',
     ];
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'product_has_categories',   'product_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'product_has_categories', 'product_id', 'category_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function tags()
     {
@@ -88,29 +91,22 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function collection()
     {
         return $this->belongsToMany('TomatoPHP\FilamentEcommerce\Models\Product', 'product_has_collection', 'collection_id');
     }
 
-
-
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function productMetas()
     {
         return $this->hasMany(ProductMeta::class);
     }
 
-    /**
-     * @param string $key
-     * @param string|array|object|null $value
-     * @return Model|string|array|null
-     */
-    public function meta(string $key, string|array|object|null $value = null): Model|string|null|array
+    public function meta(string $key, string | array | object | null $value = null): Model | string | null | array
     {
         if ($value !== null) {
             if ($value === 'null') {
@@ -128,9 +124,8 @@ class Product extends Model implements HasMedia
         }
     }
 
-
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function productReviews()
     {
@@ -138,7 +133,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function productReviewsActive()
     {
@@ -146,7 +141,7 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function category()
     {
@@ -154,11 +149,11 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function team()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo('App\Models\Team');
     }
 
     public function codes()
@@ -169,8 +164,6 @@ class Product extends Model implements HasMedia
     /**
      * Generate codes for the product
      *
-     * @param int $quantity
-     * @param array $options
      * @return void
      */
     public function generateCodes(int $quantity, array $options = [])
@@ -193,11 +186,6 @@ class Product extends Model implements HasMedia
 
     /**
      * Generate a unique code
-     *
-     * @param int $length
-     * @param string $type
-     * @param string $case
-     * @return string
      */
     private function generateUniqueCode(int $length, string $type, string $case): string
     {

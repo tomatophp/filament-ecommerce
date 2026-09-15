@@ -19,7 +19,7 @@ return new class extends Migration
                 'gift_cards',
                 'referral_codes',
                 'shipping_vendors',
-                'orders'
+                'orders',
             ];
 
             foreach ($tables as $table) {
@@ -44,7 +44,7 @@ return new class extends Migration
             'referral_codes',
             'shipping_vendors',
             'deliveries',
-            'orders'
+            'orders',
         ];
 
         foreach ($tables as $table) {

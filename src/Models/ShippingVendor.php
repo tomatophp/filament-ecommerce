@@ -2,18 +2,19 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
-use App\Models\Team;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
- * @property integer $id
+ * @property int $id
  * @property string $name
  * @property string $contact_person
  * @property string $phone
  * @property string $address
- * @property boolean $is_activated
+ * @property bool $is_activated
  * @property mixed $integration
  * @property string $created_at
  * @property string $updated_at
@@ -23,29 +24,31 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class ShippingVendor extends Model implements HasMedia
 {
     use InteractsWithMedia;
+
     /**
      * @var array
      */
-    protected $fillable = ['team_id', 'price','name', 'delivery_estimation','contact_person', 'phone', 'address', 'is_activated', 'integration', 'created_at', 'updated_at'];
+    protected $fillable = ['team_id', 'price', 'name', 'delivery_estimation', 'contact_person', 'phone', 'address', 'is_activated', 'integration', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'is_activated' => 'boolean'
+        'is_activated' => 'boolean',
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function team()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo('App\Models\Team');
     }
 
-    public function deliveries(){
+    public function deliveries()
+    {
         return $this->hasMany('TomatoPHP\FilamentEcommerce\Models\Delivery');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function orders()
     {
@@ -53,7 +56,7 @@ class ShippingVendor extends Model implements HasMedia
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function shippingPrices()
     {

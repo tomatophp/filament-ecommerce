@@ -2,10 +2,9 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource\Pages;
 
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRecords;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource;
-use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
 
 class ListShippingVendors extends ManageRecords
 {
@@ -14,7 +13,7 @@ class ListShippingVendors extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

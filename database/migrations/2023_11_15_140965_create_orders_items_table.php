@@ -16,20 +16,20 @@ return new class extends Migration
         Schema::create('orders_items', function (Blueprint $table) {
             $table->id();
 
-            //Order
+            // Order
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
 
-            //Warehouse
+            // Warehouse
             $table->unsignedBigInteger('refund_id')->nullable();
             $table->unsignedBigInteger('warehouse_move_id')->nullable();
 
-            //Customer
+            // Customer
             $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
 
-            //Product
+            // Product
             $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('cascade');
 
-            //Item Info
+            // Item Info
             $table->string('item')->nullable();
             $table->double('price')->default(0)->nullable();
             $table->double('discount')->default(0)->nullable();
@@ -37,15 +37,15 @@ return new class extends Migration
             $table->double('total')->default(0)->nullable();
             $table->double('returned')->default(0)->nullable();
 
-            //Qty
+            // Qty
             $table->double('qty')->default(1)->nullable();
             $table->double('returned_qty')->default(0)->nullable();
 
-            //Options
+            // Options
             $table->boolean('is_free')->default(0)->nullable();
             $table->boolean('is_returned')->default(0)->nullable();
 
-            //Options
+            // Options
             $table->json('options')->nullable();
 
             $table->timestamps();

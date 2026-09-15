@@ -2,29 +2,27 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
-use App\Models\Team;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use TomatoPHP\FilamentEcommerce\Models\Branch;
-use TomatoPHP\FilamentEcommerce\Models\Coupon;
-use TomatoPHP\FilamentLocations\Models\Location;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use TomatoPHP\FilamentLocations\Models\Area;
 use TomatoPHP\FilamentLocations\Models\City;
 use TomatoPHP\FilamentLocations\Models\Country;
+use TomatoPHP\FilamentLocations\Models\Location;
 
 /**
- * @property integer $id
- * @property integer $user_id
- * @property integer $country_id
- * @property integer $area_id
- * @property integer $city_id
- * @property integer $address_id
- * @property integer $account_id
- * @property integer $cashier_id
- * @property integer $coupon_id
- * @property integer $shipper_id
- * @property integer $shipping_vendor_id
- * @property integer $branch_id
+ * @property int $id
+ * @property int $user_id
+ * @property int $country_id
+ * @property int $area_id
+ * @property int $city_id
+ * @property int $address_id
+ * @property int $account_id
+ * @property int $cashier_id
+ * @property int $coupon_id
+ * @property int $shipper_id
+ * @property int $shipping_vendor_id
+ * @property int $branch_id
  * @property string $uuid
  * @property string $type
  * @property string $name
@@ -38,15 +36,15 @@ use TomatoPHP\FilamentLocations\Models\Country;
  * @property float $shipping
  * @property float $vat
  * @property string $status
- * @property boolean $is_approved
- * @property boolean $is_closed
- * @property boolean $is_on_table
+ * @property bool $is_approved
+ * @property bool $is_closed
+ * @property bool $is_on_table
  * @property string $table
  * @property string $notes
- * @property boolean $has_returns
+ * @property bool $has_returns
  * @property float $return_total
  * @property string $reason
- * @property boolean $is_payed
+ * @property bool $is_payed
  * @property string $payment_method
  * @property string $payment_vendor
  * @property string $payment_vendor_id
@@ -76,44 +74,44 @@ class Order extends Model
     protected $fillable = [
         'team_id',
         'company_id',
-        'user_id', 
-        'country_id', 
-        'area_id', 
-        'city_id', 
-        'address_id', 
-        'account_id', 
-        'cashier_id', 
-        'coupon_id', 
-        'shipper_id', 
-        'shipping_vendor_id', 
-        'branch_id', 
-        'uuid', 
-        'type', 
-        'name', 
-        'phone', 
-        'flat', 
-        'address', 
-        'source', 
-        'shipper_vendor', 
-        'total', 
-        'discount', 
-        'shipping', 
-        'vat', 
-        'status', 
-        'is_approved', 
-        'is_closed', 
-        'is_on_table', 
-        'table', 
-        'notes', 
-        'has_returns', 
-        'return_total', 
-        'reason', 
-        'is_payed', 
-        'payment_method', 
-        'payment_vendor', 
-        'payment_vendor_id', 
-        'created_at', 
-        'updated_at'
+        'user_id',
+        'country_id',
+        'area_id',
+        'city_id',
+        'address_id',
+        'account_id',
+        'cashier_id',
+        'coupon_id',
+        'shipper_id',
+        'shipping_vendor_id',
+        'branch_id',
+        'uuid',
+        'type',
+        'name',
+        'phone',
+        'flat',
+        'address',
+        'source',
+        'shipper_vendor',
+        'total',
+        'discount',
+        'shipping',
+        'vat',
+        'status',
+        'is_approved',
+        'is_closed',
+        'is_on_table',
+        'table',
+        'notes',
+        'has_returns',
+        'return_total',
+        'reason',
+        'is_payed',
+        'payment_method',
+        'payment_vendor',
+        'payment_vendor_id',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [
@@ -125,15 +123,15 @@ class Order extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function team()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo('App\Models\Team');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function orderLogs()
     {
@@ -147,7 +145,7 @@ class Order extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function orderMetas()
     {
@@ -155,22 +153,20 @@ class Order extends Model
     }
 
     /**
-     * @param string $key
-     * @param string|null $value
+     * @param  string|null  $value
      * @return Model|string
      */
-    public function meta(string $key, mixed $value=null): mixed
+    public function meta(string $key, mixed $value = null): mixed
     {
-        if($value){
+        if ($value) {
             return $this->orderMetas()->updateOrCreate(['key' => $key], ['value' => $value]);
-        }
-        else {
+        } else {
             return $this->orderMetas()->where('key', $key)->firstOrCreate()?->value;
         }
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function account()
     {
@@ -178,63 +174,63 @@ class Order extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function location()
     {
-        return $this->belongsTo(\TomatoPHP\FilamentLocations\Models\Location::class, 'address_id');
+        return $this->belongsTo(Location::class, 'address_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function area()
     {
-        return $this->belongsTo(\TomatoPHP\FilamentLocations\Models\Area::class);
+        return $this->belongsTo(Area::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function branch()
     {
-        return $this->belongsTo(\TomatoPHP\FilamentEcommerce\Models\Branch::class);
+        return $this->belongsTo(Branch::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function cashier()
     {
-        return $this->belongsTo(User::class, 'cashier_id');
+        return $this->belongsTo(config('auth.providers.users.model'), 'cashier_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function city()
     {
-        return $this->belongsTo(\TomatoPHP\FilamentLocations\Models\City::class);
+        return $this->belongsTo(City::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function country()
     {
-        return $this->belongsTo(\TomatoPHP\FilamentLocations\Models\Country::class);
+        return $this->belongsTo(Country::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function coupon()
     {
-        return $this->belongsTo(\TomatoPHP\FilamentEcommerce\Models\Coupon::class);
+        return $this->belongsTo(Coupon::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function shipper()
     {
@@ -242,7 +238,7 @@ class Order extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function shippingVendor()
     {
@@ -250,15 +246,15 @@ class Order extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(config('auth.providers.users.model'));
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function ordersItems()
     {

@@ -2,9 +2,9 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\DownloadResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\DownloadResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\DownloadResource;
 
 class EditDownload extends EditRecord
 {
@@ -13,7 +13,7 @@ class EditDownload extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

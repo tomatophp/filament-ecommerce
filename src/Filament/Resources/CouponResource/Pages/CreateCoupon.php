@@ -2,9 +2,8 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource;
 
 class CreateCoupon extends CreateRecord
 {

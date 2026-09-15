@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->double('balance')->default(0)->nullable();
-            $table->string('currency')->default("USD")->nullable();
+            $table->string('currency')->default('USD')->nullable();
 
             $table->boolean('is_activated')->default(0)->nullable();
             $table->boolean('is_expired')->default(0)->nullable();

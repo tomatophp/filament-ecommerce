@@ -2,7 +2,6 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Export;
 
-
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
@@ -19,7 +18,7 @@ class ExportOrders extends Exporter
             ExportColumn::make('company.name')->label('Company'),
             ExportColumn::make('branch.name')->label('Branch'),
             ExportColumn::make('uuid')->label('UUID'),
-            ExportColumn::make('status')->state(function ($record){
+            ExportColumn::make('status')->state(function ($record) {
                 return Type::where('for', 'orders')
                     ->where('type', 'status')
                     ->where('key', $record->status)
@@ -40,12 +39,12 @@ class ExportOrders extends Exporter
             ExportColumn::make('discount')->label('Discount'),
             ExportColumn::make('shipping')->label('Shipping'),
             ExportColumn::make('total')->label('Total'),
-            ExportColumn::make('items')->label('Items')->state(function ($record){
-                return $record->ordersItems()->get()->map(function ($item){
+            ExportColumn::make('items')->label('Items')->state(function ($record) {
+                return $record->ordersItems()->get()->map(function ($item) {
                     return [
-                        'item' => $item->product->sku . '['.$item->qty. '*'.number_format((($item->price+$item->vat)-$item->discount), 2) . setting('site_currency') . "=". number_format($item->total, 2) . setting('site_currency')."]\n",
+                        'item' => $item->product->sku . '[' . $item->qty . '*' . number_format((($item->price + $item->vat) - $item->discount), 2) . setting('site_currency') . '=' . number_format($item->total, 2) . setting('site_currency') . "]\n",
                     ];
-                })->implode("item", ',');
+                })->implode('item', ',');
             }),
         ];
     }

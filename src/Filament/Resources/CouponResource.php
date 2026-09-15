@@ -2,25 +2,36 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources;
 
-use Illuminate\Support\Str;
-use TomatoPHP\FilamentCms\Models\Category;
-use TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource\Pages;
-use TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource\RelationManagers;
-use TomatoPHP\FilamentEcommerce\Models\Coupon;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
+use TomatoPHP\FilamentCms\Models\Category;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\CouponResource\Pages\ListCoupons;
+use TomatoPHP\FilamentEcommerce\Models\Coupon;
 use TomatoPHP\FilamentEcommerce\Models\Product;
 
 class CouponResource extends Resource
 {
     protected static ?string $model = Coupon::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-receipt-percent';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-receipt-percent';
 
     protected static ?int $navigationSort = 5;
 
@@ -44,17 +55,17 @@ class CouponResource extends Resource
         return trans('filament-ecommerce::messages.coupons.single');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('code')
+        return $schema
+            ->components([
+                TextInput::make('code')
                     ->unique(ignoreRecord: true)
                     ->label(trans('filament-ecommerce::messages.coupons.columns.code'))
                     ->default(Str::random(6))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('type')
+                Select::make('type')
                     ->searchable()
                     ->label(trans('filament-ecommerce::messages.coupons.columns.type'))
                     ->options([
@@ -62,110 +73,110 @@ class CouponResource extends Resource
                         'percentage_coupon' => trans('filament-ecommerce::messages.coupons.columns.percentage_coupon'),
                     ])
                     ->default('discount_coupon'),
-                Forms\Components\TextInput::make('amount')
+                TextInput::make('amount')
                     ->label(trans('filament-ecommerce::messages.coupons.columns.amount'))
                     ->required()
                     ->numeric()
                     ->default(0),
-                Forms\Components\DatePicker::make('end_at')
+                DatePicker::make('end_at')
                     ->label(trans('filament-ecommerce::messages.coupons.columns.end_at')),
-                Forms\Components\Toggle::make('is_activated')
+                Toggle::make('is_activated')
                     ->columnSpanFull()
                     ->label(trans('filament-ecommerce::messages.coupons.columns.is_activated')),
-                Forms\Components\Toggle::make('is_limited')
+                Toggle::make('is_limited')
                     ->columnSpanFull()
                     ->default(false)
                     ->label(trans('filament-ecommerce::messages.coupons.columns.is_limited'))
                     ->live(),
-                Forms\Components\Repeater::make('apply_to')
+                Repeater::make('apply_to')
                     ->columnSpanFull()
-                    ->hidden(fn(Forms\Get $get) => !$get('is_limited'))
+                    ->hidden(fn (Get $get) => ! $get('is_limited'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.apply_to'))
                     ->schema([
-                        Forms\Components\Select::make('model_type')
+                        Select::make('model_type')
                             ->label(trans('filament-ecommerce::messages.coupons.columns.type'))
                             ->searchable()
                             ->options([
                                 Product::class => trans('filament-ecommerce::messages.coupons.columns.product'),
-                                Category::class => trans('filament-ecommerce::messages.coupons.columns.category')
+                                Category::class => trans('filament-ecommerce::messages.coupons.columns.category'),
                             ])
                             ->live(),
-                        Forms\Components\Select::make('model_id')
-                            ->hidden(fn(Forms\Get $get) => $get('model_type') !== Category::class)
+                        Select::make('model_id')
+                            ->hidden(fn (Get $get) => $get('model_type') !== Category::class)
                             ->label(trans('filament-ecommerce::messages.coupons.columns.category'))
                             ->searchable()
                             ->options(Category::query()->where('for', 'product')->where('type', 'category')->pluck('name', 'id')->toArray()),
-                        Forms\Components\Select::make('model_id')
-                            ->hidden(fn(Forms\Get $get) => $get('model_type') !== Product::class)
+                        Select::make('model_id')
+                            ->hidden(fn (Get $get) => $get('model_type') !== Product::class)
                             ->label(trans('filament-ecommerce::messages.coupons.columns.product'))
                             ->searchable()
-                            ->options(Product::query()->pluck('name', 'id')->toArray())
+                            ->options(Product::query()->pluck('name', 'id')->toArray()),
                     ]),
-                Forms\Components\Repeater::make('except')
+                Repeater::make('except')
                     ->columnSpanFull()
-                    ->hidden(fn(Forms\Get $get) => !$get('is_limited'))
+                    ->hidden(fn (Get $get) => ! $get('is_limited'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.except'))
                     ->schema([
-                        Forms\Components\Select::make('model_type')
+                        Select::make('model_type')
                             ->label(trans('filament-ecommerce::messages.coupons.columns.type'))
                             ->searchable()
                             ->options([
                                 Product::class => trans('filament-ecommerce::messages.coupons.columns.product'),
-                                Category::class => trans('filament-ecommerce::messages.coupons.columns.category')
+                                Category::class => trans('filament-ecommerce::messages.coupons.columns.category'),
                             ])
                             ->live(),
-                        Forms\Components\Select::make('model_id')
-                            ->hidden(fn(Forms\Get $get) => $get('model_type') !== Category::class)
+                        Select::make('model_id')
+                            ->hidden(fn (Get $get) => $get('model_type') !== Category::class)
                             ->label(trans('filament-ecommerce::messages.coupons.columns.category'))
                             ->searchable()
                             ->options(Category::query()->where('for', 'product')->where('type', 'category')->pluck('name', 'id')->toArray()),
-                        Forms\Components\Select::make('model_id')
-                            ->hidden(fn(Forms\Get $get) => $get('model_type') !== Product::class)
+                        Select::make('model_id')
+                            ->hidden(fn (Get $get) => $get('model_type') !== Product::class)
                             ->label(trans('filament-ecommerce::messages.coupons.columns.product'))
                             ->searchable()
-                            ->options(Product::query()->pluck('name', 'id')->toArray())
+                            ->options(Product::query()->pluck('name', 'id')->toArray()),
                     ]),
-                Forms\Components\TextInput::make('use_limit')
-                    ->hidden(fn(Forms\Get $get) => !$get('is_limited'))
+                TextInput::make('use_limit')
+                    ->hidden(fn (Get $get) => ! $get('is_limited'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.use_limit'))
                     ->numeric()
                     ->default(0),
-                Forms\Components\TextInput::make('use_limit_by_user')
-                    ->hidden(fn(Forms\Get $get) => !$get('is_limited'))
+                TextInput::make('use_limit_by_user')
+                    ->hidden(fn (Get $get) => ! $get('is_limited'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.use_limit_by_user'))
                     ->numeric()
                     ->default(0),
-                Forms\Components\TextInput::make('order_total_limit')
-                    ->hidden(fn(Forms\Get $get) => !$get('is_limited'))
+                TextInput::make('order_total_limit')
+                    ->hidden(fn (Get $get) => ! $get('is_limited'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.order_total_limit'))
                     ->numeric()
                     ->default(0),
 
-                Forms\Components\Toggle::make('is_marketing')
+                Toggle::make('is_marketing')
                     ->columnSpanFull()
                     ->live()
                     ->label(trans('filament-ecommerce::messages.coupons.columns.is_marketing')),
-                Forms\Components\TextInput::make('marketer_name')
-                    ->hidden(fn(Forms\Get $get) => !$get('is_marketing'))
+                TextInput::make('marketer_name')
+                    ->hidden(fn (Get $get) => ! $get('is_marketing'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.marketer_name'))
                     ->maxLength(255),
-                Forms\Components\TextInput::make('marketer_type')
-                    ->hidden(fn(Forms\Get $get) => !$get('is_marketing'))
+                TextInput::make('marketer_type')
+                    ->hidden(fn (Get $get) => ! $get('is_marketing'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.marketer_type'))
                     ->maxLength(255),
-                Forms\Components\TextInput::make('marketer_amount')
-                    ->hidden(fn(Forms\Get $get) => !$get('is_marketing'))
+                TextInput::make('marketer_amount')
+                    ->hidden(fn (Get $get) => ! $get('is_marketing'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.marketer_amount'))
                     ->numeric(),
-                Forms\Components\TextInput::make('marketer_amount_max')
-                    ->hidden(fn(Forms\Get $get) => !$get('is_marketing'))
+                TextInput::make('marketer_amount_max')
+                    ->hidden(fn (Get $get) => ! $get('is_marketing'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.marketer_amount_max'))
                     ->numeric(),
-                Forms\Components\Toggle::make('marketer_show_amount_max')
-                    ->hidden(fn(Forms\Get $get) => !$get('is_marketing'))
+                Toggle::make('marketer_show_amount_max')
+                    ->hidden(fn (Get $get) => ! $get('is_marketing'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.marketer_show_amount_max')),
-                Forms\Components\Toggle::make('marketer_hide_total_sales')
-                    ->hidden(fn(Forms\Get $get) => !$get('is_marketing'))
+                Toggle::make('marketer_hide_total_sales')
+                    ->hidden(fn (Get $get) => ! $get('is_marketing'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.marketer_hide_total_sales')),
             ]);
     }
@@ -174,75 +185,74 @@ class CouponResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('code')
+                TextColumn::make('code')
                     ->copyable()
                     ->icon('heroicon-o-clipboard')
                     ->badge()
                     ->tooltip(trans('filament-ecommerce::messages.coupons.columns.copy'))
                     ->label(trans('filament-ecommerce::messages.coupons.columns.code'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('type')
                     ->badge()
-                    ->icon(fn($record) => $record->type === 'discount_coupon' ? 'heroicon-o-receipt-refund' : 'heroicon-o-receipt-percent')
-                    ->color(fn($record) => $record->type === 'discount_coupon' ? 'primary' : 'info')
+                    ->icon(fn ($record) => $record->type === 'discount_coupon' ? 'heroicon-o-receipt-refund' : 'heroicon-o-receipt-percent')
+                    ->color(fn ($record) => $record->type === 'discount_coupon' ? 'primary' : 'info')
                     ->label(trans('filament-ecommerce::messages.coupons.columns.type'))
-                    ->state(fn($record) => $record->type === 'discount_coupon' ? trans('filament-ecommerce::messages.coupons.columns.discount_coupon') : trans('filament-ecommerce::messages.coupons.columns.percentage_coupon'))
+                    ->state(fn ($record) => $record->type === 'discount_coupon' ? trans('filament-ecommerce::messages.coupons.columns.discount_coupon') : trans('filament-ecommerce::messages.coupons.columns.percentage_coupon'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('amount')
+                TextColumn::make('amount')
                     ->label(trans('filament-ecommerce::messages.coupons.columns.amount'))
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('end_at')
+                TextColumn::make('end_at')
                     ->label(trans('filament-ecommerce::messages.coupons.columns.end_at'))
                     ->date()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_activated')
+                IconColumn::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.coupons.columns.is_activated'))
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('type')
+                SelectFilter::make('type')
                     ->label(trans('filament-ecommerce::messages.coupons.filters.type'))
                     ->searchable()
                     ->options([
                         'discount_coupon' => trans('filament-ecommerce::messages.coupons.columns.discount_coupon'),
                         'percentage_coupon' => trans('filament-ecommerce::messages.coupons.columns.percentage_coupon'),
                     ]),
-                Tables\Filters\TernaryFilter::make('is_activated')
+                TernaryFilter::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.coupons.filters.is_activated')),
-                Tables\Filters\TernaryFilter::make('is_limited')
+                TernaryFilter::make('is_limited')
                     ->label(trans('filament-ecommerce::messages.coupons.filters.is_limited')),
-                Tables\Filters\TernaryFilter::make('is_marketing')
+                TernaryFilter::make('is_marketing')
                     ->label(trans('filament-ecommerce::messages.coupons.filters.is_marketing')),
-                Tables\Filters\Filter::make('end_at')
+                Filter::make('end_at')
                     ->label(trans('filament-ecommerce::messages.coupons.filters.end_at'))
-                    ->form([
-                        Forms\Components\DatePicker::make('end_at'),
+                    ->schema([
+                        DatePicker::make('end_at'),
                     ])
-                    ->query(function (Builder $query, array $data): Builder
-                    {
+                    ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
                                 $data['end_at'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('end_at', '>=', $date),
                             );
-                    })
+                    }),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -257,7 +267,7 @@ class CouponResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCoupons::route('/')
+            'index' => ListCoupons::route('/'),
         ];
     }
 }

@@ -2,9 +2,9 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ComparisonResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ComparisonResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\ComparisonResource;
 
 class EditComparison extends EditRecord
 {
@@ -13,7 +13,7 @@ class EditComparison extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

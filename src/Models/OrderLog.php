@@ -2,16 +2,16 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $id
- * @property integer $user_id
- * @property integer $order_id
+ * @property int $id
+ * @property int $user_id
+ * @property int $order_id
  * @property string $status
  * @property string $note
- * @property boolean $is_closed
+ * @property bool $is_closed
  * @property string $created_at
  * @property string $updated_at
  * @property Order $order
@@ -27,8 +27,9 @@ class OrderLog extends Model
     protected $casts = [
         'is_closed' => 'boolean',
     ];
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function order()
     {
@@ -36,10 +37,10 @@ class OrderLog extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(config('auth.providers.users.model'));
     }
 }

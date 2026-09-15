@@ -2,9 +2,9 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource;
 
 class EditCart extends EditRecord
 {
@@ -13,7 +13,7 @@ class EditCart extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

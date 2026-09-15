@@ -3,11 +3,12 @@
 namespace TomatoPHP\FilamentEcommerce\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $id
- * @property integer $account_id
- * @property integer $product_id
+ * @property int $id
+ * @property int $account_id
+ * @property int $product_id
  * @property string $session_id
  * @property string $item
  * @property float $price
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $total
  * @property string $note
  * @property mixed $options
- * @property boolean $is_active
+ * @property bool $is_active
  * @property string $created_at
  * @property string $updated_at
  * @property Account $account
@@ -31,11 +32,12 @@ class Cart extends Model
     protected $fillable = ['account_id', 'product_id', 'session_id', 'item', 'price', 'discount', 'vat', 'qty', 'total', 'note', 'options', 'is_active', 'created_at', 'updated_at'];
 
     protected $casts = [
-        "is_active" => "boolean",
-        "options" => "json"
+        'is_active' => 'boolean',
+        'options' => 'json',
     ];
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function account()
     {
@@ -43,7 +45,7 @@ class Cart extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function product()
     {

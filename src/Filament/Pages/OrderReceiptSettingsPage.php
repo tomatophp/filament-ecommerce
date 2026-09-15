@@ -2,19 +2,18 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Pages;
 
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
+use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Toggle;
-use Filament\Pages\Actions\Action;
 use Filament\Pages\SettingsPage;
-use TomatoPHP\FilamentEcommerce\Filament\Pages;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
 use TomatoPHP\FilamentEcommerce\Settings\OrderingSettings;
-use TomatoPHP\FilamentSettingsHub\Settings\SitesSettings;
 
 class OrderReceiptSettingsPage extends SettingsPage
 {
-    protected static ?string $navigationIcon = 'heroicon-o-cog';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-cog';
 
     protected static string $settings = OrderingSettings::class;
 
@@ -23,19 +22,14 @@ class OrderReceiptSettingsPage extends SettingsPage
         return false;
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
-        $tenant = \Filament\Facades\Filament::getTenant();
-        if($tenant){
-            return [
-                Action::make('back')->action(fn()=> redirect()->route('filament.'.filament()->getCurrentPanel()->getId().'.pages.settings-hub', $tenant))->color('danger')->label(trans('filament-settings-hub::messages.back')),
-            ];
-        }
-
         return [
-            Action::make('back')->action(fn()=> redirect()->route('filament.'.filament()->getCurrentPanel()->getId().'.pages.settings-hub'))->color('danger')->label(trans('filament-settings-hub::messages.back')),
+            Action::make('back')
+                ->action(fn () => redirect()->route('filament.' . filament()->getCurrentOrDefaultPanel()->getId() . '.pages.settings-hub', Filament::getTenant()))
+                ->color('danger')
+                ->label(trans('filament-settings-hub::messages.back')),
         ];
-
     }
 
     public function getTitle(): string
@@ -43,27 +37,27 @@ class OrderReceiptSettingsPage extends SettingsPage
         return trans('filament-ecommerce::messages.settings.receipt.title');
     }
 
-    protected function getFormSchema(): array
+    public function form(Schema $schema): Schema
     {
-        return [
-            Grid::make(['default' => 1])->schema([
-                Toggle::make('ordering_show_company_data')
-                    ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_company_data'))
-                    ->hint(config('filament-settings-hub.show_hint') ?'setting("ordering_show_company_data")': null),
-                Toggle::make('ordering_show_company_logo')
-                    ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_company_logo'))
-                    ->hint(config('filament-settings-hub.show_hint') ?'setting("ordering_show_company_logo")': null),
-                Toggle::make('ordering_show_branch_data')
-                    ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_branch_data'))
-                    ->hint(config('filament-settings-hub.show_hint') ?'setting("ordering_show_branch_data")': null),
-                Toggle::make('ordering_show_tax_number')
-                    ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_tax_number'))
-                    ->hint(config('filament-settings-hub.show_hint') ?'setting("ordering_show_tax_number")': null),
-                Toggle::make('ordering_show_registration_number')
-                    ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_registration_number'))
-                    ->hint(config('filament-settings-hub.show_hint') ?'setting("ordering_show_registration_number")': null),
-            ])
-
-        ];
+        return $schema
+            ->components([
+                Grid::make(['default' => 1])->schema([
+                    Toggle::make('ordering_show_company_data')
+                        ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_company_data'))
+                        ->hint(config('filament-settings-hub.show_hint') ? 'setting("ordering_show_company_data")' : null),
+                    Toggle::make('ordering_show_company_logo')
+                        ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_company_logo'))
+                        ->hint(config('filament-settings-hub.show_hint') ? 'setting("ordering_show_company_logo")' : null),
+                    Toggle::make('ordering_show_branch_data')
+                        ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_branch_data'))
+                        ->hint(config('filament-settings-hub.show_hint') ? 'setting("ordering_show_branch_data")' : null),
+                    Toggle::make('ordering_show_tax_number')
+                        ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_tax_number'))
+                        ->hint(config('filament-settings-hub.show_hint') ? 'setting("ordering_show_tax_number")' : null),
+                    Toggle::make('ordering_show_registration_number')
+                        ->label(trans('filament-ecommerce::messages.settings.receipt.columns.ordering_show_registration_number'))
+                        ->hint(config('filament-settings-hub.show_hint') ? 'setting("ordering_show_registration_number")' : null),
+                ]),
+            ]);
     }
 }

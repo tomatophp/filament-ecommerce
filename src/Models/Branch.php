@@ -3,10 +3,10 @@
 namespace TomatoPHP\FilamentEcommerce\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use TomatoPHP\FilamentEcommerce\Models\Order;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property integer $id
+ * @property int $id
  * @property string $name
  * @property Company $company_id
  * @property int $branch_number
@@ -22,8 +22,7 @@ class Branch extends Model
     /**
      * @var array
      */
-    protected $fillable = ['company_id', 'branch_number','name', 'phone', 'address', 'created_at', 'updated_at'];
-
+    protected $fillable = ['company_id', 'branch_number', 'name', 'phone', 'address', 'created_at', 'updated_at'];
 
     public function company()
     {
@@ -31,7 +30,7 @@ class Branch extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function orders()
     {

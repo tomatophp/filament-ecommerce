@@ -14,21 +14,21 @@ trait SyncCart
     public function syncCart(Request $request): void
     {
         $account = auth('accounts')->user();
-        foreach ($this->carts as $cart){
+        foreach ($this->carts as $cart) {
             $this->order->ordersItems()->create([
-                "account_id" => $account->id,
-                "product_id" => $cart->product_id,
-                "item" => $cart->item,
-                "price" => $cart->price,
-                "discount" => $cart->discount,
-                "tax" => $cart->vat,
-                "total" => $cart->total,
-                "qty" => $cart->qty,
-                "options" => $cart->options
+                'account_id' => $account->id,
+                'product_id' => $cart->product_id,
+                'item' => $cart->item,
+                'price' => $cart->price,
+                'discount' => $cart->discount,
+                'tax' => $cart->vat,
+                'total' => $cart->total,
+                'qty' => $cart->qty,
+                'options' => $cart->options,
             ]);
         }
 
-        if(class_exists(Cart::class)){
+        if (class_exists(Cart::class)) {
             Cart::query()->where('session_id', Cookie::get('cart'))->delete();
         }
     }

@@ -11,30 +11,30 @@ trait UpdateAccountMeta
     {
         $account = auth('accounts')->user();
         $account->update([
-            'address' => $request->get('address')
+            'address' => $request->input('address'),
         ]);
 
-        $account->meta('city_id', $request->get('city_id'));
-        $account->meta('country_id', $request->get('country_id'));
-        $account->meta('area_id', $request->get('area_id'));
-        $account->meta('payment_method', $request->get('payment_method'));
-        $account->meta('shipper_id', $request->get('shipper_id'));
+        $account->meta('city_id', $request->input('city_id'));
+        $account->meta('country_id', $request->input('country_id'));
+        $account->meta('area_id', $request->input('area_id'));
+        $account->meta('payment_method', $request->input('payment_method'));
+        $account->meta('shipper_id', $request->input('shipper_id'));
 
-        //Create New Location
+        // Create New Location
         $checkIfLocationExists = Location::where('model_id', $account->id)
             ->where('model_type', 'account')
-            ->where('city_id', $request->get('city_id'))
-            ->where('country_id', $request->get('country_id'))
-            ->where('area_id', $request->get('area_id'))
+            ->where('city_id', $request->input('city_id'))
+            ->where('country_id', $request->input('country_id'))
+            ->where('area_id', $request->input('area_id'))
             ->first();
-        if(!$checkIfLocationExists){
-            $location = new Location();
+        if (! $checkIfLocationExists) {
+            $location = new Location;
             $location->model_id = $account->id;
             $location->model_type = 'account';
-            $location->street = $request->get('address');
-            $location->city_id = $request->get('city_id');
-            $location->country_id = $request->get('country_id');
-            $location->area_id = $request->get('area_id');
+            $location->street = $request->input('address');
+            $location->city_id = $request->input('city_id');
+            $location->country_id = $request->input('country_id');
+            $location->area_id = $request->input('area_id');
             $location->save();
         }
 

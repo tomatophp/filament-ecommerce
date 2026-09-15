@@ -24,35 +24,36 @@ use TomatoPHP\FilamentEcommerce\Services\Traits\ValidateOrder;
 
 class Ordering
 {
+    use CheckBalance;
+    use DeleteOrder;
+    use FindOrder;
     use GenerateUUID;
-    use Logger;
+    use GetShippingPrice;
     use HandleRequest;
-    use ValidateOrder;
     use InventoryCheck;
+    use Logger;
+    use Shipping;
+    use StatusUpdate;
+    use StoreOrder;
+    use StoreWebOrder;
     use SyncCart;
     use SyncItems;
     use SyncMeta;
-    use StoreOrder;
     use UpdateAccountMeta;
-    use GetShippingPrice;
-    use CheckBalance;
-    use StoreWebOrder;
-    use Shipping;
     use UpdateOrder;
-    use StatusUpdate;
-    use DeleteOrder;
-    use FindOrder;
+    use ValidateOrder;
 
     private Order $order;
 
     public function __construct()
     {
-        $this->order = new Order();
+        $this->order = new Order;
     }
 
     public function setOrder(Order $order): self
     {
         $this->order = $order;
+
         return $this;
     }
 }

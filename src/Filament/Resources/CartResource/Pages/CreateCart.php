@@ -2,9 +2,8 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\CartResource;
 
 class CreateCart extends CreateRecord
 {

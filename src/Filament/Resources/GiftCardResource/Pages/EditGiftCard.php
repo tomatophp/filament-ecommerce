@@ -2,9 +2,9 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource;
 
 class EditGiftCard extends EditRecord
 {
@@ -13,7 +13,7 @@ class EditGiftCard extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

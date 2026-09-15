@@ -2,7 +2,6 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Widgets\Traits;
 
-use BezhanSalleh\FilamentShield\Support\Utils;
 use Filament\Facades\Filament;
 use Illuminate\Support\Str;
 
@@ -10,22 +9,20 @@ trait HasShield
 {
     public static function canView(): bool
     {
-        if(filament('filament-ecommerce')->isShieldAllowed()){
-            return Filament::auth()->user()->can(static::getPermissionName());
+        if (filament('filament-ecommerce')->isShieldAllowed()) {
+            return (bool) Filament::auth()->user()?->can(static::getPermissionName());
         }
-        else {
-            return true;
-        }
+
+        return true;
     }
 
     protected static function getPermissionName(): string
     {
+        $shieldUtils = 'BezhanSalleh\\FilamentShield\\Support\\Utils';
+        $prefix = class_exists($shieldUtils) ? $shieldUtils::getWidgetPermissionPrefix() : 'widget';
+
         return Str::of(class_basename(static::class))
-            ->prepend(
-                Str::of(Utils::getWidgetPermissionPrefix())
-                    ->append('_')
-                    ->toString()
-            )
+            ->prepend($prefix . '_')
             ->toString();
     }
 }

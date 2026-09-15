@@ -2,9 +2,9 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ComparisonResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ComparisonResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\ComparisonResource;
 
 class ListComparisons extends ListRecords
 {
@@ -13,7 +13,7 @@ class ListComparisons extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

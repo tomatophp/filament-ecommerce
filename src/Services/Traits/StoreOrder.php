@@ -16,7 +16,7 @@ trait StoreOrder
         $this->syncItems($request);
         $this->syncMeta($request);
 
-        $this->log(__("Order Has Been Created From Dashboard"));
+        $this->log(__('Order Has Been Created From Dashboard'));
 
         return $this->order;
     }

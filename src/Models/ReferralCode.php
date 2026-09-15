@@ -2,17 +2,17 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
-use App\Models\Team;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $id
- * @property integer $account_id
+ * @property int $id
+ * @property int $account_id
  * @property string $name
  * @property string $code
  * @property float $counter
- * @property boolean $is_activated
- * @property boolean $is_public
+ * @property bool $is_activated
+ * @property bool $is_public
  * @property string $created_at
  * @property string $updated_at
  * @property Account $account
@@ -25,20 +25,20 @@ class ReferralCode extends Model
     protected $fillable = ['team_id', 'account_id', 'name', 'code', 'counter', 'is_activated', 'is_public', 'created_at', 'updated_at'];
 
     protected $casts = [
-        "is_activated" => "boolean",
-        "is_public" => "boolean",
+        'is_activated' => 'boolean',
+        'is_public' => 'boolean',
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function team()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo('App\Models\Team');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function account()
     {

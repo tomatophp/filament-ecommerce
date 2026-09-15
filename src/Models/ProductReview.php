@@ -2,16 +2,16 @@
 
 namespace TomatoPHP\FilamentEcommerce\Models;
 
-use App\Models\Account;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $id
- * @property integer $product_id
- * @property integer $account_id
+ * @property int $id
+ * @property int $product_id
+ * @property int $account_id
  * @property float $rate
  * @property string $review
- * @property boolean $is_activated
+ * @property bool $is_activated
  * @property string $created_at
  * @property string $updated_at
  * @property Account $account
@@ -27,8 +27,9 @@ class ProductReview extends Model
     protected $casts = [
         'is_activated' => 'boolean',
     ];
+
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function account()
     {
@@ -36,7 +37,7 @@ class ProductReview extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function product()
     {

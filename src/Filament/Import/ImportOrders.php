@@ -6,9 +6,9 @@ use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\Models\Import;
 use Illuminate\Support\Facades\DB;
-use TomatoPHP\FilamentEcommerce\Models\Branch;
-use TomatoPHP\FilamentEcommerce\Models\Company;
+use Illuminate\Support\Str;
 use TomatoPHP\FilamentEcommerce\Models\Order;
+use TomatoPHP\FilamentEcommerce\Models\Product;
 
 class ImportOrders extends Importer
 {
@@ -41,57 +41,73 @@ class ImportOrders extends Importer
 
     public function resolveRecord(): ?Order
     {
-
-        DB::transaction();
-
-        $order = null;
-
-        if($this->data['company']){
-            $order = Order::query()->create([
-                'company_id' => $this->data['company']??null,
-                'branch_id' => $this->data['branch']??null,
-                'uuid' => $this->data['uuid']??null,
-                'status' => $this->data['status']??null,
-                'name' => $this->data['name']??null,
-                'phone' => $this->data['phone']??null,
-                'account_id' => $this->data['phone']??null,
-                'country_id' =>$this->data['country']??null,
-                'city_id' => $this->data['city']??null,
-                'area_id' => $this->data['area']??null,
-                'address' => $this->data['address']??null,
-                'flat' => $this->data['flat']??null,
-                'source' => $this->data['source']??null,
-                'payment_method' => $this->data['payment_method']??null,
-                'created_at' => $this->data['created_at']??null,
-                'vat' => $this->data['vat']??0,
-                'discount' => $this->data['discount']??0,
-                'shipping' => $this->data['shipping']??0,
-                'total' => $this->data['total']??0,
-            ]);
-            if($order){
-                $items = explode(',', $this->data['items']);
-                foreach ($items as $item){
-                    $itemExpload = explode('[',  explode('*', $item)[0]);
-                    $qty = $itemExpload[1];
-                    $procut = Product::where('sku', $itemExpload[0])->first();
-                    if($procut){
-                        $order->ordersItems()->create([
-                            'product_id' => $procut->id,
-                            'qty' => $qty,
-                            'price' => $procut->price,
-                            'vat' => $procut->vat,
-                            'discount' => $procut->discount,
-                            'total' => $qty * (($procut->price + $procut->vat) - $procut->discount),
-                        ]);
-                    }
-                }
-            }
+        if (empty($this->data['company'])) {
+            return null;
         }
 
-        DB::commit();
+        return DB::transaction(function (): Order {
+            $accountModel = config('filament-accounts.model');
+            $phone = $this->data['phone'] ?? null;
+            $account = $phone ? $accountModel::query()->where('phone', $phone)->first() : null;
+            if (! $account) {
+                $account = $accountModel::query()->create([
+                    'name' => $this->data['name'] ?? $phone,
+                    'phone' => $phone,
+                    'username' => $phone ?? Str::uuid()->toString(),
+                    'loginBy' => 'phone',
+                    'address' => $this->data['address'] ?? null,
+                ]);
+            }
 
-        return $order;
+            $order = Order::query()->create([
+                'company_id' => $this->data['company'] ?? null,
+                'branch_id' => $this->data['branch'] ?? null,
+                'uuid' => $this->data['uuid'] ?? (setting('ordering_stating_code') . '-' . Str::random(8)),
+                'status' => $this->data['status'] ?? 'pending',
+                'name' => $this->data['name'] ?? null,
+                'phone' => $phone,
+                'account_id' => $account->id,
+                'country_id' => $this->data['country'] ?? null,
+                'city_id' => $this->data['city'] ?? null,
+                'area_id' => $this->data['area'] ?? null,
+                'address' => $this->data['address'] ?? null,
+                'flat' => $this->data['flat'] ?? null,
+                'source' => $this->data['source'] ?? 'system',
+                'payment_method' => $this->data['payment_method'] ?? null,
+                'vat' => $this->data['vat'] ?? 0,
+                'discount' => $this->data['discount'] ?? 0,
+                'shipping' => $this->data['shipping'] ?? 0,
+                'total' => $this->data['total'] ?? 0,
+            ]);
+
+            // Items are exported as "SKU[QTY*PRICE=TOTAL]" separated by commas.
+            foreach (array_filter(explode(',', (string) ($this->data['items'] ?? ''))) as $item) {
+                $itemParts = explode('[', explode('*', $item)[0]);
+                $product = Product::query()->where('sku', trim($itemParts[0]))->first();
+                if (! $product) {
+                    continue;
+                }
+
+                $qty = (float) ($itemParts[1] ?? 1);
+                $order->ordersItems()->create([
+                    'account_id' => $account->id,
+                    'product_id' => $product->id,
+                    'qty' => $qty,
+                    'price' => $product->price,
+                    'vat' => $product->vat,
+                    'discount' => $product->discount,
+                    'total' => $qty * (($product->price + $product->vat) - $product->discount),
+                ]);
+            }
+
+            return $order;
+        });
     }
+
+    /**
+     * The record is fully persisted in resolveRecord(); the import columns are not order attributes.
+     */
+    public function fillRecord(): void {}
 
     public static function getCompletedNotificationBody(Import $import): string
     {

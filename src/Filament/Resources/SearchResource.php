@@ -2,31 +2,33 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\SearchResource\Pages;
-use TomatoPHP\FilamentEcommerce\Filament\Resources\SearchResource\RelationManagers;
-use TomatoPHP\FilamentEcommerce\Models\Search;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\SearchResource\Pages\CreateSearch;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\SearchResource\Pages\EditSearch;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\SearchResource\Pages\ListSearches;
+use TomatoPHP\FilamentEcommerce\Models\Search;
 
 class SearchResource extends Resource
 {
     protected static ?string $model = Search::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('search')
+        return $schema
+            ->components([
+                TextInput::make('search')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('count')
+                TextInput::make('count')
                     ->numeric()
                     ->default(0),
             ]);
@@ -36,16 +38,16 @@ class SearchResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('search')
+                TextColumn::make('search')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('count')
+                TextColumn::make('count')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -53,12 +55,12 @@ class SearchResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -73,9 +75,9 @@ class SearchResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSearches::route('/'),
-            'create' => Pages\CreateSearch::route('/create'),
-            'edit' => Pages\EditSearch::route('/{record}/edit'),
+            'index' => ListSearches::route('/'),
+            'create' => CreateSearch::route('/create'),
+            'edit' => EditSearch::route('/{record}/edit'),
         ];
     }
 }

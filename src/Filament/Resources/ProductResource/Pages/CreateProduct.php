@@ -2,37 +2,36 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use LaraZeus\SpatieTranslatable\Actions\LocaleSwitcher;
+use LaraZeus\SpatieTranslatable\Resources\Pages\CreateRecord\Concerns\Translatable;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource;
 
 class CreateProduct extends CreateRecord
 {
-    use CreateRecord\Concerns\Translatable;
+    use Translatable;
 
-    #[Reactive]
     public ?string $activeLocale = null;
 
     protected static string $resource = ProductResource::class;
 
     protected function getHeaderActions(): array
     {
-        return  [
-            Actions\LocaleSwitcher::make()
+        return [
+            LocaleSwitcher::make(),
         ];
     }
 
-    protected function afterCreate()
+    protected function afterCreate(): void
     {
         $record = $this->getRecord();
         $data = $this->form->getState();
 
-
-        if(isset($data['prices'])){
+        if (isset($data['prices'])) {
             $record->meta('prices', $data['prices']);
         }
-        if(isset($data['options'])){
-            $record->meta('prices', $data['options']);
+        if (isset($data['options'])) {
+            $record->meta('options', $data['options']);
         }
     }
 }

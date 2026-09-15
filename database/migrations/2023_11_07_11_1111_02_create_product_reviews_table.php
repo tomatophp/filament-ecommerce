@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('product_reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("product_id")->references('id')->on('products')->onDelete('cascade');
+            $table->foreignId('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
 
-            $table->double("rate")->default(0);
-            $table->text("review")->nullable();
-            $table->boolean("is_activated")->default(1)->nullable();
+            $table->double('rate')->default(0);
+            $table->text('review')->nullable();
+            $table->boolean('is_activated')->default(1)->nullable();
             $table->timestamps();
         });
     }

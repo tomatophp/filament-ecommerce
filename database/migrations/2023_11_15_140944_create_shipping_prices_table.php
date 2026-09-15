@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -21,9 +21,13 @@ return new class extends Migration
 
             $table->string('type')->default('delivery')->nullable();
 
-            $table->foreignId('country_id')->nullable()->constrained('countries')->onDelete('cascade');
-            $table->foreignId('city_id')->nullable()->constrained('cities')->onDelete('cascade');
-            $table->foreignId('area_id')->nullable()->constrained('areas')->onDelete('cascade');
+            // filament-locations v5 only creates these tables with its database driver.
+            foreach (['country_id' => 'countries', 'city_id' => 'cities', 'area_id' => 'areas'] as $column => $foreignTable) {
+                $table->foreignId($column)->nullable();
+                if (Schema::hasTable($foreignTable)) {
+                    $table->foreign($column)->references('id')->on($foreignTable)->onDelete('cascade');
+                }
+            }
 
             $table->double('price')->default(0)->nullable();
 

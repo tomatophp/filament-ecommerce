@@ -2,11 +2,19 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource\RelationManagers;
 
-use Filament\Forms\Form;
-use Filament\Forms;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Tables;
 use Illuminate\Database\Eloquent\Model;
 use TomatoPHP\FilamentAccounts\Models\Account;
 
@@ -14,17 +22,11 @@ class ProductReviewManager extends RelationManager
 {
     protected static string $relationship = 'productReviews';
 
-    /**
-     * @return string|null
-     */
     public static function getLabel(): ?string
     {
         return trans('filament-ecommerce::messages.product_reviews.single');
     }
 
-    /**
-     * @return string|null
-     */
     public static function getModelLabel(): ?string
     {
         return trans('filament-ecommerce::messages.product_reviews.single');
@@ -40,29 +42,27 @@ class ProductReviewManager extends RelationManager
         return trans('filament-ecommerce::messages.product_reviews.title');
     }
 
-
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('account_id')
+        return $schema
+            ->components([
+                Select::make('account_id')
                     ->label(trans('filament-ecommerce::messages.product_reviews.columns.account_id'))
                     ->searchable()
                     ->options(Account::all()->pluck('name', 'id')->toArray())
                     ->required(),
-                Forms\Components\TextInput::make('rate')
+                TextInput::make('rate')
                     ->label(trans('filament-ecommerce::messages.product_reviews.columns.rate'))
                     ->minValue(1)
                     ->maxValue(10)
                     ->required()
                     ->numeric()
                     ->default(0),
-                Forms\Components\Textarea::make('review')
+                Textarea::make('review')
                     ->label(trans('filament-ecommerce::messages.product_reviews.columns.review'))
                     ->columnSpanFull(),
-                Forms\Components\Toggle::make('is_activated')
-                    ->label(trans('filament-ecommerce::messages.product_reviews.columns.is_activated'))
-                ,
+                Toggle::make('is_activated')
+                    ->label(trans('filament-ecommerce::messages.product_reviews.columns.is_activated')),
             ]);
     }
 
@@ -70,24 +70,24 @@ class ProductReviewManager extends RelationManager
     {
         return $table
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make(),
             ])
             ->columns([
-                Tables\Columns\TextColumn::make('account.name')
+                TextColumn::make('account.name')
                     ->label(trans('filament-ecommerce::messages.product_reviews.columns.account_id'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('rate')
+                TextColumn::make('rate')
                     ->label(trans('filament-ecommerce::messages.product_reviews.columns.rate'))
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_activated')
+                IconColumn::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.product_reviews.columns.is_activated'))
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -95,12 +95,12 @@ class ProductReviewManager extends RelationManager
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

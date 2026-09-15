@@ -2,9 +2,8 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource;
 
 class CreateGiftCard extends CreateRecord
 {

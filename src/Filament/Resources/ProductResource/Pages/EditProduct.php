@@ -2,47 +2,46 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use TomatoPHP\FilamentEcommerce\Models\Product;
+use LaraZeus\SpatieTranslatable\Actions\LocaleSwitcher;
+use LaraZeus\SpatieTranslatable\Resources\Pages\EditRecord\Concerns\Translatable;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource;
 
 class EditProduct extends EditRecord
 {
-    use EditRecord\Concerns\Translatable;
+    use Translatable;
 
-    #[Reactive]
     public ?string $activeLocale = null;
+
+    protected static string $resource = ProductResource::class;
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        $data['prices'] = $this->getRecord()->meta('prices')??[];
-        $data['options'] = $this->getRecord()->meta('options')??[];
+        $data['prices'] = $this->getRecord()->meta('prices') ?? [];
+        $data['options'] = $this->getRecord()->meta('options') ?? [];
 
         return $data;
     }
 
-    protected function afterSave()
+    protected function afterSave(): void
     {
         $record = $this->getRecord();
         $data = $this->form->getState();
 
-
-        if(isset($data['prices'])){
+        if (isset($data['prices'])) {
             $record->meta('prices', $data['prices']);
         }
-        if(isset($data['options'])){
+        if (isset($data['options'])) {
             $record->meta('options', $data['options']);
         }
     }
 
-    protected static string $resource = ProductResource::class;
-
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
-            Actions\LocaleSwitcher::make()
+            DeleteAction::make(),
+            LocaleSwitcher::make(),
         ];
     }
 }

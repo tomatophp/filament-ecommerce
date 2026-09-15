@@ -3,10 +3,11 @@
 namespace TomatoPHP\FilamentEcommerce\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $id
- * @property integer $product_id
+ * @property int $id
+ * @property int $product_id
  * @property string $code
  * @property bool $is_used
  * @property string $used_at
@@ -33,7 +34,7 @@ class Code extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function product()
     {

@@ -5,7 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
-
 {
     /**
      * Run the migrations.
@@ -17,7 +16,11 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('country_id')->nullable()->constrained('countries');
+            // filament-locations v5 only creates the countries table with its database driver.
+            $table->foreignId('country_id')->nullable();
+            if (Schema::hasTable('countries')) {
+                $table->foreign('country_id')->references('id')->on('countries');
+            }
 
             $table->string('name');
             $table->string('ceo')->nullable();

@@ -10,12 +10,15 @@ trait FindOrder
     public function get(): Order
     {
         $this->orderMerge($this->order);
+
         return $this->order;
     }
+
     public function find(int $id): Order
     {
-        $order = Order::where('id',$id)->with('ordersItems', 'account')->first();
+        $order = Order::where('id', $id)->with('ordersItems', 'account')->first();
         $this->orderMerge($order);
+
         return $order;
     }
 
@@ -23,6 +26,7 @@ trait FindOrder
     {
         $order = Order::where('uuid', $uuid)->with('ordersItems', 'account')->first();
         $this->orderMerge($order);
+
         return $order;
     }
 
@@ -30,19 +34,21 @@ trait FindOrder
     {
         $orders = Order::where('account_id', $id)->with('ordersItems', 'account')->get();
         $ordersArray = collect([]);
-        foreach ($orders as $order){
+        foreach ($orders as $order) {
             $this->orderMerge($order);
             $ordersArray->push($order);
         }
+
         return $ordersArray;
     }
 
-    public function findOrderItems(Order $order = null): Collection
+    public function findOrderItems(?Order $order = null): Collection
     {
-        return collect($order ? $order->ordersItems : $this->order->ordersItems)->map(function ($item){
-            $item->item = $item->product()->with('productMetas', function ($q){
+        return collect($order ? $order->ordersItems : $this->order->ordersItems)->map(function ($item) {
+            $item->item = $item->product()->with('productMetas', function ($q) {
                 $q->where('key', 'options')->first();
             })->first()->toArray();
+
             return $item;
         });
     }
@@ -52,7 +58,7 @@ trait FindOrder
         $order->items = $this->findOrderItems();
         $order->issue_date = $order->meta('issue_date');
         $order->due_date = $order->meta('due_date');
-        $order->account_id = $order->account()->with('locations', function ($q){
+        $order->account_id = $order->account()->with('locations', function ($q) {
             $q->where('is_main', 1)->first();
         })->with('locations.country', 'locations.area', 'locations.city')->first();
     }

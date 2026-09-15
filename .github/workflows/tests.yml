@@ -1,0 +1,71 @@
+name: "Tests"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.php'
+      - '.github/workflows/tests.yml'
+      - 'phpunit.xml'
+      - 'phpunit.xml.dist'
+      - 'composer.json'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - master
+    paths:
+      - '**.php'
+      - '.github/workflows/tests.yml'
+      - 'phpunit.xml'
+      - 'phpunit.xml.dist'
+      - 'composer.json'
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest]
+        php: [8.4, 8.3]
+        laravel: [13.*, 12.*]
+        stability: [prefer-stable]
+        include:
+          - laravel: 13.*
+            testbench: 11.*
+          - laravel: 12.*
+            testbench: 10.*
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Cache Dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          coverage: none
+
+      - name: Setup Problem Matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Install Dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
+      - name: Execute Tests
+        run: composer test

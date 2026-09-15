@@ -6,9 +6,8 @@ use Illuminate\Http\Request;
 
 trait ValidateOrder
 {
-    private function validate(Request &$request,bool $edit = false): void
+    private function validate(Request &$request, bool $edit = false): void
     {
-
 
         $rules = [
             'user_id' => 'nullable|exists:users,id',
@@ -48,19 +47,19 @@ trait ValidateOrder
             'payment_vendor_id' => 'nullable|max:255|string',
         ];
 
-        if(!$edit){
+        if (! $edit) {
             $rules['uuid'] = 'required|max:255|string|unique:orders,uuid';
         }
 
-        if(setting('ordering_active_inventory')){
-            $checkInventory = $this->checkInventory($request->get('items'));
+        if (setting('ordering_active_inventory')) {
+            $checkInventory = $this->checkInventory($request->input('items'));
             $request->merge([
-                "inventory" => $checkInventory
+                'inventory' => $checkInventory,
             ]);
 
-            $rules['inventory'] = ['required','string', function ($attribute, $value, $fail) use ($request) {
-                if($value !== 'success'){
-                    $fail(__('Product SKU') .':' . $value . ' '. __('is no enough inventory for this order'));
+            $rules['inventory'] = ['required', 'string', function ($attribute, $value, $fail) {
+                if ($value !== 'success') {
+                    $fail(__('Product SKU') . ':' . $value . ' ' . __('is no enough inventory for this order'));
                 }
             }];
         }

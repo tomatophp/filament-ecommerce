@@ -3,10 +3,11 @@
 namespace TomatoPHP\FilamentEcommerce\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property integer $id
- * @property integer $order_id
+ * @property int $id
+ * @property int $order_id
  * @property string $key
  * @property mixed $value
  * @property string $type
@@ -23,11 +24,11 @@ class OrderMeta extends Model
     protected $fillable = ['order_id', 'key', 'value', 'type', 'group', 'created_at', 'updated_at'];
 
     protected $casts = [
-        "value" => "json"
+        'value' => 'json',
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function order()
     {

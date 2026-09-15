@@ -18,17 +18,17 @@ return new class extends Migration
             $table->string('type')->default('discount_coupon')->nullable();
             $table->double('amount')->default(0);
 
-            //Limited
+            // Limited
             $table->boolean('is_limited')->default(0)->nullable();
             $table->date('end_at')->nullable();
             $table->integer('use_limit')->default(0)->nullable();
             $table->integer('use_limit_by_user')->default(0)->nullable();
             $table->integer('order_total_limit')->default(0)->nullable();
 
-            //Is Active
+            // Is Active
             $table->boolean('is_activated')->default(1)->nullable();
 
-            //Link To Marketer
+            // Link To Marketer
             $table->boolean('is_marketing')->default(0)->nullable();
             $table->string('marketer_name')->nullable();
             $table->string('marketer_type')->nullable();
@@ -37,10 +37,10 @@ return new class extends Migration
             $table->boolean('marketer_show_amount_max')->default(0)->nullable();
             $table->boolean('marketer_hide_total_sales')->default(0)->nullable();
 
-            //Is Used
+            // Is Used
             $table->double('is_used')->default(0)->nullable();
 
-            //Select
+            // Select
             $table->json('apply_to')->nullable();
             $table->json('except')->nullable();
 

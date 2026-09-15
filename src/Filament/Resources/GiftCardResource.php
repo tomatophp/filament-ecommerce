@@ -2,24 +2,28 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources;
 
-use Illuminate\Support\Str;
-use TomatoPHP\FilamentAccounts\Models\Account;
-use TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource\Pages;
-use TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource\RelationManagers;
-use TomatoPHP\FilamentEcommerce\Models\GiftCard;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\GiftCardResource\Pages\ListGiftCards;
+use TomatoPHP\FilamentEcommerce\Models\GiftCard;
 
 class GiftCardResource extends Resource
 {
     protected static ?string $model = GiftCard::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-gift';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-gift';
+
     protected static ?int $navigationSort = 6;
 
     public static function getNavigationGroup(): ?string
@@ -42,27 +46,27 @@ class GiftCardResource extends Resource
         return trans('filament-ecommerce::messages.gift_card.single');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->default(trans('filament-ecommerce::messages.gift_card.columns.default'))
                     ->label(trans('filament-ecommerce::messages.gift_card.columns.name'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('code')
+                TextInput::make('code')
                     ->unique(ignoreRecord: true)
                     ->default(Str::random(6))
                     ->label(trans('filament-ecommerce::messages.gift_card.columns.code'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('balance')
+                TextInput::make('balance')
                     ->columnSpanFull()
                     ->label(trans('filament-ecommerce::messages.gift_card.columns.balance'))
                     ->numeric()
                     ->default(0),
-                Forms\Components\Toggle::make('is_activated')
+                Toggle::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.gift_card.columns.is_activated')),
             ]);
     }
@@ -71,47 +75,47 @@ class GiftCardResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(trans('filament-ecommerce::messages.gift_card.columns.name'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('code')
+                TextColumn::make('code')
                     ->copyable()
                     ->icon('heroicon-o-clipboard')
                     ->badge()
                     ->label(trans('filament-ecommerce::messages.gift_card.columns.code'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('balance')
+                TextColumn::make('balance')
                     ->label(trans('filament-ecommerce::messages.gift_card.columns.balance'))
                     ->money(locale: 'en', currency: setting('site_currency'))
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_activated')
+                IconColumn::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.gift_card.columns.is_activated'))
                     ->boolean(),
-                Tables\Columns\IconColumn::make('is_expired')
+                IconColumn::make('is_expired')
                     ->label(trans('filament-ecommerce::messages.gift_card.columns.is_expired'))
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_activated')
+                TernaryFilter::make('is_activated')
                     ->label(trans('filament-ecommerce::messages.gift_card.filters.is_activated')),
-                Tables\Filters\TernaryFilter::make('is_expired')
+                TernaryFilter::make('is_expired')
                     ->label(trans('filament-ecommerce::messages.gift_card.filters.is_expired')),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -126,7 +130,7 @@ class GiftCardResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGiftCards::route('/'),
+            'index' => ListGiftCards::route('/'),
         ];
     }
 }

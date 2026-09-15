@@ -2,32 +2,35 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ProductResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CodesManager extends RelationManager
 {
     protected static string $relationship = 'codes';
 
-    /**
-     * @return string|null
-     */
     public static function getLabel(): ?string
     {
         return trans('filament-ecommerce::messages.codes.single');
     }
 
-    /**
-     * @return string|null
-     */
     public static function getModelLabel(): ?string
     {
         return trans('filament-ecommerce::messages.codes.single');
@@ -43,20 +46,20 @@ class CodesManager extends RelationManager
         return trans('filament-ecommerce::messages.codes.title');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('code')
+        return $schema
+            ->components([
+                TextInput::make('code')
                     ->label(trans('filament-ecommerce::messages.codes.columns.code'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Toggle::make('is_used')
+                Toggle::make('is_used')
                     ->label(trans('filament-ecommerce::messages.codes.columns.is_used'))
                     ->required(),
-                Forms\Components\DateTimePicker::make('used_at')
+                DateTimePicker::make('used_at')
                     ->label(trans('filament-ecommerce::messages.codes.columns.used_at')),
-                Forms\Components\DateTimePicker::make('expires_at')
+                DateTimePicker::make('expires_at')
                     ->label(trans('filament-ecommerce::messages.codes.columns.expires_date')),
             ]);
     }
@@ -66,16 +69,16 @@ class CodesManager extends RelationManager
         return $table
             ->recordTitleAttribute('code')
             ->columns([
-                Tables\Columns\TextColumn::make('code')
+                TextColumn::make('code')
                     ->label(trans('filament-ecommerce::messages.codes.columns.code')),
-                Tables\Columns\IconColumn::make('is_used')
+                IconColumn::make('is_used')
                     ->label(trans('filament-ecommerce::messages.codes.columns.is_used'))
                     ->boolean(),
-                Tables\Columns\TextColumn::make('used_at')
+                TextColumn::make('used_at')
                     ->label(trans('filament-ecommerce::messages.codes.columns.used_at'))
                     ->dateTime()
                     ->placeholder(trans('filament-ecommerce::messages.codes.columns.unused')),
-                Tables\Columns\TextColumn::make('expires_at')
+                TextColumn::make('expires_at')
                     ->dateTime()
                     ->placeholder(trans('filament-ecommerce::messages.codes.columns.no_expiration')),
             ])
@@ -107,12 +110,12 @@ class CodesManager extends RelationManager
                     })
                     ->label(trans('filament-ecommerce::messages.codes.filters.expiration_status')),
                 Filter::make('expires_soon')
-                    ->query(fn(Builder $query): Builder => $query->whereBetween('expires_at', [now(), now()->addDays(7)]))
+                    ->query(fn (Builder $query): Builder => $query->whereBetween('expires_at', [now(), now()->addDays(7)]))
                     ->label(trans('filament-ecommerce::messages.codes.filters.expiring_soon')),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
-                Tables\Actions\Action::make('generateCodes')
+                CreateAction::make(),
+                Action::make('generateCodes')
                     ->label(trans('filament-ecommerce::messages.codes.generate.generate_codes'))
                     ->action(function (RelationManager $livewire, array $data): void {
                         $livewire->ownerRecord->generateCodes(
@@ -127,17 +130,17 @@ class CodesManager extends RelationManager
                             ]
                         );
                     })
-                    ->form([
-                        Forms\Components\TextInput::make('quantity')
+                    ->schema([
+                        TextInput::make('quantity')
                             ->label(trans('filament-ecommerce::messages.codes.generate.quantity'))
                             ->required()
                             ->numeric()
                             ->minValue(1),
-                        Forms\Components\TextInput::make('prefix')
+                        TextInput::make('prefix')
                             ->label(trans('filament-ecommerce::messages.codes.generate.prefix')),
-                        Forms\Components\TextInput::make('suffix')
+                        TextInput::make('suffix')
                             ->label(trans('filament-ecommerce::messages.codes.generate.suffix')),
-                        Forms\Components\Select::make('code_type')
+                        Select::make('code_type')
                             ->label(trans('filament-ecommerce::messages.codes.generate.code_type'))
                             ->options([
                                 'alphanumeric' => trans('filament-ecommerce::messages.codes.generate.alphanumeric'),
@@ -146,7 +149,7 @@ class CodesManager extends RelationManager
                             ])
                             ->required()
                             ->default('alphanumeric'),
-                        Forms\Components\Select::make('code_case')
+                        Select::make('code_case')
                             ->label(trans('filament-ecommerce::messages.codes.generate.code_case'))
                             ->options([
                                 'upper' => trans('filament-ecommerce::messages.codes.generate.upper'),
@@ -155,29 +158,29 @@ class CodesManager extends RelationManager
                             ])
                             ->required()
                             ->default('upper'),
-                        Forms\Components\TextInput::make('code_length')
+                        TextInput::make('code_length')
                             ->label(trans('filament-ecommerce::messages.codes.generate.code_length'))
                             ->numeric()
                             ->minValue(4)
                             ->maxValue(32)
                             ->default(8)
                             ->required(),
-                        Forms\Components\Toggle::make('has_expiration')
+                        Toggle::make('has_expiration')
                             ->label(trans('filament-ecommerce::messages.codes.generate.has_expiration'))
                             ->live()
                             ->default(false),
-                        Forms\Components\DateTimePicker::make('expires_at')
+                        DateTimePicker::make('expires_at')
                             ->label(trans('filament-ecommerce::messages.codes.generate.expires_at'))
-                            ->visible(fn(callable $get) => $get('has_expiration')),
+                            ->visible(fn (callable $get) => $get('has_expiration')),
                     ]),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

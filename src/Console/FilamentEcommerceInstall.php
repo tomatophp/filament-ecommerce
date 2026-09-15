@@ -28,7 +28,6 @@ class FilamentEcommerceInstall extends Command
         parent::__construct();
     }
 
-
     /**
      * Execute the console command.
      *
@@ -38,8 +37,8 @@ class FilamentEcommerceInstall extends Command
     {
         $this->info('Publish Vendor Assets');
         $this->callSilent('optimize:clear');
-        $this->artisanCommand(["migrate"]);
-        $this->artisanCommand(["optimize:clear"]);
+        $this->artisanCommand(['migrate']);
+        $this->artisanCommand(['optimize:clear']);
         $this->info('Filament Ecommerce installed successfully.');
     }
 }

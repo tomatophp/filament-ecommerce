@@ -9,6 +9,15 @@
 
 Build your own ecommerce store with FilamentPHP with the Power of Tomato CMS Builder
 
+## Compatibility
+
+| Package | Filament | Laravel | PHP |
+|---------|----------|---------|-----|
+| 5.x | 5.x | 12.x / 13.x | 8.3+ |
+| 1.x | 3.x | 10.x / 11.x | 8.1+ |
+
+The Filament v3 line is kept on the [`v3`](https://github.com/tomatophp/filament-ecommerce/tree/v3) branch.
+
 ## Installation
 
 ```bash
@@ -28,11 +37,9 @@ php artisan vendor:publish --provider="Spatie\LaravelSettings\LaravelSettingsSer
 php artisan filament-settings-hub:install
 ```
 
-then you need to publish the account model
+the package uses [Filament Accounts](https://github.com/tomatophp/filament-accounts), [Filament Types](https://github.com/tomatophp/filament-types), [Filament CMS](https://github.com/tomatophp/filament-cms) and [Filament Locations](https://github.com/tomatophp/filament-locations); their migrations run with the install command below.
 
-```bash
-php artisan vendor:publish --tag="filament-accounts-model"
-```
+> Filament Locations v5 reads countries, cities and areas from JSON by default, so the `country_id`, `city_id` and `area_id` columns only get foreign keys when those tables exist (`FILAMENT_LOCATIONS_DRIVER=database`).
 
 after installing your package please run this command
 

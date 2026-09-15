@@ -7,7 +7,7 @@ trait CheckBalance
     public function checkBalance(float $total): bool
     {
         $balance = auth('accounts')->user()->balance;
-        if($balance >= $total){
+        if ($balance >= $total) {
             return true;
         }
 

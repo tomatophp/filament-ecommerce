@@ -1,39 +1,28 @@
-<x-filament-panels::page
-    @class([
-        'fi-resource-view-record-page',
-        'fi-resource-' . str_replace('/', '-', $this->getResource()::getSlug()),
-        'fi-resource-record-' . $record->getKey(),
-    ])
->
-    @php
-        $relationManagers = $this->getRelationManagers();
-        $hasCombinedRelationManagerTabsWithContent = $this->hasCombinedRelationManagerTabsWithContent();
-    @endphp
-
+<div class="fi-ecommerce-order-summary">
     <x-filament::section>
         <div class="flex justify-between xl:gap-60 lg:gap-48 md:gap-16 sm:gap-8 sm:flex-row flex-col gap-4">
             <div class="w-full">
                 <div class=" my-4">
-                    <img src="{{$this->getRecord()->company?->getFirstMediaUrl('logo')}}" alt="{{$this->getRecord()->company->name}}" class="h-12 ">
+                    <img src="{{$record->company?->getFirstMediaUrl('logo')}}" alt="{{$record->company->name}}" class="h-12 ">
                 </div>
                 <div class="flex flex-col">
                     <div>
                         {{trans('filament-ecommerce::messages.orders.print.from')}}
                     </div>
                     <div class="text-lg font-bold mt-2">
-                        {{$this->getRecord()->company->name}}
+                        {{$record->company->name}}
                     </div>
                     <div class="text-sm">
-                        {{$this->getRecord()->company->ceo}}
+                        {{$record->company->ceo}}
                     </div>
                     <div class="text-sm">
-                        {{$this->getRecord()->company->address}}
+                        {{$record->company->address}}
                     </div>
                     <div class="text-sm">
-                        {{$this->getRecord()->company->zip}} {{$this->getRecord()->company->city}}
+                        {{$record->company->zip}} {{$record->company->city}}
                     </div>
                     <div class="text-sm">
-                        {{$this->getRecord()->company->country?->name}}
+                        {{$record->company->country?->name}}
                     </div>
                 </div>
                 <div class="mt-4">
@@ -42,19 +31,19 @@
                     </div>
                     <div class="mt-4">
                         <div class="text-lg font-bold mt-2">
-                            {{$this->getRecord()->account?->name}}
+                            {{$record->account?->name}}
                         </div>
                         <div class="text-sm">
-                            {{$this->getRecord()->account?->email}}
+                            {{$record->account?->email}}
                         </div>
                         <div class="text-sm">
-                            {{$this->getRecord()->account?->phone}}
+                            {{$record->account?->phone}}
                         </div>
                         <div class="text-sm">
-                            {{$this->getRecord()->address}}
+                            {{$record->address}}
                         </div>
                         <div class="text-sm">
-                            {{$this->getRecord()->country?->name}} , {{$this->getRecord()->city?->name}}, {{$this->getRecord()->area?->name}}
+                            {{$record->country?->name}} , {{$record->city?->name}}, {{$record->area?->name}}
                         </div>
                     </div>
                 </div>
@@ -65,7 +54,7 @@
                         {{trans('filament-ecommerce::messages.orders.print.order')}}
                     </div>
                     <div>
-                        {{$this->getRecord()->uuid}}
+                        {{$record->uuid}}
                     </div>
                 </div>
                 <div class="flex justify-between gap-4">
@@ -73,7 +62,7 @@
                         {{trans('filament-ecommerce::messages.orders.print.issue_date')}}
                     </div>
                     <div>
-                        {{$this->getRecord()->created_at->toDateString()}}
+                        {{$record->created_at->toDateString()}}
                     </div>
                 </div>
                 <div class="flex justify-between gap-4">
@@ -81,7 +70,7 @@
                         {{trans('filament-ecommerce::messages.orders.print.due_date')}}
                     </div>
                     <div>
-                        {{$this->getRecord()->created_at->toDateString()}}
+                        {{$record->created_at->toDateString()}}
                     </div>
                 </div>
                 <div class="flex justify-between gap-4">
@@ -89,7 +78,7 @@
                         {{trans('filament-ecommerce::messages.orders.print.status')}}
                     </div>
                     <div>
-                        {{str($this->getRecord()->status)->upper()}}
+                        {{str($record->status)->upper()}}
                     </div>
                 </div>
                 <div class="flex justify-between gap-4">
@@ -97,7 +86,7 @@
                         {{trans('filament-ecommerce::messages.orders.print.source')}}
                     </div>
                     <div class="font-bold text-primary-500">
-                        {{str($this->getRecord()->source)->upper()}}
+                        {{str($record->source)->upper()}}
                     </div>
                 </div>
             </div>
@@ -124,7 +113,7 @@
                 </div>
             </div>
             <div class="flex flex-col gap-4">
-                @foreach($this->getRecord()->ordersItems as $item)
+                @foreach($record->ordersItems as $item)
                     <div class="grid grid-cols-12 gap-4 border-b dark:border-gray-700 py-4">
                         <div class="col-span-4 flex  flex-col justify-start">
                             <div>
@@ -161,49 +150,49 @@
                         {{trans('filament-ecommerce::messages.orders.print.sub_total')}}
                     </div>
                     <div>
-                        {!! dollar(($this->getRecord()->total + $this->getRecord()->discount) - ($this->getRecord()->vat + $this->getRecord()->shipping)) !!}
+                        {!! dollar(($record->total + $record->discount) - ($record->vat + $record->shipping)) !!}
                     </div>
                 </div>
-                @if($this->getRecord()->vat)
+                @if($record->vat)
                 <div class="flex justify-between gap-4 py-4 border-b dark:border-gray-700 text-success-500">
                     <div class="font-bold">
                         {{trans('filament-ecommerce::messages.orders.print.vat')}}
                     </div>
                     <div>
-                        {!! dollar($this->getRecord()->vat ) !!}
+                        {!! dollar($record->vat ) !!}
                     </div>
                 </div>
                 @endif
-                @if($this->getRecord()->shipping)
+                @if($record->shipping)
                 <div class="flex justify-between gap-4 py-4 border-b dark:border-gray-700 text-success-500">
                     <div class="font-bold">
                         {{trans('filament-ecommerce::messages.orders.print.shipping')}}
                     </div>
                     <div>
-                        {!! dollar($this->getRecord()->shipping ) !!}
+                        {!! dollar($record->shipping ) !!}
                     </div>
                 </div>
                 @endif
-                @if($this->getRecord()->coupon)
+                @if($record->coupon)
                     <div class="flex justify-between gap-4 py-4 border-b dark:border-gray-700 text-danger-500">
                         <div class="font-bold">
-                            {{trans('filament-ecommerce::messages.orders.print.coupon')}} [{{ $this->getRecord()->coupon->code }}]
+                            {{trans('filament-ecommerce::messages.orders.print.coupon')}} [{{ $record->coupon->code }}]
                         </div>
                         <div>
-                            {!! dollar($this->getRecord()->coupon->discount($this->getRecord()->total) ) !!}
+                            {!! dollar($record->coupon->discount($record->total) ) !!}
                         </div>
                     </div>
                 @endif
-                @if($this->getRecord()->discount)
+                @if($record->discount)
                 <div class="flex justify-between gap-4 py-4 border-b dark:border-gray-700 text-danger-500">
                     <div class="font-bold">
                         {{trans('filament-ecommerce::messages.orders.print.discount')}}
                     </div>
                     <div>
-                        @if($this->getRecord()->coupon)
-                            {!! dollar($this->getRecord()->discount - $this->getRecord()->coupon->discount($this->getRecord()->total)) !!}
+                        @if($record->coupon)
+                            {!! dollar($record->discount - $record->coupon->discount($record->total)) !!}
                         @else
-                            {!! dollar($this->getRecord()->discount ) !!}
+                            {!! dollar($record->discount ) !!}
                         @endif
                     </div>
                 </div>
@@ -213,40 +202,20 @@
                         {{trans('filament-ecommerce::messages.orders.print.total')}}
                     </div>
                     <div>
-                        {!! dollar($this->getRecord()->total) !!}
+                        {!! dollar($record->total) !!}
                     </div>
                 </div>
-                @if($this->getRecord()->notes)
+                @if($record->notes)
                     <div class="flex flex-col gap-4 py-4 text-gray-800">
                         <div class="font-bold">
                             {{trans('filament-ecommerce::messages.orders.print.notes')}}
                         </div>
                         <div>
-                            {{ $this->getRecord()->notes }}
+                            {{ $record->notes }}
                         </div>
                     </div>
                 @endif
             </div>
         </div>
     </x-filament::section>
-
-    @if (count($relationManagers))
-        <x-filament-panels::resources.relation-managers
-            :active-locale="isset($activeLocale) ? $activeLocale : null"
-            :active-manager="$this->activeRelationManager ?? ($hasCombinedRelationManagerTabsWithContent ? null : array_key_first($relationManagers))"
-            :managers="$relationManagers"
-            :owner-record="$record"
-            :page-class="static::class"
-        >
-            @if ($hasCombinedRelationManagerTabsWithContent)
-                <x-slot name="content">
-                    @if ($this->hasInfolist())
-                        {{ $this->infolist }}
-                    @else
-                        {{ $this->form }}
-                    @endif
-                </x-slot>
-            @endif
-        </x-filament-panels::resources.relation-managers>
-    @endif
-</x-filament-panels::page>
+</div>

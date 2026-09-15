@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_has_tags', function (Blueprint $table) {
-            $table->foreignId("product_id")->references('id')->on('products')->onDelete('cascade')->unsigned();
-            $table->foreignId("tag_id")->constrained('categories')->onDelete('cascade');
+            $table->foreignId('product_id')->references('id')->on('products')->onDelete('cascade')->unsigned();
+            $table->foreignId('tag_id')->constrained('categories')->onDelete('cascade');
 
         });
     }

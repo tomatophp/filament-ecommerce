@@ -2,31 +2,33 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\DownloadResource\Pages;
-use TomatoPHP\FilamentEcommerce\Filament\Resources\DownloadResource\RelationManagers;
-use TomatoPHP\FilamentEcommerce\Models\Download;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\DownloadResource\Pages\CreateDownload;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\DownloadResource\Pages\EditDownload;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\DownloadResource\Pages\ListDownloads;
+use TomatoPHP\FilamentEcommerce\Models\Download;
 
 class DownloadResource extends Resource
 {
     protected static ?string $model = Download::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('account_id')
+        return $schema
+            ->components([
+                TextInput::make('account_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('product_id')
+                TextInput::make('product_id')
                     ->required()
                     ->numeric(),
             ]);
@@ -36,17 +38,17 @@ class DownloadResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('account_id')
+                TextColumn::make('account_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('product_id')
+                TextColumn::make('product_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -54,12 +56,12 @@ class DownloadResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -74,9 +76,9 @@ class DownloadResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDownloads::route('/'),
-            'create' => Pages\CreateDownload::route('/create'),
-            'edit' => Pages\EditDownload::route('/{record}/edit'),
+            'index' => ListDownloads::route('/'),
+            'create' => CreateDownload::route('/create'),
+            'edit' => EditDownload::route('/{record}/edit'),
         ];
     }
 }

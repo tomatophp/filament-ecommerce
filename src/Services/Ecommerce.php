@@ -16,6 +16,7 @@ class Ecommerce
     public function setCart(Cart $cart): static
     {
         $this->cart = $cart;
+
         return $this;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\FilamentEcommerce\Transformers;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductsResource extends JsonResource
@@ -9,7 +10,7 @@ class ProductsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request
+     * @param  Request
      * @return array
      */
     public function toArray($request)
@@ -45,12 +46,12 @@ class ProductsResource extends JsonResource
             'tags' => $this->tags,
             'images' => $this->getMedia('images'),
             'feature_image' => $this->getMedia('feature_image'),
-            "options" =>   $this->meta('options') ?: (object)[],
-            "qty" =>   $this->meta('qty') ?: (object)[],
-            "prices" =>   $this->meta('prices') ?: [],
-            "brand" =>   $this->meta('brand') ?: null,
-            "unit" =>   $this->meta('unit') ?: null,
-            "weight" =>   $this->meta('weight') ?: null,
+            'options' => $this->meta('options') ?: (object) [],
+            'qty' => $this->meta('qty') ?: (object) [],
+            'prices' => $this->meta('prices') ?: [],
+            'brand' => $this->meta('brand') ?: null,
+            'unit' => $this->meta('unit') ?: null,
+            'weight' => $this->meta('weight') ?: null,
         ];
     }
 }

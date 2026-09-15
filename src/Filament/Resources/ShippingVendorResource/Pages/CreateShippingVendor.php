@@ -2,9 +2,8 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource\Pages;
 
-use TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use TomatoPHP\FilamentEcommerce\Filament\Resources\ShippingVendorResource;
 
 class CreateShippingVendor extends CreateRecord
 {

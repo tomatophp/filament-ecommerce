@@ -2,8 +2,9 @@
     <x-filament::section>
         <div class="flex justify-between xl:gap-60 lg:gap-48 md:gap-16 sm:gap-8 sm:flex-row flex-col gap-4">
             <div class="w-full">
+                @if($record->company)
                 <div class=" my-4">
-                    <img src="{{$record->company?->getFirstMediaUrl('logo')}}" alt="{{$record->company->name}}" class="h-12 ">
+                    <img src="{{$record->company->getFirstMediaUrl('logo')}}" alt="{{$record->company->name}}" class="h-12 ">
                 </div>
                 <div class="flex flex-col">
                     <div>
@@ -25,6 +26,7 @@
                         {{$record->company->country?->name}}
                     </div>
                 </div>
+                @endif
                 <div class="mt-4">
                     <div>
                         {{trans('filament-ecommerce::messages.orders.print.to')}}

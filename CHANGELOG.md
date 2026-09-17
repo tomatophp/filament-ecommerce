@@ -1,3 +1,7 @@
+### v5.0.1
+
+- point `homepage` at the plugin page on tomatophp.com
+
 ### V5.0.0
 
 - Support Filament v5 and Laravel 12 / 13

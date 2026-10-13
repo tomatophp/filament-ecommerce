@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources;
 
+use TomatoPHP\FilamentEcommerce\Support\OrderPrintUrl;
 use App\Models\User;
 use Carbon\Carbon;
 use Filament\Tables\Actions\ExportAction;
@@ -723,7 +724,8 @@ class OrderResource extends Resource
                     ->tooltip(trans('filament-ecommerce::messages.orders.actions.print'))
                     ->icon('heroicon-s-printer')
                     ->openUrlInNewTab()
-                    ->url(fn($record) => route('order.print', $record->id))
+                    ->visible(fn (): bool => OrderPrintUrl::enabled())
+                    ->url(fn ($record): ?string => OrderPrintUrl::for($record))
                     ->iconButton(),
                 Tables\Actions\ViewAction::make()
                     ->tooltip(trans('filament-ecommerce::messages.orders.actions.show'))

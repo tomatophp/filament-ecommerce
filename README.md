@@ -208,6 +208,21 @@ now you need to allow it on the plugin options
 
 for more information check the [Filament Shield](https://github.com/bezhanSalleh/filament-shield)
 
+## Order Print Page
+
+The print action on orders opens a printable receipt through a temporary signed link. The page uses your app's `Order` policy: register a policy with a `view` method for `TomatoPHP\FilamentEcommerce\Models\Order` (Filament Shield generates one), otherwise printing is denied. On panels with tenancy, an order can only be printed from the tenant that owns it.
+
+You can change the link lifetime, the middleware, or turn the route off in the published config:
+
+```php
+// config/filament-ecommerce.php
+'print' => [
+    'enabled' => env('FILAMENT_ECOMMERCE_PRINT_ROUTE', true),
+    'middleware' => ['web', 'auth:web'],
+    'expires' => 30, // minutes
+],
+```
+
 ## Publish Assets
 
 you can publish config file by use this command

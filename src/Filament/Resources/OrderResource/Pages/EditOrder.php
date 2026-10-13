@@ -2,6 +2,7 @@
 
 namespace TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource\Pages;
 
+use TomatoPHP\FilamentEcommerce\Support\OrderPrintUrl;
 use Carbon\Carbon;
 use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource;
 use Filament\Actions;
@@ -21,7 +22,8 @@ class EditOrder extends EditRecord
                 ->icon('heroicon-o-printer')
                 ->label(trans('filament-ecommerce::messages.orders.actions.print'))
                 ->openUrlInNewTab()
-                ->url(route('order.print', $this->getRecord()->id)),
+                ->visible(fn (): bool => OrderPrintUrl::enabled())
+                ->url(fn (): ?string => OrderPrintUrl::for($this->getRecord())),
             Actions\DeleteAction::make()->icon('heroicon-o-trash'),
         ];
     }

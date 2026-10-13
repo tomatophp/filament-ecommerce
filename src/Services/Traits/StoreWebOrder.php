@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cookie;
 use TomatoPHP\FilamentEcommerce\Models\Cart;
 use TomatoPHP\FilamentEcommerce\Models\Order;
 use TomatoPHP\FilamentEcommerce\Models\ShippingPrice;
+use TomatoPHP\FilamentEcommerce\Services\Cart\ProductsServices;
 
 trait StoreWebOrder
 {
@@ -23,7 +24,9 @@ trait StoreWebOrder
 
         $account = auth('accounts')->user();
 
-        $carts = Cart::query()->where('session_id', Cookie::get('cart'))->get();
+        $carts = Cart::query()->where('session_id', Cookie::get('cart'))->get()
+            ->filter(fn (Cart $cart): bool => ProductsServices::repriceCart($cart))
+            ->values();
         $this->setCart($carts);
 
         $shipping = $this->getShippingPrice($request);

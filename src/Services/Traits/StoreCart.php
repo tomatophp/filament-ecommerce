@@ -5,61 +5,66 @@ namespace TomatoPHP\FilamentEcommerce\Services\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use TomatoPHP\FilamentEcommerce\Models\Cart;
-use ProtoneMedia\Splade\Facades\Toast;
 use TomatoPHP\FilamentEcommerce\Models\Product;
+use TomatoPHP\FilamentEcommerce\Services\Cart\ProductsServices;
 
 trait StoreCart
 {
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
-            'product_id' => 'nullable|exists:products,id',
+            'product_id' => 'required|exists:products,id',
+            'qty' => 'nullable|integer|min:1',
             'note' => 'nullable|max:65535',
         ]);
 
-        if(auth('accounts')->user()){
-            $request->merge([
-                'account_id' => auth('accounts')->user()->id
-            ]);
+        $product = Product::query()->findOrFail($request->input('product_id'));
+
+        $options = [];
+        $productOptions = $product->meta('options');
+        foreach (is_array($productOptions) ? $productOptions : [] as $key => $option) {
+            $options[$key] = $request->input($key);
         }
 
-        $request->merge([
-            'session_id' => Cookie::get('cookieName')
-        ]);
+        // Prices always come from the product (or its option variant), never from the request.
+        $price = ProductsServices::getProductPrice($product->id, array_values(array_filter($options, 'is_string')));
+        $unitTotal = max(0, $price->collect());
+        $qty = (int) ($request->input('qty') ?: 1);
 
+        $accountId = auth('accounts')->user()?->id;
+        $sessionId = Cookie::get('cookieName');
 
-        $product = Product::find($request->get('product_id'));
-        if($product){
-            $options = [];
-            foreach ($product->meta('options') ?? [] as $key=>$option){
-                $options[$key] = $request->get($key);
-            }
-            $request->merge([
-                'item' => $product->name,
-                'price' => $product->price,
-                'discount' => $product->discount,
-                'vat' => $product->vat,
-                'total' => (($product->price + $product->vat) - $product->discount),
-                'qty' => 1,
-                'options' => $options
-            ]);
-        }
-
-        $checkIFCartExists = Cart::where('product_id', $request->get('product_id'))
-            ->where('session_id', $request->get('session_id'))
-            ->whereJsonContains('options', $request->get('options'))
+        $checkIFCartExists = Cart::where('product_id', $product->id)
+            ->where('session_id', $sessionId)
+            ->whereJsonContains('options', $options)
             ->first();
 
-        if($checkIFCartExists){
+        if ($checkIFCartExists) {
+            $newQty = (int) $checkIFCartExists->qty + $qty;
+
             $checkIFCartExists->update([
-                'qty' => $checkIFCartExists->qty + 1,
-                'total' => $checkIFCartExists->total + (($product->price + $product->vat) - $product->discount)
+                'price' => $price->price,
+                'discount' => $price->discount,
+                'vat' => $price->vat,
+                'qty' => $newQty,
+                'total' => $unitTotal * $newQty,
             ]);
 
             return __('Cart updated successfully');
         }
 
-        $cart = Cart::create($request->all());
-
-        return $cart;
+        return Cart::create([
+            'account_id' => $accountId,
+            'session_id' => $sessionId,
+            'product_id' => $product->id,
+            'item' => $product->name,
+            'price' => $price->price,
+            'discount' => $price->discount,
+            'vat' => $price->vat,
+            'qty' => $qty,
+            'total' => $unitTotal * $qty,
+            'options' => $options,
+            'note' => $request->input('note'),
+        ]);
     }
 }

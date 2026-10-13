@@ -10,6 +10,7 @@ use TomatoPHP\FilamentEcommerce\Filament\Resources\OrderResource;
 use TomatoPHP\FilamentEcommerce\Models\OrderLog;
 use TomatoPHP\FilamentEcommerce\Models\OrdersItem;
 use TomatoPHP\FilamentEcommerce\Models\Product;
+use TomatoPHP\FilamentEcommerce\Support\OrderPrintUrl;
 
 class EditOrder extends EditRecord
 {
@@ -22,7 +23,8 @@ class EditOrder extends EditRecord
                 ->icon('heroicon-o-printer')
                 ->label(trans('filament-ecommerce::messages.orders.actions.print'))
                 ->openUrlInNewTab()
-                ->url(route('order.print', $this->getRecord()->id)),
+                ->visible(fn (): bool => OrderPrintUrl::enabled())
+                ->url(fn (): ?string => OrderPrintUrl::for($this->getRecord())),
             DeleteAction::make()->icon('heroicon-o-trash'),
         ];
     }

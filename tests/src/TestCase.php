@@ -21,6 +21,9 @@ use Lab404\Impersonate\ImpersonateServiceProvider;
 use LaraZeus\SpatieTranslatable\SpatieTranslatableServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Maatwebsite\Excel\ExcelServiceProvider;
+use Milon\Barcode\BarcodeServiceProvider;
+use Milon\Barcode\Facades\DNS1DFacade;
+use Milon\Barcode\Facades\DNS2DFacade;
 use Orchestra\Testbench\Attributes\WithEnv;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as BaseTestCase;
@@ -52,6 +55,7 @@ abstract class TestCase extends BaseTestCase
     {
         $providers = [
             ActionsServiceProvider::class,
+            BarcodeServiceProvider::class,
             BladeCaptureDirectiveServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
             BladeIconsServiceProvider::class,
@@ -86,6 +90,14 @@ abstract class TestCase extends BaseTestCase
         return $providers;
     }
 
+    protected function getPackageAliases($app): array
+    {
+        return [
+            'DNS1D' => DNS1DFacade::class,
+            'DNS2D' => DNS2DFacade::class,
+        ];
+    }
+
     protected function defineDatabaseMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
@@ -106,6 +118,7 @@ abstract class TestCase extends BaseTestCase
             $config->set('auth.providers.testing.driver', 'eloquent');
             $config->set('auth.providers.testing.model', User::class);
             $config->set('auth.providers.users.model', User::class);
+            $config->set('auth.guards.accounts', ['driver' => 'session', 'provider' => 'users']);
 
             $config->set('media-library.media_model', Media::class);
             $config->set('media-library.disk_name', 'public');

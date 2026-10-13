@@ -1,19 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use TomatoPHP\FilamentEcommerce\Models\Order;
+use TomatoPHP\FilamentEcommerce\Http\Controllers\PrintOrderController;
 use TomatoPHP\FilamentTranslations\Http\Middleware\LanguageMiddleware;
 
+if (! config('filament-ecommerce.print.enabled', true)) {
+    return;
+}
+
 $middleware = [
-    'auth:web',
-    'web',
+    ...config('filament-ecommerce.print.middleware', ['web', 'auth:web']),
+    'signed',
 ];
 if (class_exists(LanguageMiddleware::class)) {
     $middleware[] = LanguageMiddleware::class;
 }
 
 Route::middleware($middleware)->group(function () {
-    Route::get('orders/{model}/print', function (Order $model) {
-        return view('filament-ecommerce::orders.print', compact('model'));
-    })->name('order.print');
+    Route::get('orders/{order:uuid}/print', PrintOrderController::class)->name('order.print');
 });

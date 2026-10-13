@@ -52,6 +52,7 @@ use TomatoPHP\FilamentEcommerce\Models\OrderLog;
 use TomatoPHP\FilamentEcommerce\Models\Product;
 use TomatoPHP\FilamentEcommerce\Models\ShippingPrice;
 use TomatoPHP\FilamentEcommerce\Models\ShippingVendor;
+use TomatoPHP\FilamentEcommerce\Support\OrderPrintUrl;
 use TomatoPHP\FilamentLocations\Models\Area;
 use TomatoPHP\FilamentLocations\Models\City;
 use TomatoPHP\FilamentLocations\Models\Country;
@@ -688,7 +689,8 @@ class OrderResource extends Resource
                     ->tooltip(trans('filament-ecommerce::messages.orders.actions.print'))
                     ->icon('heroicon-s-printer')
                     ->openUrlInNewTab()
-                    ->url(fn ($record) => route('order.print', $record->id))
+                    ->visible(fn (): bool => OrderPrintUrl::enabled())
+                    ->url(fn ($record) => OrderPrintUrl::for($record))
                     ->iconButton(),
                 ViewAction::make()
                     ->tooltip(trans('filament-ecommerce::messages.orders.actions.show'))
